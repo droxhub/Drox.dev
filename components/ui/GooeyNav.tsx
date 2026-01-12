@@ -238,9 +238,11 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
           .effect.text {
             color: white;
             transition: color 0.3s ease;
+            opacity: 0;
           }
           .effect.text.active {
             color: black;
+            opacity: 1;
           }
           .effect.filter {
             filter: blur(7px) contrast(100) blur(0);
@@ -340,7 +342,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
             }
           }
           li.active {
-            color: black;
+            color: transparent;
             text-shadow: none;
           }
           li.active::after {
@@ -376,8 +378,8 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
             {items.map((item, index) => (
               <li
                 key={index}
-                className={`rounded-full relative cursor-pointer transition-[background-color_color_box-shadow] duration-300 ease shadow-[0_0_0.5px_1.5px_transparent] text-white ${
-                  activeIndex === index ? "active" : ""
+                className={`rounded-full relative cursor-pointer transition-[background-color_color_box-shadow] duration-300 ease shadow-[0_0_0.5px_1.5px_transparent] ${
+                  activeIndex === index ? "active" : "text-white"
                 }`}
               >
                 <Link

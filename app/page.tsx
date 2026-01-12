@@ -20,7 +20,7 @@ export default function Home() {
       </div>
       <LightBg />
       <Integrations /> */}
-      <div className="mt-[350px] px-4 sm:px-6 xl:px-0 mt-[-20px] md:mt-[0px]">
+      <div className="md:mt-[350px] px-4 sm:px-6 xl:px-0 mt-[-20px]">
         <AboutSection />
       </div>
       <div className="px-4 sm:px-6 xl:px-0 mt-[100px]">

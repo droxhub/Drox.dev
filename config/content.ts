@@ -29,8 +29,8 @@ export const siteMetadata = {
 export const navigation = {
   items: [
     { label: "Home", href: "/" },
-    { label: "Services", href: "/services" },
     { label: "About", href: "/about" },
+    { label: "Services", href: "/services" },
     { label: "Contact", href: "/contact" },
     // { label: "Projects", href: "#portfolio" },
     // { label: "Process", href: "#process" },

@@ -99,9 +99,9 @@ export default function AboutPage() {
   const MOBILE_VISIBLE_COUNT = 3;
 
   return (
-    <div className="flex flex-col items-center w-full px-4 sm:px-6 xl:px-0">
+    <div className="flex flex-col items-center w-full px-4 sm:px-6 xl:px-0 overflow-x-hidden">
       {/* Hero Section */}
-      <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
+      <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10 px-4 sm:px-0">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -114,18 +114,23 @@ export default function AboutPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="inline-block max-w-sm lg:max-w-4xl text-center justify-center"
+          className="text-center w-full max-w-4xl"
         >
-          <h1 className={title({ size: "lg" })}>Building&nbsp;</h1>
-          <h1 className={title({ size: "lg" })}>Tomorrow&apos;s&nbsp;</h1>
+          <h1
+            className={title({ size: "md", class: "sm:text-4xl lg:text-6xl" })}
+          >
+            Building Tomorrow&apos;s
+          </h1>
           <br />
-          <h1 className={title({ color: "violet", size: "lg" })}>
-            Digital&nbsp;
+          <h1
+            className={title({
+              color: "violet",
+              size: "md",
+              class: "sm:text-4xl lg:text-6xl",
+            })}
+          >
+            Digital Experiences Today
           </h1>
-          <h1 className={title({ color: "violet", size: "lg" })}>
-            Experiences&nbsp;
-          </h1>
-          <h1 className={title({ color: "violet", size: "lg" })}>Today</h1>
         </motion.div>
 
         <motion.p
