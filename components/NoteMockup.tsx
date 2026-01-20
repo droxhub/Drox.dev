@@ -336,8 +336,8 @@ export function NoteMockup() {
                           key={day}
                           className={
                             day === currentDay
-                              ? "bg-indigo-400 text-white rounded-md font-normal text-[14px] aspect-square flex items-center justify-center"
-                              : "text-gray-300 hover:bg-white/5 rounded-md transition cursor-pointer text-[14px] font-light aspect-square flex items-center justify-center"
+                              ? "bg-indigo-500 text-white rounded-md font-normal text-[14px] aspect-square flex items-center justify-center"
+                              : "text-gray-300 hover:bg-indigo-900 rounded-md transition cursor-pointer text-[14px] font-light aspect-square flex items-center justify-center"
                           }
                         >
                           {day}

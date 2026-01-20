@@ -50,7 +50,7 @@ export const ContainerScroll = ({
   const cardTranslate = useTransform(
     scrollYProgress,
     progressRange,
-    isMobile ? [0, 82] : [0, 70]
+    isMobile ? [0, 82] : [0, 72]
   ); // Card moves down - responsive
 
   return (

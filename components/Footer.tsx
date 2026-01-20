@@ -3,6 +3,7 @@
 import React from "react";
 import { Link } from "@nextui-org/link";
 import { Input, Button } from "@nextui-org/react";
+import Image from "next/image";
 
 import { siteConfig } from "@/config/site";
 
@@ -14,10 +15,14 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 mb-8">
           {/* Logo and Social Section */}
           <div className="lg:col-span-3">
-            <Link className="flex items-center gap-2 mb-4" href="/">
-              <span className="text-2xl font-bold bg-gradient-to-r from-violet-400 to-purple-600 bg-clip-text text-transparent">
-                {siteConfig.name}
-              </span>
+            <Link className="flex items-center gap-2 ml-[-10px] mb-2" href="/">
+               <Image
+                src="/logo.png"
+                alt={siteConfig.name}
+                width={150}
+                height={40}
+                className="object-fill"
+              />
             </Link>
             <p className="text-default-500 text-sm mb-6">
               Crafting digital excellence, one project at a time.
@@ -135,28 +140,44 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Resources Links */}
+          {/* Pages Links */}
           <div className="lg:col-span-2">
             <h3 className="font-semibold text-default-900 dark:text-white mb-4">
-              Resources
+              Pages
             </h3>
             <ul className="space-y-3">
-              {/* <li>
+              <li>
                 <Link
-                  href="/docs"
                   className="text-default-500 hover:text-primary transition-colors text-sm"
+                  href="/"
                 >
-                  Downloads
+                  Home
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/docs"
                   className="text-default-500 hover:text-primary transition-colors text-sm"
+                  href="/about"
                 >
-                  Documentation
+                  About
                 </Link>
-              </li> */}
+              </li>
+              <li>
+                <Link
+                  className="text-default-500 hover:text-primary transition-colors text-sm"
+                  href="/services"
+                >
+                  Services
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className="text-default-500 hover:text-primary transition-colors text-sm"
+                  href="/pricing"
+                >
+                  Pricing
+                </Link>
+              </li>
               <li>
                 <Link
                   className="text-default-500 hover:text-primary transition-colors text-sm"
@@ -167,6 +188,8 @@ const Footer = () => {
               </li>
             </ul>
           </div>
+
+       
 
           {/* Newsletter Section */}
           <div className="lg:col-span-3">

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { List, X } from "@phosphor-icons/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 import GooeyNav from "./ui/GooeyNav";
 
@@ -64,11 +65,16 @@ export default function Navigation() {
         {/* Logo */}
         <div className="flex-1 flex items-center">
           <Link
-            className="text-2xl font-bold text-white tracking-tight select-none cursor-pointer hover:opacity-80 transition-opacity"
+            className="select-none cursor-pointer hover:opacity-80 transition-opacity"
             href="/"
           >
-            <h1 className={title({ size: "sm" })}>DRO&nbsp;</h1>
-            <h1 className={title({ color: "violet", size: "sm" })}>X&nbsp;</h1>
+            <Image
+              src="/logo.png"
+              alt="DROX Logo"
+              width={130}
+              height={40}
+              priority
+            />
           </Link>
         </div>
 
