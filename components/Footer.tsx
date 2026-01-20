@@ -15,7 +15,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 mb-8">
           {/* Logo and Social Section */}
           <div className="lg:col-span-3">
-            <Link className="flex items-center gap-2 ml-[-10px] mb-2" href="/">
+            <Link className="flex items-center gap-2 ml-[-3px] mb-2" href="/">
                <Image
                 src="/logo.png"
                 alt={siteConfig.name}
