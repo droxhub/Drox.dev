@@ -99,11 +99,7 @@ export default function AboutSection() {
             class: "max-w-3xl text-center mb-12 text-gray-400",
           })}
         >
-          We transform bold ideas into powerful digital experiences. Our mission
-          is to help visionary brands achieve remarkable growth through
-          innovative web solutions, user-centered design, and strategic
-          execution. From concept to launch, we&apos;re your dedicated partners
-          in digital success.
+          We build digital products that help brands grow. We focus on practical web solutions, user-friendly design, and strong execution from start to launch.
         </motion.p>
 
         {/* Cards Container with relative positioning for overlay */}
