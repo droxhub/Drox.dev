@@ -353,7 +353,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
             content: "";
             position: absolute;
             inset: 0;
-            border-radius: 8px;
+            border-radius: 14px;
             background: white;
             opacity: 0;
             transform: scale(0);

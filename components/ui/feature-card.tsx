@@ -1,47 +1,93 @@
-import React from "react";
-import { Card, CardBody } from "@nextui-org/react";
-import { IconProps } from "@phosphor-icons/react";
+import React, { useId } from "react";
 
 interface FeatureCardProps {
-  icon?: React.ComponentType<IconProps>;
-  iconText?: string;
   title: string;
   description: string;
-  gradient?: string;
 }
 
 export default function FeatureCard({
-  icon: IconComponent,
-  iconText,
   title,
   description,
-  gradient = "from-violet-400 to-purple-600",
 }: FeatureCardProps) {
   return (
-    <Card className="bg-gradient-to-t from-[#0E0C1E] to-[#08061D] backdrop-blur-sm border border-[#1C1A31]/80 rounded-2xl transition-all duration-300 h-full hover:scale-105 hover:border-[#2C2A51]/90 hover:shadow-xl hover:shadow-purple-900/30">
-      <CardBody className="p-4 md:p-6">
-        {(IconComponent || iconText) && (
-          <div className="mb-3 md:mb-4">
-            {IconComponent ? (
-              <IconComponent
-                className="text-purple-600 dark:text-purple-400"
-                size={32}
-                weight="regular"
-              />
-            ) : (
-              <span
-                className={`text-xl md:text-2xl font-bold bg-gradient-to-br ${gradient} bg-clip-text text-transparent`}
-              >
-                {iconText}
-              </span>
-            )}
-          </div>
-        )}
-        <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3">
-          {title}
-        </h3>
-        <p className="text-sm md:text-base text-default-600">{description}</p>
-      </CardBody>
-    </Card>
+    <div className="relative bg-gradient-to-b from-[#0E0C1E] to-[#08061D] p-6 rounded-3xl overflow-hidden border border-[#1C1A31]/50 transition-transform duration-300 hover:scale-[0.98] group">
+      <Grid size={20} />
+      <p className="text-base font-bold text-white relative z-20 transition-transform duration-300 group-hover:scale-105 origin-center inline-block">
+        {title}
+      </p>
+      <p className="text-gray-400 mt-4 text-base font-normal relative z-20 transition-transform duration-300 group-hover:scale-105 origin-center inline-block">
+        {description}
+      </p>
+    </div>
+  );
+}
+
+export const Grid = ({
+  pattern,
+  size,
+}: {
+  pattern?: number[][];
+  size?: number;
+}) => {
+  const p = pattern ?? [
+    [Math.floor(Math.random() * 4) + 7, Math.floor(Math.random() * 6) + 1],
+    [Math.floor(Math.random() * 4) + 7, Math.floor(Math.random() * 6) + 1],
+    [Math.floor(Math.random() * 4) + 7, Math.floor(Math.random() * 6) + 1],
+    [Math.floor(Math.random() * 4) + 7, Math.floor(Math.random() * 6) + 1],
+    [Math.floor(Math.random() * 4) + 7, Math.floor(Math.random() * 6) + 1],
+  ];
+  return (
+    <div className="pointer-events-none absolute left-1/2 top-0 -ml-20 -mt-2 h-full w-full [mask-image:linear-gradient(white,transparent)]">
+      <div className="absolute inset-0 bg-gradient-to-r [mask-image:radial-gradient(farthest-side_at_top,white,transparent)] from-purple-900/20 to-violet-900/20 opacity-100">
+        <GridPattern
+          width={size ?? 20}
+          height={size ?? 20}
+          x="-12"
+          y="4"
+          squares={p}
+          className="absolute inset-0 h-full w-full mix-blend-overlay fill-purple-500/10 stroke-purple-500/10"
+        />
+      </div>
+    </div>
+  );
+};
+
+export function GridPattern({ width, height, x, y, squares, ...props }: any) {
+  const patternId = useId();
+  return (
+    <svg aria-hidden="true" {...props}>
+      <defs>
+        <pattern
+          id={patternId}
+          width={width}
+          height={height}
+          patternUnits="userSpaceOnUse"
+          x={x}
+          y={y}
+        >
+          <path d={`M.5 ${height}V.5H${width}`} fill="none" />
+        </pattern>
+      </defs>
+      <rect
+        width="100%"
+        height="100%"
+        strokeWidth={0}
+        fill={`url(#${patternId})`}
+      />
+      {squares && (
+        <svg x={x} y={y} className="overflow-visible">
+          {squares.map(([x, y]: any) => (
+            <rect
+              strokeWidth="0"
+              key={`${x}-${y}`}
+              width={width + 1}
+              height={height + 1}
+              x={x * width}
+              y={y * height}
+            />
+          ))}
+        </svg>
+      )}
+    </svg>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Card, CardBody, Button } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import {
   ChartLineUp,
   DeviceMobile,
@@ -15,6 +15,7 @@ import { Chip } from "@nextui-org/react";
 import { motion } from "motion/react";
 
 import { title, subtitle } from "@/components/primitives";
+import { Grid } from "@/components/ui/feature-card";
 
 const services = [
   {
@@ -106,7 +107,7 @@ const ServiceCards = ({ showChip = false }: ServiceCardsProps) => {
   const MOBILE_VISIBLE_COUNT = 3;
 
   return (
-    <section className="flex flex-col items-center w-full my-16 md:my-24">
+    <section className="flex flex-col items-center w-full my-16 md:my-24 px-4 md:px-6 lg:px-8">
       {showChip && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -157,23 +158,23 @@ const ServiceCards = ({ showChip = false }: ServiceCardsProps) => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className={isHiddenOnMobile ? "hidden md:block" : ""}
               >
-                <Card className="bg-gradient-to-t from-[#0E0C1E] to-[#08061D] backdrop-blur-sm border border-[#1C1A31]/80 rounded-2xl transition-all duration-300 h-full group hover:scale-105 hover:border-[#2C2A51]/90 hover:shadow-xl hover:shadow-purple-900/30">
-                  <CardBody className="p-8 flex flex-col items-start">
-                    <div className="mb-6">
-                      <service.icon
-                        className="text-purple-600 dark:text-purple-400"
-                        size={32}
-                        weight="regular"
-                      />
-                    </div>
-                    <h3 className="text-lg font-semibold mb-3 text-default-900 dark:text-default-700">
-                      {service.title}
-                    </h3>
-                    <p className="text-sm text-default-600 dark:text-default-500 leading-relaxed">
-                      {service.description}
-                    </p>
-                  </CardBody>
-                </Card>
+                <div className="relative bg-gradient-to-b flex flex-col justify-start from-[#0E0C1E] to-[#08061D] p-8 rounded-3xl overflow-hidden border border-[#1C1A31]/50 transition-all duration-300 h-full group hover:scale-[0.96] hover:shadow-2xl">
+                  <Grid size={20} />
+                  <div className="mb-6 relative z-20">
+                    <service.icon
+                      className="text-purple-600 dark:text-purple-400 block transition-all duration-300 group-hover:scale-[1.2] group-hover:ml-[-10px] group-hover:drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]"
+                      style={{ transformOrigin: 'center' }}
+                      size={32}
+                      weight="regular"
+                    />
+                  </div>
+                  <h3 className="text-lg font-semibold mb-3 text-white relative z-20 transition-all duration-300 group-hover:scale-110 origin-center inline-block group-hover:drop-shadow-[0_2px_4px_rgba(168,85,247,0.4)]">
+                    {service.title}
+                  </h3>
+                  <p className="text-sm text-gray-400 leading-relaxed relative z-20 transition-all duration-300 group-hover:scale-110 origin-center inline-block group-hover:drop-shadow-[0_2px_4px_rgba(168,85,247,0.4)]">
+                    {service.description}
+                  </p>
+                </div>
               </motion.div>
             );
           })}
@@ -186,16 +187,30 @@ const ServiceCards = ({ showChip = false }: ServiceCardsProps) => {
             <div className="h-40 bg-gradient-to-t from-[#030014] via-[#030014]/95 to-transparent" />
 
             {/* Button container */}
-            <div className="absolute bottom-4 left-0 right-0 flex justify-center pointer-events-auto">
-              <Button
-                className="bg-gradient-to-r from-purple-600 to-violet-600 text-white font-medium px-6 py-2 shadow-lg shadow-purple-900/40"
-                endContent={<CaretDown size={18} weight="bold" />}
-                radius="full"
-                size="md"
-                onPress={() => setShowAll(true)}
+            <div className="absolute bottom-4 left-0 right-0 flex justify-center pointer-events-auto mb-[-55px]">
+              <button
+                className="group relative inline-flex items-center justify-center px-8 py-3.5 text-base font-semibold text-white transition-all duration-300 bg-gradient-to-t from-[#1a0b2e] to-[#0a0525] border border-gray-800/80 rounded-full hover:border-purple-500/60 hover:shadow-2xl hover:shadow-purple-900/40 overflow-hidden"
+                onClick={() => setShowAll(true)}
               >
-                Show All Services
-              </Button>
+                {/* Subtle purple glow on hover */}
+                <span className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-purple-600/20 via-violet-600/20 to-purple-600/20 transition-opacity duration-300" />
+                
+                {/* Text container with slide animation */}
+                <span className="relative z-10 overflow-hidden inline-block">
+                  {/* Original text - slides up and fades out */}
+                  <span className="inline-block transition-all duration-300 group-hover:-translate-y-full group-hover:opacity-0">
+                    Show All Services
+                  </span>
+                  {/* Duplicate text - slides up from bottom */}
+                  <span className="absolute left-0 top-0 inline-block translate-y-full opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                    Show All Services
+                  </span>
+                </span>
+                
+                <span className="relative z-10 ml-2 transition-transform duration-300 group-hover:translate-y-1">
+                  <CaretDown size={18} weight="bold" />
+                </span>
+              </button>
             </div>
           </div>
         )}

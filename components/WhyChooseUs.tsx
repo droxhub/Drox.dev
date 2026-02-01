@@ -54,13 +54,13 @@ const AnimatedCounter = ({
 
 const WhyChooseUs = () => {
   return (
-    <section className="flex flex-col items-center w-full my-16 md:my-24">
+    <section className="flex flex-col items-center w-full my-16 md:my-24 px-4 md:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col items-center mb-12 md:mb-16"
+        className="flex flex-col items-center mb-12 md:mb-16 overflow-visible"
       >
         <h2 className={title({ size: "lg" })}>Why Choose DROX?</h2>
         <p

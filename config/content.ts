@@ -19,7 +19,7 @@ export const siteMetadata = {
     highlight: "X",
   },
   badge: {
-    text: "DROX Your TECH Partner",
+    text: "DROX - Your TECH Partner",
   },
 };
 
@@ -377,14 +377,14 @@ export const contactPage = {
   },
   contactInfo: {
     email: {
-      address: "droxdev100@gmail.com",
-      link: "mailto:droxdev100@gmail.com",
+      address: "hello@droxdev.com",
+      link: "mailto:hello@droxdev.com",
     },
     phone: {
-      number: "+91 8111807089",
-      display: "+91 8111807089",
-      link: "tel:+918111807089",
-      whatsapp: "918111807089", // For WhatsApp (no + or spaces)
+      number: "+91 9946 642 643",
+      display: "+91 9946 642 643",
+      link: "tel:+91 9946 642 643",
+      whatsapp: "919946642643", // For WhatsApp (no + or spaces)
     },
     location: {
       address: "Hilite Business Park, Calicut, Kerala, India",
@@ -433,7 +433,7 @@ export const contactPage = {
       },
       {
         name: "Whatsapp",
-        url: "https://wa.me/918111807089",
+        url: "https://wa.me/919946642643",
         gradient: "from-blue-400 to-blue-600",
       },
       {
@@ -443,7 +443,7 @@ export const contactPage = {
       },
       {
         name: "Instagram",
-        url: "https://instagram.com",
+        url: "https://instagram.com/drox.dev",
         gradient: "from-pink-400 to-purple-600",
       },
     ],

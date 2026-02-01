@@ -4,64 +4,59 @@ import React, { useState } from "react";
 import { Divider, Button } from "@nextui-org/react";
 import { motion } from "motion/react";
 import {
-  Sparkle,
-  RocketLaunch,
-  Users,
-  Heart,
-  Code,
-  Palette,
-  Lightbulb,
-  Target,
-  CaretDown,
-} from "@phosphor-icons/react";
+  IconSparkles,
+  IconRocket,
+  IconUsers,
+  IconHeart,
+  IconCode,
+  IconPalette,
+  IconBulb,
+  IconTarget,
+  IconCaretDownFilled,
+} from "@tabler/icons-react";
+import { cn } from "@/lib/utils";
 
 import { title, subtitle } from "@/components/primitives";
 import Badge from "@/components/chip";
-import FeatureCard from "@/components/ui/feature-card";
+import BorderedFeatureCard from "@/components/ui/bordered-feature-card";
 import CTAButton from "@/components/ui/cta-button";
 
 const values = [
   {
-    icon: Sparkle,
+    icon: <IconSparkles />,
     title: "Innovation First",
     description:
-      "We push boundaries and explore cutting-edge technologies to deliver solutions that set you apart.",
-    gradient: "from-violet-400 to-purple-600",
+      "Cutting-edge tech that sets you apart.",
   },
   {
-    icon: Heart,
+    icon: <IconHeart />,
     title: "Client-Centric",
     description:
-      "Your success is our priority. We build lasting partnerships through transparent communication.",
-    gradient: "from-pink-400 to-rose-600",
+      "Your success drives everything we do.",
   },
   {
-    icon: Code,
+    icon: <IconCode />,
     title: "Technical Excellence",
     description:
-      "Clean, scalable code and best practices ensure your project stands the test of time.",
-    gradient: "from-blue-400 to-cyan-600",
+      "Clean, scalable code built to last.",
   },
   {
-    icon: Palette,
+    icon: <IconPalette />,
     title: "Design-Driven",
     description:
-      "Beautiful, intuitive interfaces that create memorable user experiences and drive conversions.",
-    gradient: "from-yellow-400 to-orange-600",
+      "Beautiful interfaces that convert.",
   },
   {
-    icon: Target,
+    icon: <IconTarget />,
     title: "Results-Oriented",
     description:
-      "Every project is built with clear objectives and measurable outcomes in mind.",
-    gradient: "from-green-400 to-emerald-600",
+      "Clear objectives, measurable outcomes.",
   },
   {
-    icon: Users,
+    icon: <IconUsers />,
     title: "Collaborative Spirit",
     description:
-      "We work as an extension of your team, bringing expertise and enthusiasm to every project.",
-    gradient: "from-cyan-400 to-blue-600",
+      "Your extended team, fully invested.",
   },
 ];
 
@@ -69,28 +64,28 @@ const milestones = [
   {
     year: "2020",
     title: "The Beginning",
-    description: "Started with a vision to transform digital experiences",
+    description: "Vision to transform digital experiences",
   },
   {
     year: "2022",
     title: "Rapid Growth",
-    description: "Expanded our team and delivered 50+ successful projects",
+    description: "50+ successful projects delivered",
   },
   {
     year: "2024",
     title: "Industry Recognition",
-    description: "Recognized as a leading creative technology partner",
+    description: "Leading creative technology partner",
   },
   {
     year: "2025",
     title: "Global Expansion",
-    description: "Expanding our reach and serving clients worldwide",
+    description: "Serving clients worldwide",
   },
   {
     year: "2026",
     title: "Innovation Leader",
     description:
-      "Setting new standards in digital transformation and innovation",
+      "Setting new standards in digital transformation",
   },
 ];
 
@@ -106,6 +101,7 @@ export default function AboutPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
+          className="relative z-10"
         >
           <Badge />
         </motion.div>
@@ -114,22 +110,19 @@ export default function AboutPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-center w-full max-w-4xl"
+          className="inline-block max-w-sm md:max-w-2xl lg:max-w-4xl text-center justify-center text-2xl relative z-10"
         >
-          <h1
-            className={title({ size: "md", class: "sm:text-4xl lg:text-6xl" })}
-          >
-            Building Tomorrow&apos;s
+          <h1 className={title({ size: "lg" })}>
+            <span style={{
+              background: 'linear-gradient(to bottom, #FFFFFF 0%, #9B9B9E 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}>Building Tomorrow&apos;s </span>
           </h1>
           <br />
-          <h1
-            className={title({
-              color: "violet",
-              size: "md",
-              class: "sm:text-4xl lg:text-6xl",
-            })}
-          >
-            Digital Experiences Today
+          <h1 className={title({ color: "violet", size: "lg" })}>
+            Digital Experiences
           </h1>
         </motion.div>
 
@@ -138,11 +131,10 @@ export default function AboutPage() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
           className={subtitle({
-            class: "max-w-3xl text-center text-gray-500 py-2",
+            class: "max-w-2xl text-center text-gray-500 py-2",
           })}
         >
-          We are passionate creators and strategic thinkers dedicated to turning
-          ambitious visions into extraordinary digital realities.
+          Passionate creators turning visions into digital realities.
         </motion.p>
       </section>
 
@@ -159,25 +151,15 @@ export default function AboutPage() {
           >
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-600/20 flex items-center justify-center">
-                <RocketLaunch
+                <IconRocket
                   className="text-violet-500"
                   size={28}
-                  weight="fill"
                 />
               </div>
               <h2 className="text-2xl md:text-3xl font-bold">Our Mission</h2>
             </div>
             <p className="text-base md:text-lg text-default-600 leading-relaxed">
-              Our mission is crystal clear: to empower smart brands with
-              exceptional digital solutions that drive growth and create
-              meaningful connections. We believe technology should serve people,
-              not the other way around.
-            </p>
-            <p className="text-base md:text-lg text-default-600 leading-relaxed">
-              Every line of code we write, every design we craft, and every
-              strategy we develop is centered around one goal—your success.
-              We&apos;re not just service providers; we&apos;re your partners in
-              building a digital future that matters.
+              Empower brands with exceptional digital solutions that drive growth and create meaningful connections. Technology should serve people—every line of code, every design, every strategy centers on your success.
             </p>
           </motion.div>
 
@@ -191,24 +173,15 @@ export default function AboutPage() {
           >
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-600/20 flex items-center justify-center">
-                <Lightbulb
+                <IconBulb
                   className="text-violet-500"
                   size={28}
-                  weight="fill"
                 />
               </div>
               <h2 className="text-2xl md:text-3xl font-bold">Our Vision</h2>
             </div>
             <p className="text-base md:text-lg text-default-600 leading-relaxed">
-              To be the catalyst that transforms ideas into digital
-              masterpieces. We envision a world where every brand has the tools,
-              insights, and support needed to create unforgettable online
-              experiences that resonate deeply with their audience.
-            </p>
-            <p className="text-base md:text-lg text-default-600 leading-relaxed">
-              Through innovation, creativity, and unwavering dedication, we
-              strive to set new standards in digital excellence and help our
-              clients achieve remarkable success in their digital journey.
+              Transform ideas into digital masterpieces. Through innovation and dedication, we set new standards in digital excellence, helping clients achieve remarkable success in their digital journey.
             </p>
           </motion.div>
         </div>
@@ -228,17 +201,16 @@ export default function AboutPage() {
           <h2 className={title({ size: "lg" })}>What Sets Us Apart</h2>
           <p
             className={subtitle({
-              class: "max-w-3xl text-center mt-4",
+              class: "max-w-2xl text-center mt-4",
             })}
           >
-            Our unique combination of expertise, passion, and commitment makes
-            us the ideal choice for your digital journey
+            Expertise, passion, and commitment in every project
           </p>
         </motion.div>
 
         {/* Cards Container with relative positioning for overlay */}
         <div className="relative w-full max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 relative z-10">
             {values.map((value, index) => {
               // On mobile, hide cards after MOBILE_VISIBLE_COUNT unless showAllValues is true
               const isHiddenOnMobile =
@@ -251,12 +223,12 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className={isHiddenOnMobile ? "hidden md:block" : ""}
+                  className={cn(isHiddenOnMobile && "hidden md:block")}
                 >
-                  <FeatureCard
+                  <BorderedFeatureCard
                     description={value.description}
-                    gradient={value.gradient}
                     icon={value.icon}
+                    index={index}
                     title={value.title}
                   />
                 </motion.div>
@@ -274,7 +246,7 @@ export default function AboutPage() {
               <div className="absolute bottom-4 left-0 right-0 flex justify-center pointer-events-auto">
                 <Button
                   className="bg-gradient-to-r from-purple-600 to-violet-600 text-white font-medium px-6 py-2 shadow-lg shadow-purple-900/40"
-                  endContent={<CaretDown size={18} weight="bold" />}
+                  endContent={<IconCaretDownFilled size={18} />}
                   radius="full"
                   size="md"
                   onPress={() => setShowAllValues(true)}
@@ -314,23 +286,10 @@ export default function AboutPage() {
           className="flex flex-col items-center max-w-4xl w-full space-y-6 mb-12 md:mb-16"
         >
           <p className="text-base md:text-lg text-default-600 leading-relaxed text-center">
-            At DROX, we&apos;ve built more than a company—we&apos;ve cultivated
-            a culture where creativity meets craftsmanship, and every project is
-            infused with collaboration, passion, and purpose.
+            At DROX, we&apos;ve built a culture where creativity meets craftsmanship. Every project is infused with collaboration, passion, and purpose—facing challenges head-on and celebrating victories together.
           </p>
           <p className="text-base md:text-lg text-default-600 leading-relaxed text-center">
-            Our team is the heartbeat of everything we do. It&apos;s not just
-            about working together, but growing together—facing challenges
-            head-on, celebrating victories big and small, and evolving as a
-            unified force. We believe that the best results come from teams that
-            are genuinely invested in each other&apos;s success.
-          </p>
-          <p className="text-base md:text-lg text-default-600 leading-relaxed text-center">
-            DROX is more than a workplace; it&apos;s a journey powered by
-            ambition, unity, and unwavering dedication. Every client we serve,
-            every project we complete, and every relationship we build is a
-            testament to our commitment to excellence and our belief in the
-            transformative power of great digital experiences.
+            We&apos;re more than a workplace; we&apos;re a journey powered by ambition and dedication. Every client, project, and relationship is a testament to our commitment to excellence.
           </p>
         </motion.div>
 
@@ -383,8 +342,7 @@ export default function AboutPage() {
               Ready to Start Your Journey?
             </h2>
             <p className="text-base md:text-lg text-default-600 text-center mt-4 mb-6">
-              Let&apos;s transform your vision into a digital reality. Get in
-              touch and discover how we can elevate your brand.
+              Let&apos;s transform your vision into reality.
             </p>
             <div className="flex justify-center">
               <CTAButton href="/contact" text="Let's Talk" />

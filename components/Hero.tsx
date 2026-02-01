@@ -22,6 +22,7 @@ export default function Hero() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
+        className="relative z-10"
       >
         <Badge />
       </motion.div>
@@ -29,13 +30,26 @@ export default function Hero() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="inline-block max-w-sm md:max-w-2xl lg:max-w-4xl text-center justify-center text-2xl"
+        className="inline-block max-w-sm md:max-w-2xl lg:max-w-4xl text-center justify-center text-2xl relative z-10"
       >
         <h1 className={title({ size: "lg" })}>
-          Make <ColourfulText text="Beautiful" />{" "}
+          <span style={{
+            background: 'linear-gradient(to bottom, #FFFFFF 0%, #9B9B9E 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+          }}>Make </span>
+          <span style={{ all: 'unset', display: 'inline' }}>
+            <ColourfulText text="Beautiful" />
+          </span>
         </h1>
         <br />
-        <h1 className={title({ size: "lg" })}>Digital Experiences</h1>
+        <h1 className={title({ size: "lg" })} style={{
+          background: 'linear-gradient(to bottom, #FFFFFF 0%, #9B9B9E 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+        }}>Digital Experiences</h1>
         <BlurText
           text="Beautiful, fast and modern web solutions."
           delay={150}
@@ -48,7 +62,7 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.3 }}
-        className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto px-4 sm:px-0"
+        className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto px-4 sm:px-0 relative z-10"
       >
         <Link
           isExternal
@@ -74,6 +88,7 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.4 }}
+        className="relative z-10"
       >
         <TrustedBy />
       </motion.div>
@@ -83,7 +98,9 @@ export default function Hero() {
         transition={{ duration: 0.6, delay: 0.5 }}
         className="mt-0 sm:mt-[-20px] md:mt-[-30px] lg:mt-[-50px] w-full"
       >
+        <div className="mt-[-80px]">
         <PrototypeImg />
+        </div>
       </motion.div>
     </section>
   );

@@ -8,7 +8,7 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/Footer";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import { siteConfig } from "@/config/site";
-import { fontSans } from "@/config/fonts";
+import { fontSans, fontHeading } from "@/config/fonts";
 
 export const metadata: Metadata = {
   title: {
@@ -39,7 +39,8 @@ export default function RootLayout({
       <body
         className={clsx(
           "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
+          fontSans.variable,
+          fontHeading.variable
         )}
       >
         <SmoothScroll>

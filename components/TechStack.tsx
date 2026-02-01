@@ -92,7 +92,7 @@ const TechStack = () => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="flex flex-col items-center mb-12"
+        className="flex flex-col items-center mb-12 overflow-visible"
       >
         <h2 className={title({ size: "lg" })}>Technologies We Use</h2>
         <p
