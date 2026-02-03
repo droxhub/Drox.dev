@@ -1,122 +1,136 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import { Medal } from "lucide-react";
 import { motion, useInView } from "motion/react";
-
-import { title, subtitle } from "@/components/primitives";
+import { useEffect, useRef, useState } from "react";
+import { title } from "@/components/primitives";
+import SectionHeader from "@/components/ui/section-header";
+import { cn } from "@/lib/utils";
 
 // Counter animation component
 const AnimatedCounter = ({
-  target,
-  suffix = "",
-  duration = 2,
+	target,
+	suffix = "",
+	duration = 2,
+	suffixClass = "",
 }: {
-  target: number;
-  suffix?: string;
-  duration?: number;
+	target: number;
+	suffix?: string;
+	duration?: number;
+	suffixClass?: string;
 }) => {
-  const [count, setCount] = useState(0);
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+	const [count, setCount] = useState(0);
+	const ref = useRef(null);
+	const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-  useEffect(() => {
-    if (isInView) {
-      let startTime: number | null = null;
-      const animate = (currentTime: number) => {
-        if (startTime === null) startTime = currentTime;
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / (duration * 1000), 1);
+	useEffect(() => {
+		if (isInView) {
+			let startTime: number | null = null;
+			const animate = (currentTime: number) => {
+				if (startTime === null) startTime = currentTime;
+				const elapsed = currentTime - startTime;
+				const progress = Math.min(elapsed / (duration * 1000), 1);
 
-        // Easing function (easeOutQuart)
-        const eased = 1 - Math.pow(1 - progress, 4);
-        const current = Math.floor(eased * target);
+				// Easing function (easeOutQuart)
+				const eased = 1 - Math.pow(1 - progress, 4);
+				const current = Math.floor(eased * target);
 
-        setCount(current);
+				setCount(current);
 
-        if (progress < 1) {
-          requestAnimationFrame(animate);
-        } else {
-          setCount(target);
-        }
-      };
+				if (progress < 1) {
+					requestAnimationFrame(animate);
+				} else {
+					setCount(target);
+				}
+			};
 
-      requestAnimationFrame(animate);
-    }
-  }, [isInView, target, duration]);
+			requestAnimationFrame(animate);
+		}
+	}, [isInView, target, duration]);
 
-  return (
-    <div ref={ref} className="text-4xl font-bold text-violet-500 mb-2">
-      {count}
-      {suffix}
-    </div>
-  );
+	return (
+		<div
+			ref={ref}
+			className="text-6xl md:text-7xl font-bold text-foreground mb-4 tabular-nums tracking-tighter"
+		>
+			{count}
+			<span className={cn("text-violet-500", suffixClass)}>{suffix}</span>
+		</div>
+	);
 };
 
+const stats = [
+	{
+		number: 25,
+		suffix: "+",
+		title: "Projects Delivered",
+		description:
+			"We've successfully completed over 25 projects—and we're just getting started!",
+		suffixClass: "text-violet-500", // Primary color
+	},
+	{
+		number: 70,
+		suffix: "%",
+		title: "Business Growth",
+		description:
+			"Our websites have helped clients achieve up to 70% revenue growth in just one year!",
+		suffixClass: "text-violet-500",
+	},
+	{
+		number: 3,
+		suffix: "x",
+		title: "Faster Delivery",
+		description: "Rapid turnaround without compromising quality or creativity.",
+		suffixClass: "text-violet-500", // Using violet/primary instead of orange to match theme
+	},
+];
+
 const WhyChooseUs = () => {
-  return (
-    <section className="flex flex-col items-center w-full my-16 md:my-24 px-4 md:px-6 lg:px-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.5 }}
-        className="flex flex-col items-center mb-12 md:mb-16 overflow-visible"
-      >
-        <h2 className={title({ size: "lg" })}>Why Choose DROX?</h2>
-        <p
-          className={subtitle({
-            class: "max-w-3xl text-center mt-4",
-          })}
-        >
-          What sets us apart in delivering exceptional digital solutions
-        </p>
-      </motion.div>
+	return (
+		<section className="flex flex-col items-center w-full my-20 md:my-[100px] px-4 md:px-6 lg:px-8">
+			<SectionHeader
+				badge="Why Choose Us"
+				icon={Medal}
+				title={
+					<>
+						Building{" "}
+						<span className={title({ color: "violet", size: "lg" })}>
+							success
+						</span>{" "}
+						stories online — one website, one brand, one bold move at a time.
+					</>
+				}
+				subtitle="Your growth is our goal. We combine data-driven strategy with creative design to deliver measurable business outcomes."
+				size="lg"
+			/>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-center"
-        >
-          <AnimatedCounter target={15} suffix="+" duration={2} />
-          <h3 className="text-lg font-semibold mb-2">Projects Delivered</h3>
-          <p className="text-sm text-default-600">
-            Successfully completed projects across various industries
-          </p>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-center"
-        >
-          <AnimatedCounter target={100} suffix="%" duration={2} />
-          <h3 className="text-lg font-semibold mb-2">Client Satisfaction</h3>
-          <p className="text-sm text-default-600">
-            Our clients love working with us and keep coming back
-          </p>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="text-center"
-        >
-          <div className="text-4xl font-bold text-violet-500 mb-2">24/7</div>
-          <h3 className="text-lg font-semibold mb-2">Support Available</h3>
-          <p className="text-sm text-default-600">
-            Round-the-clock support to keep your business running smoothly
-          </p>
-        </motion.div>
-      </div>
-    </section>
-  );
+			<div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 w-full max-w-7xl">
+				{stats.map((stat, index) => (
+					<motion.div
+						key={index}
+						className="flex flex-col p-8 md:p-10 border-2 border-dashed border-default-200 dark:border-default-100 rounded-[2.5rem] bg-transparent hover:border-violet-500/50 transition-colors duration-300"
+						initial={{ opacity: 0, y: 20 }}
+						transition={{ duration: 0.5, delay: 0.1 * (index + 1) }}
+						viewport={{ once: true, margin: "-100px" }}
+						whileInView={{ opacity: 1, y: 0 }}
+					>
+						<AnimatedCounter
+							duration={2}
+							suffix={stat.suffix}
+							target={stat.number}
+							suffixClass={stat.suffixClass}
+						/>
+						<h3 className="text-xl md:text-2xl font-medium mb-3">
+							{stat.title}
+						</h3>
+						<p className="text-default-500 text-base md:text-lg leading-relaxed">
+							{stat.description}
+						</p>
+					</motion.div>
+				))}
+			</div>
+		</section>
+	);
 };
 
 export default WhyChooseUs;

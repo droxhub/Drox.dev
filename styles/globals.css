@@ -1,296 +1,355 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
 
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-  }
-  .dark {
-    --background: 240 100% 4%;
-    --foreground: 0 0% 98%;
-    --card: 240 100% 4%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 100% 6%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 240 50% 10%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 50% 10%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 240 50% 10%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 30% 15%;
-    --input: 240 30% 15%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-  }
+	:root {
+		--background: 0 0% 100%;
+		--foreground: 0 0% 3.9%;
+		--card: 0 0% 100%;
+		--card-foreground: 0 0% 3.9%;
+		--popover: 0 0% 100%;
+		--popover-foreground: 0 0% 3.9%;
+		--primary: 0 0% 9%;
+		--primary-foreground: 0 0% 98%;
+		--secondary: 0 0% 96.1%;
+		--secondary-foreground: 0 0% 9%;
+		--muted: 0 0% 96.1%;
+		--muted-foreground: 0 0% 45.1%;
+		--accent: 0 0% 96.1%;
+		--accent-foreground: 0 0% 9%;
+		--destructive: 0 84.2% 60.2%;
+		--destructive-foreground: 0 0% 98%;
+		--border: 0 0% 89.8%;
+		--input: 0 0% 89.8%;
+		--ring: 0 0% 3.9%;
+		--chart-1: 12 76% 61%;
+		--chart-2: 173 58% 39%;
+		--chart-3: 197 37% 24%;
+		--chart-4: 43 74% 66%;
+		--chart-5: 27 87% 67%;
+		--radius: 0.5rem;
+	}
+
+	.dark {
+		--background: 240 100% 4%;
+		--foreground: 0 0% 98%;
+		--card: 240 100% 4%;
+		--card-foreground: 0 0% 98%;
+		--popover: 240 100% 6%;
+		--popover-foreground: 0 0% 98%;
+		--primary: 0 0% 98%;
+		--primary-foreground: 0 0% 9%;
+		--secondary: 240 50% 10%;
+		--secondary-foreground: 0 0% 98%;
+		--muted: 240 50% 10%;
+		--muted-foreground: 0 0% 63.9%;
+		--accent: 240 50% 10%;
+		--accent-foreground: 0 0% 98%;
+		--destructive: 0 62.8% 30.6%;
+		--destructive-foreground: 0 0% 98%;
+		--border: 240 30% 15%;
+		--input: 240 30% 15%;
+		--ring: 0 0% 83.1%;
+		--chart-1: 220 70% 50%;
+		--chart-2: 160 60% 45%;
+		--chart-3: 30 80% 55%;
+		--chart-4: 280 65% 60%;
+		--chart-5: 340 75% 55%;
+		--reflect-sub: rgba(239, 237, 253, 0.7);
+	}
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-    font-family: var(--font-sans);
-    font-weight: 400;
-  }
-  p, span, div, a, li, td, th, label, input, textarea, button {
-    font-family: var(--font-sans);
-    font-weight: 400;
-  }
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-heading);
-    font-weight: 600;
-  }
-  h1:not(:has(> *)), h2:not(:has(> *)), h3:not(:has(> *)), h4:not(:has(> *)), h5:not(:has(> *)), h6:not(:has(> *)),
-  h1 > span:not([style*="color"]):not([class*="inline-block"]), 
-  h2 > span:not([style*="color"]):not([class*="inline-block"]), 
-  h3 > span:not([style*="color"]):not([class*="inline-block"]), 
-  h4 > span:not([style*="color"]):not([class*="inline-block"]), 
-  h5 > span:not([style*="color"]):not([class*="inline-block"]), 
-  h6 > span:not([style*="color"]):not([class*="inline-block"]) {
-    background: linear-gradient(to bottom, #FFFFFF 0%, #9B9B9E 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+	* {
+		border-color: hsl(var(--border));
+	}
+
+	body {
+		background-color: hsl(var(--background));
+		color: hsl(var(--foreground));
+		font-family: var(--font-sans);
+		font-weight: 400;
+	}
+
+	p,
+	span,
+	div,
+	a,
+	li,
+	td,
+	th,
+	label,
+	input,
+	textarea,
+	button {
+		font-family: var(--font-sans);
+		font-weight: 400;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: var(--font-heading);
+		font-weight: 500;
+		color: #ffffff;
+	}
+
+	/* Reflect.app Responsive Headings */
+	@media (min-width: 1248px) {
+		h1.reflect-title {
+			font-size: 64px !important;
+			line-height: 72px !important;
+		}
+
+		h2.reflect-title {
+			font-size: 48px !important;
+			line-height: 56px !important;
+		}
+	}
+
+	.reflect-subheading {
+		color: var(--reflect-sub);
+		font-family: var(--font-sans);
+		font-weight: 400;
+	}
 }
 
 /* Custom Scrollbar Styles */
 ::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+	width: 12px;
+	height: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #08061D;
-  border-radius: 10px;
+	background: #08061d;
+	border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #7c3aed 0%, #a855f7 100%);
-  border-radius: 10px;
-  border: 2px solid #08061D;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+	background: linear-gradient(180deg, #7c3aed 0%, #a855f7 100%);
+	border-radius: 10px;
+	border: 2px solid #08061d;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #8b5cf6 0%, #c084fc 100%);
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+	background: linear-gradient(180deg, #8b5cf6 0%, #c084fc 100%);
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
 }
 
 /* Firefox Scrollbar */
 * {
-  scrollbar-width: thin;
-  scrollbar-color: #180140 #08061D;
+	scrollbar-width: thin;
+	scrollbar-color: #180140 #08061d;
 }
 
 /* Black Hole Effect Animations */
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate(360deg);
+	}
 }
 
 @keyframes twinkle {
-  0%, 100% {
-    opacity: 0.3;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.3);
-  }
+	0%,
+	100% {
+		opacity: 0.3;
+		transform: scale(1);
+	}
+
+	50% {
+		opacity: 1;
+		transform: scale(1.3);
+	}
 }
 
 @keyframes drift {
-  0%, 100% {
-    transform: translate(0, 0);
-  }
-  25% {
-    transform: translate(3px, -3px);
-  }
-  50% {
-    transform: translate(-2px, 2px);
-  }
-  75% {
-    transform: translate(2px, 3px);
-  }
+	0%,
+	100% {
+		transform: translate(0, 0);
+	}
+
+	25% {
+		transform: translate(3px, -3px);
+	}
+
+	50% {
+		transform: translate(-2px, 2px);
+	}
+
+	75% {
+		transform: translate(2px, 3px);
+	}
 }
 
 @keyframes toCenter {
-  0% {
-    transform: translate(0, 0) scale(0.3);
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-    transform: translate(0, 0) scale(1);
-  }
-  85% {
-    opacity: 1;
-  }
-  100% {
-    transform: translate(calc(var(--start-x) * -1), calc(var(--start-y) * -1)) scale(0);
-    opacity: 0;
-  }
+	0% {
+		transform: translate(0, 0) scale(0.3);
+		opacity: 0;
+	}
+
+	10% {
+		opacity: 1;
+		transform: translate(0, 0) scale(1);
+	}
+
+	85% {
+		opacity: 1;
+	}
+
+	100% {
+		transform: translate(calc(var(--start-x) * -1), calc(var(--start-y) * -1))
+			scale(0);
+		opacity: 0;
+	}
 }
 
 @keyframes orbit {
-  0% {
-    transform: rotate(var(--start-angle, 0deg)) translateX(var(--orbit-radius, 300px)) rotate(calc(var(--start-angle, 0deg) * -1));
-    opacity: 0.8;
-  }
-  5% {
-    opacity: 1;
-  }
-  95% {
-    opacity: 1;
-  }
-  100% {
-    transform: rotate(calc(var(--start-angle, 0deg) + 360deg)) translateX(100px) rotate(calc((var(--start-angle, 0deg) + 360deg) * -1));
-    opacity: 0.8;
-  }
+	0% {
+		transform: rotate(var(--start-angle, 0deg))
+			translateX(var(--orbit-radius, 300px))
+			rotate(calc(var(--start-angle, 0deg) * -1));
+		opacity: 0.8;
+	}
+
+	5% {
+		opacity: 1;
+	}
+
+	95% {
+		opacity: 1;
+	}
+
+	100% {
+		transform: rotate(calc(var(--start-angle, 0deg) + 360deg)) translateX(100px)
+			rotate(calc((var(--start-angle, 0deg) + 360deg) * -1));
+		opacity: 0.8;
+	}
 }
 
 @keyframes spiral {
-  0% {
-    transform: translate(var(--start-x, 0), var(--start-y, 0)) rotate(0deg) scale(1);
-    opacity: 0.8;
-  }
-  5% {
-    opacity: 1;
-  }
-  95% {
-    opacity: 1;
-  }
-  100% {
-    transform: translate(0, 0) rotate(720deg) scale(0.1);
-    opacity: 0.8;
-  }
+	0% {
+		transform: translate(var(--start-x, 0), var(--start-y, 0)) rotate(0deg)
+			scale(1);
+		opacity: 0.8;
+	}
+
+	5% {
+		opacity: 1;
+	}
+
+	95% {
+		opacity: 1;
+	}
+
+	100% {
+		transform: translate(0, 0) rotate(720deg) scale(0.1);
+		opacity: 0.8;
+	}
 }
 
 @keyframes gravity {
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.8;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    transform: translate(calc(var(--x, 0) * -1), calc(var(--y, 0) * -1)) scale(0.1);
-    opacity: 0.8;
-  }
+	0% {
+		transform: translate(0, 0) scale(1);
+		opacity: 0.8;
+	}
+
+	10% {
+		opacity: 1;
+	}
+
+	90% {
+		opacity: 1;
+	}
+
+	100% {
+		transform: translate(calc(var(--x, 0) * -1), calc(var(--y, 0) * -1))
+			scale(0.1);
+		opacity: 0.8;
+	}
 }
 
 @keyframes pulse {
-  0%, 100% {
-    opacity: 0.4;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.2);
-  }
+	0%,
+	100% {
+		opacity: 0.4;
+		transform: scale(1);
+	}
+
+	50% {
+		opacity: 1;
+		transform: scale(1.2);
+	}
 }
 
 .black-hole-ring {
-  position: absolute;
-  border: 1px solid rgba(139, 92, 246, 0.2);
-  border-radius: 50%;
-  /* animation removed - set inline for custom durations per ring */
+	position: absolute;
+	border: 1px solid rgba(139, 92, 246, 0.2);
+	border-radius: 50%;
+	/* animation removed - set inline for custom durations per ring */
 }
 
 .black-hole-dot {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background: radial-gradient(circle, rgba(139, 92, 246, 1) 0%, rgba(139, 92, 246, 0) 70%);
-  border-radius: 50%;
-  top: 50%;
-  left: 50%;
-  margin: -3px 0 0 -3px;
-  animation: pulse 2s ease-in-out infinite;
-  box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+	position: absolute;
+	width: 6px;
+	height: 6px;
+	background: radial-gradient(
+		circle,
+		rgba(139, 92, 246, 1) 0%,
+		rgba(139, 92, 246, 0) 70%
+	);
+	border-radius: 50%;
+	top: 50%;
+	left: 50%;
+	margin: -3px 0 0 -3px;
+	animation: pulse 2s ease-in-out infinite;
+	box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
 }
 
 .black-hole-orbit {
-  position: absolute;
-  background: white;
-  border-radius: 50%;
-  top: 50%;
-  left: 50%;
-  animation: orbit linear infinite;
-  box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
-  will-change: transform;
+	position: absolute;
+	background: white;
+	border-radius: 50%;
+	top: 50%;
+	left: 50%;
+	animation: orbit linear infinite;
+	box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+	will-change: transform;
 }
 
 .black-hole-spiral {
-  position: absolute;
-  background: white;
-  border-radius: 50%;
-  animation: spiral ease-in infinite;
-  box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
-  will-change: transform;
+	position: absolute;
+	background: white;
+	border-radius: 50%;
+	animation: spiral ease-in infinite;
+	box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+	will-change: transform;
 }
 
 .black-hole-gravity {
-  position: absolute;
-  background: white;
-  border-radius: 50%;
-  animation: gravity ease-in infinite;
-  box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
-  will-change: transform;
+	position: absolute;
+	background: white;
+	border-radius: 50%;
+	animation: gravity ease-in infinite;
+	box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+	will-change: transform;
 }
 
 .space-dot-twinkle {
-  animation: twinkle ease-in-out infinite;
+	animation: twinkle ease-in-out infinite;
 }
 
 .space-dot-drift {
-  animation: drift ease-in-out infinite;
+	animation: drift ease-in-out infinite;
 }
 
 .space-dot-to-center {
-  animation: toCenter ease-in infinite;
+	animation: toCenter ease-in infinite;
 }

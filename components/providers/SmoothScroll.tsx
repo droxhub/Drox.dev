@@ -1,43 +1,55 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import Lenis from "lenis";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
 
 export default function SmoothScroll({
-  children,
+	children,
 }: {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }) {
-  const lenisRef = useRef<Lenis | null>(null);
+	const lenisRef = useRef<Lenis | null>(null);
+	const pathname = usePathname();
 
-  useEffect(() => {
-    // Initialize Lenis
-    const lenis = new Lenis({
-      duration: 1.2, // Duration of the smooth scroll animation
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Easing function
-      orientation: "vertical", // Scroll direction
-      gestureOrientation: "vertical", // Gesture scroll direction
-      smoothWheel: true, // Smooth scroll for mouse wheel events
-      wheelMultiplier: 1, // Mouse wheel sensitivity
-      touchMultiplier: 2, // Touch scroll sensitivity
-      infinite: false, // Infinite scroll
-    });
+	useEffect(() => {
+		// Initialize Lenis
+		const lenis = new Lenis({
+			duration: 1.2,
+			easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+			orientation: "vertical",
+			gestureOrientation: "vertical",
+			smoothWheel: true,
+			wheelMultiplier: 1,
+			touchMultiplier: 2,
+			infinite: false,
+			autoResize: true, // Auto resize on window resize
+		});
 
-    lenisRef.current = lenis;
+		lenisRef.current = lenis;
 
-    // Request animation frame loop
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
+		// Request animation frame loop
+		let rafId: number;
+		function raf(time: number) {
+			lenis.raf(time);
+			rafId = requestAnimationFrame(raf);
+		}
 
-    requestAnimationFrame(raf);
+		rafId = requestAnimationFrame(raf);
 
-    // Cleanup on unmount
-    return () => {
-      lenis.destroy();
-    };
-  }, []);
+		// Cleanup on unmount
+		return () => {
+			cancelAnimationFrame(rafId);
+			lenis.destroy();
+		};
+	}, []);
 
-  return <>{children}</>;
+	// Reset scroll position on route change
+	useEffect(() => {
+		if (lenisRef.current) {
+			lenisRef.current.scrollTo(0, { immediate: true });
+		}
+	}, [pathname]);
+
+	return <>{children}</>;
 }
