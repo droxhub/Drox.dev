@@ -1,6 +1,5 @@
 "use client";
 
-import { Chip } from "@heroui/react";
 import {
 	CaretDown,
 	ChartLineUp,
@@ -13,7 +12,7 @@ import {
 import { motion } from "motion/react";
 import { useState } from "react";
 
-import { subtitle, title } from "@/components/primitives";
+import { title } from "@/components/primitives";
 import { Grid } from "@/components/ui/feature-card";
 import SectionHeader from "@/components/ui/section-header";
 

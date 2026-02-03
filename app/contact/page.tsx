@@ -142,7 +142,7 @@ export default function ContactPage() {
 
 			{/* Contact Info Cards */}
 			<section className="flex flex-col items-center w-full my-16 md:my-24">
-				<div className="w-full max-w-6xl">
+				<div className="w-full max-w-6xl px-4 sm:px-6 xl:px-0">
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
 						{contactInfo.map((info, index) => (
 							<motion.a

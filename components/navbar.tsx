@@ -58,7 +58,7 @@ export default function Navigation() {
 			initial={{ y: 0 }}
 			transition={{ duration: 0.4, ease: "easeInOut" }}
 		>
-			<div className="max-w-7xl mx-auto px-6 flex items-center justify-between bg-background border border-white/10 rounded-3xl h-20 overflow-hidden">
+			<div className="max-w-7xl mx-auto px-6 flex items-center justify-between bg-[#000014] border border-white/10 rounded-3xl h-20 overflow-hidden">
 				{/* Logo */}
 				<div className="flex-1 flex items-center">
 					<Link
@@ -122,7 +122,7 @@ export default function Navigation() {
 						initial={{ y: 100, opacity: 0 }}
 						transition={{ type: "spring", damping: 25, stiffness: 300 }}
 					>
-						<div className="bg-background/95 backdrop-blur-xl rounded-3xl p-4 border border-white/10 shadow-2xl overflow-hidden">
+						<div className="bg-[#000014] backdrop-blur-xl rounded-3xl p-4 border border-white/10 shadow-2xl overflow-hidden">
 							<div className="flex justify-center">
 								<GooeyNav
 									animationTime={600}

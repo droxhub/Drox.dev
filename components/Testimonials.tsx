@@ -2,7 +2,6 @@
 
 import { Heart } from "lucide-react";
 import { motion } from "motion/react";
-import { subtitle, title } from "@/components/primitives";
 import LogoLoop from "@/components/ui/LogoLoop";
 import SectionHeader from "@/components/ui/section-header";
 

@@ -227,7 +227,9 @@ export default function ServicesPage() {
 			<Divider className="w-full max-w-7xl my-16 md:my-24 bg-white/5" />
 
 			{/* Why Choose Us Section */}
-			<WhyChooseUs />
+			<div className="w-full px-4 sm:px-6 xl:px-0">
+				<WhyChooseUs />
+			</div>
 
 			{/* CTA Section */}
 			<section className="flex flex-col items-center w-full my-16 md:my-24">

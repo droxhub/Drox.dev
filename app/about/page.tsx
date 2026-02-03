@@ -102,7 +102,7 @@ export default function AboutPage() {
 
 			{/* Mission & Vision Section */}
 			<section className="flex flex-col items-center w-full my-16 md:my-24 leading-none">
-				<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 max-w-7xl w-full px-4 sm:px-0">
+				<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 max-w-7xl w-full">
 					{/* Mission Card */}
 					<motion.div
 						className="relative group p-[1px] rounded-[2.5rem] bg-gradient-to-br from-violet-500/20 to-transparent overflow-hidden shadow-2xl min-h-[400px]"
@@ -199,7 +199,7 @@ export default function AboutPage() {
 				/>
 
 				{/* Cards Container */}
-				<div className="w-full max-w-6xl mb-12">
+				<div className="w-full max-w-6xl mb-12 px-4 sm:px-6 xl:px-0">
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 						{values.map((value, index) => (
 							<motion.div

@@ -87,7 +87,7 @@ const stats = [
 
 const WhyChooseUs = () => {
 	return (
-		<section className="flex flex-col items-center w-full my-20 md:my-[100px] px-4 md:px-6 lg:px-8">
+		<section className="flex flex-col items-center w-full my-20 md:my-[100px]">
 			<SectionHeader
 				badge="Why Choose Us"
 				icon={Medal}

@@ -1,7 +1,5 @@
 import React from "react";
 
-import { cn } from "@/lib/utils";
-
 interface BorderedFeatureCardProps {
 	icon: React.ReactNode;
 	title: string;

@@ -1,6 +1,5 @@
 "use client";
 
-import { Chip } from "@heroui/react";
 import { Wrench } from "lucide-react";
 import { motion } from "motion/react";
 import React from "react";
@@ -14,7 +13,7 @@ import {
 	SiTailwindcss,
 	SiTypescript,
 } from "react-icons/si";
-import { subtitle, title } from "@/components/primitives";
+import { title } from "@/components/primitives";
 import LogoLoop from "@/components/ui/LogoLoop";
 import SectionHeader from "@/components/ui/section-header";
 
