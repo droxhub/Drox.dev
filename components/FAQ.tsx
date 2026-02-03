@@ -69,7 +69,7 @@ export default function FAQ() {
 					<Accordion
 						variant="splitted"
 						itemClasses={{
-							base: "group-[.is-splitted]:px-6 group-[.is-splitted]:bg-transparent group-[.is-splitted]:shadow-none group-[.is-splitted]:hover:bg-default-100 dark:group-[.is-splitted]:hover:bg-white/5 transition-colors rounded-[1rem] mb-4 data-[open=true]:bg-default-100 bg-[#200045] dark:data-[open=true]:bg-white/5",
+							base: "group-[.is-splitted]:px-6 group-[.is-splitted]:bg-transparent group-[.is-splitted]:shadow-none group-[.is-splitted]:hover:bg-default-100 dark:group-[.is-splitted]:hover:bg-white/5 transition-colors rounded-[1rem] mb-4 data-[open=true]:bg-default-100 bg-[#0c0d21] dark:data-[open=true]:bg-white/5",
 							title: "font-medium text-lg text-default-900 text-left",
 							trigger: "py-6 data-[hover=true]:bg-transparent",
 							content:
