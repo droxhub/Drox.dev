@@ -121,10 +121,12 @@ export default function ContactPage() {
 					transition={{ duration: 0.5, delay: 0.1 }}
 				>
 					<h1 className={title({ size: "lg" })}>
-						{contactPage.hero.title.part1}&nbsp;
-					</h1>
-					<h1 className={title({ color: "violet", size: "lg" })}>
-						{contactPage.hero.title.part2}
+						<span className="gradient-line">
+							{contactPage.hero.title.part1}&nbsp;
+							<span className={title({ color: "violet", size: "lg" })}>
+								{contactPage.hero.title.part2}
+							</span>
+						</span>
 					</h1>
 				</motion.div>
 
@@ -189,9 +191,11 @@ export default function ContactPage() {
 					whileInView={{ opacity: 1, y: 0 }}
 				>
 					<h2 className={title({ size: "lg" })}>
-						{contactPage.form.title.part1}&nbsp;
-						<span className={title({ color: "violet", size: "lg" })}>
-							{contactPage.form.title.part2}
+						<span className="gradient-line">
+							{contactPage.form.title.part1}&nbsp;
+							<span className={title({ color: "violet", size: "lg" })}>
+								{contactPage.form.title.part2}
+							</span>
 						</span>
 					</h2>
 					<p
@@ -302,7 +306,9 @@ export default function ContactPage() {
 					viewport={{ once: true, margin: "-100px" }}
 					whileInView={{ opacity: 1, y: 0 }}
 				>
-					<h2 className={title({ size: "lg" })}>{contactPage.social.title}</h2>
+					<h2 className={title({ size: "lg" })}>
+						<span className="gradient-line">{contactPage.social.title}</span>
+					</h2>
 					<p
 						className={subtitle({
 							class: "max-w-3xl text-center mt-4",

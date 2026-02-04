@@ -97,6 +97,73 @@
 		color: #ffffff;
 	}
 
+	/* Gradient text utility - wrap each line with this class */
+	.gradient-line {
+		background: linear-gradient(180deg, #ffffff 0%, #f8efff 50%, #75717d 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		font-weight: 500;
+		font-family: var(--font-heading);
+	}
+
+	/* Allow nested colored text (like ColourfulText) to show */
+	.gradient-line span {
+		background: none;
+		-webkit-background-clip: unset;
+		-webkit-text-fill-color: unset;
+		background-clip: unset;
+	}
+
+	/* Exclude footer headings from gradient */
+	footer h1:not(.no-gradient),
+	footer h2:not(.no-gradient),
+	footer h3:not(.no-gradient),
+	footer h4:not(.no-gradient),
+	footer h5:not(.no-gradient),
+	footer h6:not(.no-gradient) {
+		background: none !important;
+		-webkit-text-fill-color: currentColor !important;
+		color: inherit !important;
+	}
+
+	/* Exclude specific elements from gradient - allow Tailwind color classes */
+	h2.no-gradient,
+	.no-gradient {
+		background: none !important;
+		-webkit-background-clip: unset !important;
+		-webkit-text-fill-color: unset !important;
+		background-clip: unset !important;
+		color: rgba(255, 255, 255, 0.03) !important;
+	}
+
+	/* Allow ColourfulText to show its own colors */
+	h1 span[class*="inline-block"],
+	h2 span[class*="inline-block"],
+	h3 span[class*="inline-block"],
+	h4 span[class*="inline-block"],
+	h5 span[class*="inline-block"],
+	h6 span[class*="inline-block"] {
+		background: none !important;
+		-webkit-background-clip: unset !important;
+		-webkit-text-fill-color: unset !important;
+		background-clip: unset !important;
+	}
+
+	/* Special gradient for hero heading */
+	.hero-gradient {
+		background: linear-gradient(
+			to bottom,
+			#ffffff 0%,
+			#f0f9ff 30%,
+			#a78bfa 70%,
+			#7c3aed 100%
+		) !important;
+		-webkit-background-clip: text !important;
+		-webkit-text-fill-color: transparent !important;
+		background-clip: text !important;
+	}
+
 	/* Reflect.app Responsive Headings */
 	@media (min-width: 1248px) {
 		h1.reflect-title {

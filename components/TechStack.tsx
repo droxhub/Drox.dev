@@ -77,10 +77,12 @@ const TechStack = () => {
 				icon={Wrench}
 				title={
 					<>
-						<span className={title({ color: "violet", size: "lg" })}>
-							Technologies
-						</span>{" "}
-						We Use
+						<span className="gradient-line">
+							<span className={title({ color: "violet", size: "lg" })}>
+								Technologies
+							</span>{" "}
+							We Use
+						</span>
 					</>
 				}
 				subtitle="Building with cutting-edge tools and frameworks"

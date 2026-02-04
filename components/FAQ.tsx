@@ -49,8 +49,10 @@ export default function FAQ() {
 					icon={CircleHelp}
 					title={
 						<>
-							<span className={title({ color: "violet", size: "lg" })}>
-								FAQ It Up!
+							<span className="gradient-line">
+								<span className={title({ color: "violet", size: "lg" })}>
+									FAQ It Up!
+								</span>
 							</span>
 						</>
 					}

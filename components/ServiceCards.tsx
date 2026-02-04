@@ -117,9 +117,11 @@ const ServiceCards = ({
 					icon={Globe}
 					title={
 						<>
-							What We{" "}
-							<span className={title({ color: "violet", size: "lg" })}>
-								Offer
+							<span className="gradient-line">
+								What We{" "}
+								<span className={title({ color: "violet", size: "lg" })}>
+									Offer
+								</span>
 							</span>
 						</>
 					}

@@ -26,13 +26,19 @@ const Projects = () => {
 					icon={Rocket}
 					title={
 						<>
-							Explore the{" "}
-							<span className={title({ color: "violet", size: "lg" })}>
-								projects
-							</span>{" "}
-							where <br className="hidden md:block" />
-							we played, experimented, <br className="hidden md:block" />
-							and built something amazing.
+							<span className="gradient-line">
+								Explore the{" "}
+								<span className={title({ color: "violet", size: "lg" })}>
+									projects
+								</span>{" "}
+								where
+							</span>
+							<br className="hidden md:block" />
+							<span className="gradient-line">we played, experimented,</span>
+							<br className="hidden md:block" />
+							<span className="gradient-line">
+								and built something amazing.
+							</span>
 						</>
 					}
 					size="lg"

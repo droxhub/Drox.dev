@@ -93,11 +93,13 @@ const WhyChooseUs = () => {
 				icon={Medal}
 				title={
 					<>
-						Building{" "}
-						<span className={title({ color: "violet", size: "lg" })}>
-							success
-						</span>{" "}
-						stories online — one website, one brand, one bold move at a time.
+						<span className="gradient-line">
+							Buildin{" "}
+							<span className={title({ color: "violet", size: "lg" })}>
+								success
+							</span>{" "}
+							stories online — one website, one brand, one bold move at a time.
+						</span>
 					</>
 				}
 				subtitle="Your growth is our goal. We combine data-driven strategy with creative design to deliver measurable business outcomes."

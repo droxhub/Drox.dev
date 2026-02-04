@@ -61,11 +61,14 @@ export default function AboutSection() {
 					icon={Gift}
 					title={
 						<>
-							Crafting Digital{" "}
-							<span className={title({ color: "violet", size: "lg" })}>
-								Excellence
-							</span>{" "}
-							One Project at a Time
+							<span className="gradient-line">
+								Crafting Digital{" "}
+								<span className={title({ color: "violet", size: "lg" })}>
+									Excellence
+								</span>
+							</span>
+							<br />
+							<span className="gradient-line">One Project at a Time</span>
 						</>
 					}
 					subtitle="We build digital products that help brands grow with practical web solutions and user-friendly design."

@@ -89,9 +89,12 @@ export default function AboutPage() {
 					icon={Users}
 					title={
 						<>
-							Building Tomorrow&apos;s <br className="hidden md:block" />
-							<span className={title({ color: "violet", size: "xl" })}>
-								Digital Experiences
+							<span className="gradient-line">Building Tomorrow&apos;s</span>{" "}
+							<br className="hidden md:block" />
+							<span className="gradient-line">
+								<span className={title({ color: "violet", size: "xl" })}>
+									Digital Experiences
+								</span>
 							</span>
 						</>
 					}

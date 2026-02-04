@@ -57,7 +57,11 @@ const SectionHeader = ({
 				viewport={{ once: true }}
 				whileInView={{ opacity: 1, y: 0 }}
 			>
-				{title}
+				{typeof title === "string" ? (
+					<span className="gradient-line">{title}</span>
+				) : (
+					title
+				)}
 			</motion.h2>
 
 			{subtitle && (

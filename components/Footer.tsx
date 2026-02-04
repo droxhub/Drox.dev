@@ -11,7 +11,7 @@ const Footer = () => {
 		<footer className="relative w-full bg-[#030014] pt-16 md:pt-24 pb-8 md:pb-12 overflow-hidden border-t border-white/5">
 			{/* Large Background Branding */}
 			<div className="absolute bottom-[2%] md:bottom-[-5%] lg:bottom-[-10%] left-1/2 -translate-x-1/2 w-full text-center pointer-events-none select-none z-0">
-				<h2 className="text-[28vw] md:text-[18vw] lg:text-[20vw] font-bold text-white/[0.03] leading-none tracking-tighter uppercase whitespace-nowrap">
+				<h2 className="no-gradient text-[28vw] md:text-[18vw] lg:text-[20vw] font-bold text-white/3 leading-none tracking-tighter uppercase whitespace-nowrap">
 					DROX
 				</h2>
 			</div>
@@ -147,7 +147,7 @@ const Footer = () => {
 							<li>
 								<Link
 									isExternal
-									href="#"
+									href="https://www.facebook.com/drox.dev"
 									className="text-gray-500 hover:text-white transition-colors text-sm"
 								>
 									Facebook
@@ -156,16 +156,16 @@ const Footer = () => {
 							<li>
 								<Link
 									isExternal
-									href={siteConfig.links.twitter}
+									href="https://wa.me/919946642643"
 									className="text-gray-500 hover:text-white transition-colors text-sm"
 								>
-									Twitter
+									WhatsApp
 								</Link>
 							</li>
 							<li>
 								<Link
 									isExternal
-									href="#"
+									href="https://www.linkedin.com/company/drox-dev/?viewAsMember=true"
 									className="text-gray-500 hover:text-white transition-colors text-sm"
 								>
 									LinkedIn
@@ -174,7 +174,7 @@ const Footer = () => {
 							<li>
 								<Link
 									isExternal
-									href="#"
+									href="https://www.instagram.com/drox.dev_"
 									className="text-gray-500 hover:text-white transition-colors text-sm"
 								>
 									Instagram

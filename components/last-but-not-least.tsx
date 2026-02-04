@@ -16,12 +16,24 @@ export const LastButNotLeast = () => {
 				<div>
 					<div className={titleWrapper({ class: "items-center" })}>
 						<div>
-							<h1 className={title({ size: "lg" })}>Last&nbsp;</h1>
-							<h1 className={title({ color: "yellow", size: "lg" })}>but</h1>
+							<h1 className={title({ size: "lg" })}>
+								<span className="gradient-line">
+									Last&nbsp;
+									<span className={title({ color: "yellow", size: "lg" })}>
+										but
+									</span>
+								</span>
+							</h1>
 						</div>
 						<div>
-							<h1 className={title({ size: "lg" })}>not&nbsp;</h1>
-							<h1 className={title({ size: "lg", color: "pink" })}>least.</h1>
+							<h1 className={title({ size: "lg" })}>
+								<span className="gradient-line">
+									not&nbsp;
+									<span className={title({ size: "lg", color: "pink" })}>
+										least.
+									</span>
+								</span>
+							</h1>
 						</div>
 					</div>
 					<p

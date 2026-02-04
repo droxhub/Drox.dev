@@ -25,10 +25,13 @@ export default function Hero() {
 				transition={{ duration: 0.5, delay: 0.1 }}
 			>
 				<h1 className={title({ size: "xl" })}>
-					Make <ColourfulText text="Beautiful" />
+					<span className="gradient-line">Make </span>
+					<ColourfulText text="Beautiful" />
 				</h1>
 				<br />
-				<h1 className={title({ size: "xl" })}>Digital Experiences</h1>
+				<h1 className={title({ size: "xl" })}>
+					<span className="gradient-line">Digital Experiences</span>
+				</h1>
 				<div className="flex justify-center">
 					<p className={subtitle({ fullWidth: true })}>
 						Beautiful, fast and modern web solutions.

@@ -74,9 +74,13 @@ export default function ServicesPage() {
 					initial={{ opacity: 0, y: 20 }}
 					transition={{ duration: 0.5, delay: 0.1 }}
 				>
-					<h1 className={title({ size: "xl" })}>Our&nbsp;</h1>
-					<h1 className={title({ color: "violet", size: "xl" })}>
-						Services&nbsp;
+					<h1 className={title({ size: "xl" })}>
+						<span className="gradient-line">
+							Our&nbsp;
+							<span className={title({ color: "violet", size: "xl" })}>
+								Services
+							</span>
+						</span>
 					</h1>
 				</motion.div>
 
@@ -201,7 +205,7 @@ export default function ServicesPage() {
 													className="mt-6"
 												>
 													<h3 className="text-3xl md:text-5xl font-medium text-white mb-6 leading-tight">
-														{step.title}
+														<span className="gradient-line">{step.title}</span>
 													</h3>
 													<p className="text-lg md:text-xl text-gray-400 font-normal leading-relaxed max-w-xl">
 														{step.description}
@@ -255,8 +259,7 @@ export default function ServicesPage() {
 				</motion.div>
 			</section>
 
-			<style jsx global>{`
-			`}</style>
+			<style jsx global>{``}</style>
 		</div>
 	);
 }
