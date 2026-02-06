@@ -82,7 +82,7 @@ const Projects = () => {
 					viewport={{ once: true }}
 				>
 					<Link
-						href="/portfolio"
+						href="/"
 						className="group inline-flex items-center gap-2 px-10 py-4 bg-[#121212] hover:bg-white hover:text-black text-white rounded-full transition-all duration-500 font-medium text-[16px] border border-white/10 shadow-2xl"
 					>
 						See more projects
