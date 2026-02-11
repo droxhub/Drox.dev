@@ -43,7 +43,7 @@ const Footer = () => {
           {/* Navigation Links */}
           <div className="lg:pl-8">
             <h4 className="text-white text-sm md:text-base font-medium mb-5 md:mb-6">
-              Navigations
+              Navigation
             </h4>
             <ul className="grid grid-cols-2 sm:grid-cols-1 gap-y-3.5 md:gap-y-4">
               <li>

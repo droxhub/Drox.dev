@@ -94,7 +94,7 @@ const WhyChooseUs = () => {
 				title={
 					<>
 						<span className="gradient-line">
-							Buildin{" "}
+							Building{" "}
 							<span className={title({ color: "violet", size: "lg" })}>
 								success
 							</span>{" "}
