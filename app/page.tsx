@@ -5,6 +5,7 @@ import Projects from "@/components/Projects";
 import ServiceCards from "@/components/ServiceCards";
 import TechStack from "@/components/TechStack";
 import WhyChooseUs from "@/components/WhyChooseUs";
+import Testimonials from "@/components/Testimonials";
 
 export default function Home() {
 	return (
@@ -38,9 +39,9 @@ export default function Home() {
 			<div className="px-4 sm:px-6 xl:px-0">
 				<FAQ />
 			</div>
-			{/* <div className="px-4 sm:px-6 xl:px-0">
+			<div className="px-4 sm:px-6 xl:px-0">
         <Testimonials />
-      </div> */}
+      </div>
 		</>
 	);
 }
