@@ -4,110 +4,133 @@ import { Heart } from "lucide-react";
 import { motion } from "motion/react";
 import LogoLoop from "@/components/ui/LogoLoop";
 import SectionHeader from "@/components/ui/section-header";
+import Link from "next/link";
 
 interface Testimonial {
   name: string;
   handle: string;
   avatar: string;
   content: string;
+  link?: string;
 }
 
 const testimonials: Testimonial[] = [
   {
-    name: "Imthiyas Ahmed",
-    handle: "Manager Of Alafa Events",
+    name: "Imthiyas Ahamed",
+    handle: "Manager Of Alfa Events",
     avatar: "testimonials/imthiyas.png",
     content:
-      "We had difficulty managing catering staff for multiple events. The team built a web app that streamlined scheduling and made our operations organized and efficient.",
+      "We struggled to manage catering staff across multiple events at the same time. After sharing the issue with the team, they built a web app where we can list events and staff can view and book available jobs. It completely streamlined our workflow and turned our operations into a smart, organized system.",
+    link: "https://www.instagram.com/imthiyaasss",
   },
   {
     name: "Sainul Abid",
-    handle: "Founder and MD of Alafa Events",
+    handle: "Founder and MD of Alfa Events",
     avatar: "testimonials/alfa.png",
     content:
       "As founders, we wanted faster and more scalable operations. The team delivered a system that streamlined our workflow, improved coordination, and accelerated our growth significantly.",
+    link: "#",
   },
-//   {
-//     name: "Demetria Giles",
-//     handle: "@drosewillings",
-//     avatar: "https://i.pravatar.cc/150?img=5",
-//     content:
-//       "Playing around with @reflectnotes, I'm back logging key thoughts, details and soundbites from episodes, books, meetings, articles, etc from the past week. So far, it's a knowledge worker's dream come true.",
-//   },
-//   {
-//     name: "Marcus Chen",
-//     handle: "@mchen_dev",
-//     avatar: "https://i.pravatar.cc/150?img=15",
-//     content:
-//       "Finally, a platform that understands modern development needs. The API integration was seamless and the documentation is top-notch.",
-//   },
-//   {
-//     name: "Jeremy McPeak",
-//     handle: "@jrmcpeak",
-//     avatar: "https://i.pravatar.cc/150?img=13",
-//     content:
-//       "I just received an invite to @reflectnotes, and holy crap! It is well thought out, and I can see this being my note-taking platform going forward. Well done! I'm looking forward to seeing how the app progresses.",
-//   },
-//   {
-//     name: "Elena Vasquez",
-//     handle: "@elenadesigns",
-//     avatar: "https://i.pravatar.cc/150?img=9",
-//     content:
-//       "As a designer, I appreciate the attention to detail in every pixel. The UI is not just functional, it's beautiful.",
-//   },
-//   {
-//     name: "Fabrizio Rinaldi",
-//     handle: "@linuz90",
-//     avatar: "https://i.pravatar.cc/150?img=8",
-//     content:
-//       "I'm keeping @reflectnotes open *all* the time, and I'm using both for simple journaling, and long form writing. It's rare to see a single app work so well for both.",
-//   },
-//   {
-//     name: "David Park",
-//     handle: "@dpark_tech",
-//     avatar: "https://i.pravatar.cc/150?img=11",
-//     content:
-//       "Migrated our entire infrastructure and couldn't be happier. Performance improvements are beyond our expectations.",
-//   },
-//   {
-//     name: "Jonathan Barronville",
-//     handle: "@jonbarronville",
-//     avatar: "https://i.pravatar.cc/150?img=14",
-//     content:
-//       "All righty, I had to jot down a few thoughts on @reflectnotes' natural writing speed, focus mode, and the overall flow. It really does deliver on all the bits of other note apps I wish were faster.",
-//   },
-//   {
-//     name: "Olivia Thompson",
-//     handle: "@oliviat",
-//     avatar: "https://i.pravatar.cc/150?img=20",
-//     content:
-//       "Customer support is exceptional. They went above and beyond to ensure our team was set up for success.",
-//   },
+  //   {
+  //     name: "Demetria Giles",
+  //     handle: "@drosewillings",
+  //     avatar: "https://i.pravatar.cc/150?img=5",
+  //     content:
+  //       "Playing around with @reflectnotes, I'm back logging key thoughts, details and soundbites from episodes, books, meetings, articles, etc from the past week. So far, it's a knowledge worker's dream come true.",
+  //   },
+  //   {
+  //     name: "Marcus Chen",
+  //     handle: "@mchen_dev",
+  //     avatar: "https://i.pravatar.cc/150?img=15",
+  //     content:
+  //       "Finally, a platform that understands modern development needs. The API integration was seamless and the documentation is top-notch.",
+  //   },
+  //   {
+  //     name: "Jeremy McPeak",
+  //     handle: "@jrmcpeak",
+  //     avatar: "https://i.pravatar.cc/150?img=13",
+  //     content:
+  //       "I just received an invite to @reflectnotes, and holy crap! It is well thought out, and I can see this being my note-taking platform going forward. Well done! I'm looking forward to seeing how the app progresses.",
+  //   },
+  //   {
+  //     name: "Elena Vasquez",
+  //     handle: "@elenadesigns",
+  //     avatar: "https://i.pravatar.cc/150?img=9",
+  //     content:
+  //       "As a designer, I appreciate the attention to detail in every pixel. The UI is not just functional, it's beautiful.",
+  //   },
+  //   {
+  //     name: "Fabrizio Rinaldi",
+  //     handle: "@linuz90",
+  //     avatar: "https://i.pravatar.cc/150?img=8",
+  //     content:
+  //       "I'm keeping @reflectnotes open *all* the time, and I'm using both for simple journaling, and long form writing. It's rare to see a single app work so well for both.",
+  //   },
+  //   {
+  //     name: "David Park",
+  //     handle: "@dpark_tech",
+  //     avatar: "https://i.pravatar.cc/150?img=11",
+  //     content:
+  //       "Migrated our entire infrastructure and couldn't be happier. Performance improvements are beyond our expectations.",
+  //   },
+  //   {
+  //     name: "Jonathan Barronville",
+  //     handle: "@jonbarronville",
+  //     avatar: "https://i.pravatar.cc/150?img=14",
+  //     content:
+  //       "All righty, I had to jot down a few thoughts on @reflectnotes' natural writing speed, focus mode, and the overall flow. It really does deliver on all the bits of other note apps I wish were faster.",
+  //   },
+  //   {
+  //     name: "Olivia Thompson",
+  //     handle: "@oliviat",
+  //     avatar: "https://i.pravatar.cc/150?img=20",
+  //     content:
+  //       "Customer support is exceptional. They went above and beyond to ensure our team was set up for success.",
+  //   },
 ];
 
 const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
-  return (
-    <div className="flex-none w-[280px] h-[160px] md:w-[450px] md:h-[210px]">
-      <div className="bg-gradient-to-t from-[#0E0C1E] to-[#08061D] backdrop-blur-sm border border-[#1C1A31]/80 rounded-2xl p-3 md:p-5 h-full flex flex-col">
-        <div className="flex items-center gap-3 mb-3">
-          <img
-            alt={testimonial.name}
-            className="w-8 h-8 md:w-11 md:h-11 rounded-full object-cover ring-2 ring-purple-500/20 flex-shrink-0"
-            src={testimonial.avatar}
-          />
-          <div className="min-w-0 flex-1">
-            <h4 className="font-semibold text-sm md:text-base text-default-900 dark:text-white truncate">
-              {testimonial.name}
-            </h4>
-            <p className="text-sm text-default-500 dark:text-default-400 truncate">
-              {testimonial.handle}
-            </p>
-          </div>
+  const content = (
+    <div className="bg-gradient-to-t from-[#0E0C1E] to-[#08061D] backdrop-blur-sm border border-[#1C1A31]/80 rounded-2xl p-3 md:p-5 h-full flex flex-col transition-colors">
+      <div className="flex items-center gap-3 mb-3">
+        <img
+          alt={testimonial.name}
+          className="w-8 h-8 md:w-11 md:h-11 rounded-full object-cover ring-2 ring-purple-500/20 flex-shrink-0"
+          src={testimonial.avatar}
+        />
+        <div className="min-w-0 flex-1">
+          <h4 className="font-semibold text-sm md:text-base text-default-900 dark:text-white truncate">
+            {testimonial.name}
+          </h4>
+          <p className="text-[10px] md:text-xs text-default-500 dark:text-default-400 truncate">
+            {testimonial.handle}
+          </p>
         </div>
-        <p className="text-sm md:text-base text-default-700 dark:text-default-300 leading-relaxed line-clamp-3 flex-1">
-          {testimonial.content}
-        </p>
       </div>
+      <p className="text-[9px] md:text-sm text-default-700 dark:text-default-300 leading-relaxed line-clamp-3 flex-1">
+        {testimonial.content}
+      </p>
+    </div>
+  );
+
+  const containerClasses =
+    "flex-none w-[280px] h-[160px] md:w-[450px] md:h-[210px] group cursor-pointer";
+
+  if (testimonial.link) {
+    return (
+      <Link
+        href={testimonial.link}
+        target="_blank"
+        className={containerClasses}
+      >
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <div className={containerClasses.replace("cursor-pointer", "")}>
+      {content}
     </div>
   );
 };
