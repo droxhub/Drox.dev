@@ -9,10 +9,10 @@ import SectionHeader from "@/components/ui/section-header";
 
 const data = [
 	{
-		src: "/projects/project1.jpeg",
+		src: "/projects/drox1.png",
 	},
 	{
-		src: "/projects/project2.jpeg",
+		src: "/projects/alfa1.png",
 	},
 ];
 
