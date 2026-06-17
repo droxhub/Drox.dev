@@ -36,9 +36,9 @@ export default function Home() {
       <div className="mt-[-50px]">
         <Projects />
       </div>
-      <div className="px-4 sm:px-6 xl:px-0">
+      {/* <div className="px-4 sm:px-6 xl:px-0">
         <Testimonials />
-      </div>
+      </div> */}
       <div className="px-4 sm:px-6 xl:px-0">
         <FAQ />
       </div>
