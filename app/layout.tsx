@@ -10,11 +10,33 @@ import { siteConfig } from "@/config/site";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
+	metadataBase: new URL("https://www.droxdev.com"),
 	title: {
 		default: siteConfig.name,
 		template: `%s - ${siteConfig.name}`,
 	},
 	description: siteConfig.description,
+	openGraph: {
+		title: siteConfig.name,
+		description: siteConfig.description,
+		url: "https://www.droxdev.com",
+		siteName: siteConfig.name,
+		images: [
+			{
+				url: "/og-image.png",
+				width: 1200,
+				height: 630,
+				alt: "Droxdev.com – Building exceptional digital experiences",
+			},
+		],
+		type: "website",
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: siteConfig.name,
+		description: siteConfig.description,
+		images: ["/og-image.png"],
+	},
 	icons: {
 		icon: "/icon.png",
 	},
