@@ -51,34 +51,6 @@ const values = [
 	},
 ];
 
-const _milestones = [
-	{
-		year: "2020",
-		title: "The Beginning",
-		description: "Vision to transform digital experiences",
-	},
-	{
-		year: "2022",
-		title: "Rapid Growth",
-		description: "50+ successful projects delivered",
-	},
-	{
-		year: "2024",
-		title: "Industry Recognition",
-		description: "Leading creative technology partner",
-	},
-	{
-		year: "2025",
-		title: "Global Expansion",
-		description: "Serving clients worldwide",
-	},
-	{
-		year: "2026",
-		title: "Innovation Leader",
-		description: "Setting new standards in digital transformation",
-	},
-];
-
 export default function AboutPage() {
 	return (
 		<div className="flex flex-col items-center w-full px-4 sm:px-6 xl:px-0 overflow-x-hidden">
@@ -138,11 +110,10 @@ export default function AboutPage() {
 								</h2>
 							</div>
 							<p className="text-lg md:text-xl text-gray-200 font-normal leading-relaxed">
-								Our Mission To help businesses grow through practical
-								technology, thoughtful design, and reliable digital solutions.
-								We believe technology should create measurable value, solve real
-								problems, and empower businesses to move forward with
-								confidence.
+								We help businesses solve real-world challenges through custom
+								software, AI, automation, and digital solutions — combining
+								business understanding with engineering excellence to deliver
+								measurable, scalable, and long-term value.
 							</p>
 							<div className="absolute bottom-[-20%] right-[-10%] w-64 h-64 bg-violet-600/10 blur-[80px] rounded-full group-hover:bg-violet-600/20 transition-colors" />
 						</div>
@@ -180,10 +151,11 @@ export default function AboutPage() {
 								</h2>
 							</div>
 							<p className="text-lg md:text-xl text-gray-200 font-normal leading-relaxed">
-								Transform ideas into digital masterpieces. Through innovation
-								and dedication, we set new standards in digital excellence,
-								helping clients achieve remarkable victory in their digital
-								evolution.
+								To become the world&apos;s most trusted technology partner,
+								empowering businesses
+								through intelligent software, AI, automation, and digital
+								innovation that transforms the way organizations operate,
+								compete, and grow.
 							</p>
 							<div className="absolute bottom-[-20%] right-[-10%] w-64 h-64 bg-purple-600/10 blur-[80px] rounded-full group-hover:bg-purple-600/20 transition-colors" />
 						</div>

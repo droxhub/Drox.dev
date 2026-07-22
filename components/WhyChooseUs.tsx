@@ -61,26 +61,27 @@ const AnimatedCounter = ({
 
 const stats = [
 	{
-		number: 25,
+		number: 26,
 		suffix: "+",
 		title: "Projects Delivered",
 		description:
-			"We've successfully completed over 25 projects—and we're just getting started!",
+			"Projects shipped by our team across web, mobile, AI, and cloud.",
 		suffixClass: "text-violet-500", // Primary color
 	},
 	{
-		number: 70,
-		suffix: "%",
-		title: "Business Growth",
+		number: 9,
+		suffix: "+",
+		title: "Years Combined Experience",
 		description:
-			"Our websites have helped clients achieve up to 70% revenue growth in just one year!",
+			"Engineering experience across modern web, mobile, AI, and cloud technologies.",
 		suffixClass: "text-violet-500",
 	},
 	{
-		number: 3,
-		suffix: "x",
-		title: "Faster Delivery",
-		description: "Rapid turnaround without compromising quality or creativity.",
+		number: 50,
+		suffix: "+",
+		title: "Technologies",
+		description:
+			"We select the right tools for each project instead of forcing one stack on every problem.",
 		suffixClass: "text-violet-500", // Using violet/primary instead of orange to match theme
 	},
 ];

@@ -89,9 +89,9 @@ const services = [
 			"Ongoing support and maintenance to keep your digital assets running smoothly. We ensure your systems stay updated and secure.",
 		gradient: "from-cyan-400 to-blue-600",
 		features: [
-			"24/7 Monitoring",
+			"Performance Monitoring",
 			"Security Updates",
-			"Performance Tuning",
+			"Bug Resolution",
 			"Technical Support",
 		],
 	},

@@ -28,10 +28,10 @@ const Footer = () => {
 						<Link className="flex items-center gap-2" href="/">
 							<Image
 								alt={siteConfig.name}
-								height={32}
+								height={31}
 								src="/logo.png"
 								width={110}
-								className="brightness-200"
+								className="brightness-200 h-auto"
 							/>
 						</Link>
 						<p className="text-gray-400 text-[13px] md:text-sm leading-relaxed max-w-[280px]">

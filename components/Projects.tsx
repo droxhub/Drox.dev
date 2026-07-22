@@ -60,6 +60,7 @@ const Projects = () => {
 									src={project.src}
 									alt="Project Preview"
 									fill
+									sizes="(max-width: 768px) 100vw, 50vw"
 									className="object-cover transition-transform duration-1000 group-hover:scale-105"
 								/>
 								{/* Gradient Overlay */}

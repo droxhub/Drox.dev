@@ -166,30 +166,22 @@ export const aboutPage = {
 	},
 	milestones: [
 		{
-			year: "2020",
-			title: "The Beginning",
-			description: "Started with a vision to transform digital experiences",
-		},
-		{
-			year: "2022",
-			title: "Rapid Growth",
-			description: "Expanded our team and delivered 50+ successful projects",
-		},
-		{
-			year: "2024",
-			title: "Industry Recognition",
-			description: "Recognized as a leading creative technology partner",
-		},
-		{
-			year: "2025",
-			title: "Global Expansion",
-			description: "Expanding our reach and serving clients worldwide",
+			year: "2026",
+			title: "Founded",
+			description:
+				"Drox Dev is founded in Kozhikode, Kerala, by four equal founders",
 		},
 		{
 			year: "2026",
-			title: "Innovation Leader",
+			title: "First Platforms Delivered",
 			description:
-				"Setting new standards in digital transformation and innovation",
+				"Alfa Event Management System and Droxlink go live for their first users",
+		},
+		{
+			year: "2026",
+			title: "Building Our Own Products",
+			description:
+				"Extending beyond client software into our own products and intelligent platforms",
 		},
 	],
 	cta: {
@@ -284,9 +276,9 @@ export const servicesPage = {
 					"Ongoing support and maintenance to keep your digital assets running smoothly. We ensure your systems stay updated and secure.",
 				gradient: "from-cyan-400 to-blue-600",
 				features: [
-					"24/7 Monitoring",
+					"Performance Monitoring",
 					"Security Updates",
-					"Performance Tuning",
+					"Bug Resolution",
 					"Technical Support",
 				],
 			},
@@ -336,21 +328,22 @@ export const servicesPage = {
 		subtitle: "What sets us apart in delivering exceptional digital solutions",
 		items: [
 			{
-				value: "15+",
+				value: "26+",
 				label: "Projects Delivered",
 				description:
-					"Successfully completed projects across various industries",
+					"Projects shipped by our team across web, mobile, AI, and cloud",
 			},
 			{
-				value: "100%",
-				label: "Client Satisfaction",
-				description: "Our clients love working with us and keep coming back",
-			},
-			{
-				value: "24/7",
-				label: "Support Available",
+				value: "9+",
+				label: "Years Combined Experience",
 				description:
-					"Round-the-clock support to keep your business running smoothly",
+					"Engineering depth across modern web, mobile, AI, and cloud technologies",
+			},
+			{
+				value: "50+",
+				label: "Technologies",
+				description:
+					"We select the right tools for each project instead of forcing one stack",
 			},
 		],
 	},

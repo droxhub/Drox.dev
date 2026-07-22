@@ -7,7 +7,7 @@ export default function TrustedBy() {
 	const rahib = "/founders/rahib.jpg";
 
 	return (
-		<AvatarGroup isBordered className="mt-4" max={3} total={10}>
+		<AvatarGroup isBordered className="mt-4" max={3} total={4}>
 			<Avatar src={ziyadImage} />
 			<Avatar src={ajnas} />
 			<Avatar src={rahib} />

@@ -68,7 +68,8 @@ export default function Navigation() {
 						<Image
 							priority
 							alt="DROX Logo"
-							height={40}
+							className="h-auto"
+							height={37}
 							src="/logo.png"
 							width={130}
 						/>
