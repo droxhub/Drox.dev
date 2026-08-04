@@ -71,21 +71,22 @@ const techLogos = [
 
 const TechStack = () => {
 	return (
-		<section className="flex flex-col items-center w-full my-16 md:my-[100px]">
+		<section className="flex flex-col items-center w-full my-16 md:my-24">
 			<SectionHeader
-				badge="Arms"
+				badge="Engineering"
 				icon={Wrench}
 				title={
 					<>
 						<span className="gradient-line">
+							We pick the{" "}
 							<span className={title({ color: "violet", size: "lg" })}>
-								Technologies
+								stack
 							</span>{" "}
-							We Use
+							to fit the problem
 						</span>
 					</>
 				}
-				subtitle="Building with cutting-edge tools and frameworks"
+				subtitle="React, Next.js, React Native, Node, Python, PostgreSQL and MongoDB are our defaults — but we'll use whatever your team can maintain after we hand it over."
 				size="lg"
 			/>
 

@@ -29,15 +29,14 @@ export const siteMetadata = {
 export const navigation = {
 	items: [
 		{ label: "Home", href: "/" },
-		{ label: "About", href: "/about" },
 		{ label: "Services", href: "/services" },
+		{ label: "Work", href: "/work" },
+		{ label: "Pricing", href: "/pricing" },
+		{ label: "About", href: "/about" },
 		{ label: "Contact", href: "/contact" },
-		// { label: "Projects", href: "#portfolio" },
-		// { label: "Process", href: "#process" },
-		// { label: "Reviews", href: "#testimonials" },
 	],
 	contactButton: {
-		text: "Contact Now",
+		text: "Book a call",
 		href: "/contact",
 	},
 };
@@ -48,24 +47,37 @@ export const navigation = {
 export const homepage = {
 	hero: {
 		title: {
-			part1: "Make",
-			part2: "Beautiful",
-			part3: "Digital Experiences",
+			// Split so the desktop line break is deliberate. On mobile the two
+			// lines flow together and wrap naturally.
+			line1: "Custom software that runs",
+			line2: "your",
+			// Rendered with the animated ColourfulText treatment — keep it short,
+			// it renders one animated span per character.
+			highlight: "operations",
 		},
-		subtitle: "Beautiful, fast and modern web solutions.",
+		// Echoes the founding observation in the Company Profile (p.7): businesses
+		// "forced to adapt their workflows to generic software".
+		subtitle:
+			"Built around how your business actually works — not around a template.",
 		ctaButtons: [
-			{
-				text: "Documentation",
-				href: "#",
-				variant: "primary" as const,
-			},
-			{
-				text: "GitHub",
-				href: "https://github.com",
-				variant: "bordered" as const,
-				icon: "github",
-			},
+			{ text: "Book a scoping call", href: "/contact" },
+			{ text: "See our work", href: "/work" },
 		],
+	},
+	closingCta: {
+		title: "The first step is a conversation.",
+		description:
+			"Whether the requirement is a defined project, a long-term product, or a technology decision that needs a second opinion, we assess it properly before anything is committed.",
+		primary: { text: "Book a scoping call", href: "/contact" },
+		secondary: { text: "Message us on WhatsApp", href: "" }, // href built from contactPage
+		reassurance: "We reply within one business day.",
+		// The low-commitment path, for readers who reached the bottom of the page
+		// but aren't ready to scope a whole build.
+		lowCommitment: {
+			lead: "Not ready to commit to a full build?",
+			linkText: "Start with a two-week Discovery Sprint",
+			href: "/pricing#discovery-sprint",
+		},
 	},
 	features: {
 		title: "Features",
@@ -191,6 +203,362 @@ export const aboutPage = {
 		buttonText: "Let's Talk",
 		buttonHref: "/contact",
 	},
+};
+
+// ============================================
+// SELECTED WORK — Company Profile pp.19-20
+// ============================================
+export const caseStudies = [
+	{
+		slug: "alfa-events",
+		name: "Alfa Event Management System",
+		category: "Event Operations Platform",
+		client: "Alfa Events, Malappuram",
+		liveUrl: "https://alfaeventsitebooking.cloud",
+		image: "/projects/alfa1.webp",
+		imageAlt:
+			"Alfa Event Management System — staff and event scheduling app built for Alfa Events, shown on mobile",
+		summary:
+			"Replaced manual coordination across concurrent events with one system for scheduling, staff assignment, work tracking and finance.",
+		challenge:
+			"Alfa ran weddings and events on manual workflows, struggling to coordinate catering staff across multiple events taking place at the same time. Availability changed daily, and there was no central view of who was booked where — so events could run short-handed with no warning.",
+		solution:
+			"A centralised platform that digitises event operations end to end: scheduling, staff assignment, work tracking, finance and coordination. Alfa list their events; staff browse available shifts and book themselves onto them, which removed the phone-and-message coordination layer entirely.",
+		modules: [
+			"Event Management",
+			"Staff Management",
+			"Finance Management",
+			"Scheduling & Assignment",
+			"Work Tracking",
+		],
+		stack: ["React.js", "Node.js", "MongoDB"],
+		outcomes: [
+			{ value: "100+", label: "Events managed" },
+			{ value: "200+", label: "Staff managed" },
+			{ value: "5", label: "Core modules" },
+		],
+		testimonials: [
+			{
+				quote:
+					"We struggled to manage catering staff across multiple events at the same time. After sharing the issue with the team, they built a web app where we can list events and staff can view and book available jobs. It completely streamlined our workflow and turned our operations into a smart, organized system.",
+				name: "Imthiyas Ahamed",
+				role: "Manager, Alfa Events",
+				avatar: "/testimonials/imthiyas.webp",
+			},
+			{
+				quote:
+					"As founders, we wanted faster and more scalable operations. The team delivered a system that streamlined our workflow, improved coordination, and accelerated our growth significantly.",
+				name: "Sainul Abid",
+				role: "Founder & MD, Alfa Events",
+				avatar: "/testimonials/alfa.webp",
+			},
+		],
+		// TODO: add the delivery timeline — "X weeks from first conversation to
+		// first live event" is the number enterprise buyers ask for next.
+	},
+];
+
+// ============================================
+// LEADERSHIP — Company Profile p.24, near-verbatim
+// ============================================
+export const founders = {
+	title: "Ownership at every level",
+	subtitle:
+		"Four equal founders who stay close to the work. Direction, delivery, architecture and engineering each have a named owner — so decisions sit with the person accountable for the outcome.",
+	/**
+	 * `shortRole` is what the card shows — one or two plain words naming the
+	 * area this founder owns. It replaced an `owns` field whose values were
+	 * abstractions ("Ownership", "Accountability", "Execution") that told a
+	 * visitor nothing about what the person actually does.
+	 *
+	 * `role` is the formal title, kept for the image alt text and shown when a
+	 * card is expanded.
+	 */
+	people: [
+		{
+			name: "Muhammad Ziyad M",
+			role: "Chief Executive Officer",
+			shortRole: "CEO",
+			photo: "/founders/ziyad-cutout.webp",
+			initials: "MZ",
+			responsibility:
+				"Company direction, client partnerships and long-term strategy. The person setting that direction stays involved in the engagement rather than handing it on.",
+		},
+		{
+			name: "Abdul Rahib KP",
+			role: "Chief Operating Officer",
+			shortRole: "Operations",
+			photo: "/founders/rahib-cutout.webp",
+			initials: "AR",
+			responsibility:
+				"Requirement analysis, sprint and delivery planning, team coordination. Scope is agreed realistically and progress stays visible from first conversation to completion.",
+		},
+		{
+			name: "Sinan Thadathil",
+			role: "Chief Technology Officer",
+			shortRole: "Architecture",
+			// TODO: no photo on file — add public/founders/sinan.webp, then run it
+			// through the subject-lift step described in docs/STATUS.md to produce
+			// sinan-cutout.webp and set it here.
+			// Renders as initials until then rather than a stock silhouette.
+			photo: null as string | null,
+			initials: "ST",
+			responsibility:
+				"Architecture, technology selection and engineering standards, set deliberately rather than by default. Systems are designed for the demands they will carry later.",
+		},
+		{
+			name: "Ajnas TK",
+			role: "Head of Engineering",
+			shortRole: "Engineering",
+			photo: "/founders/ajnas-cutout.webp",
+			initials: "AT",
+			responsibility:
+				"Feature delivery, module ownership and build quality. Approved plans become working software here — accountable for what ships, not only for what was specified.",
+		},
+	],
+};
+
+// ============================================
+// ENGAGEMENT MODELS — Company Profile p.17
+// ============================================
+export const engagementModels = {
+	/**
+	 * This page is reached from a nav item labelled "Pricing", so it has to
+	 * answer the price question in the first screen — even though the honest
+	 * answer is "it depends, and here's why". Leading with engagement models
+	 * instead made the nav label a promise the page didn't keep.
+	 */
+	title: "What it costs to work with us",
+	// Shown directly under the h1, before anything else.
+	subtitle:
+		"We don't publish a rate card, because a number without a scope behind it is meaningless. Here's what we can tell you upfront.",
+	modelsTitle: "Five ways to engage",
+	modelsSubtitle:
+		"From a fixed-scope project to a long-term product partnership. Every engagement starts the same way: understanding the business before proposing a solution.",
+	models: [
+		{
+			name: "Fixed Price Project",
+			what: "A defined scope, timeline and cost, agreed upfront.",
+			bestFor: "Well-defined projects",
+		},
+		{
+			name: "Dedicated Development Team",
+			what: "A dedicated team working as a long-term extension of your business.",
+			bestFor: "Ongoing product work",
+		},
+		{
+			name: "Monthly Technology Partner",
+			what: "Continuous development and support on a flexible monthly basis.",
+			bestFor: "Continuous support",
+		},
+		{
+			name: "Product Development Partnership",
+			what: "We build, launch and grow a product together as partners.",
+			bestFor: "Long-term products",
+		},
+		{
+			name: "Technical Consulting",
+			what: "Expert guidance on architecture, technology and strategy.",
+			bestFor: "Strategy & advisory",
+		},
+	],
+	// The three commitments we can make before knowing scope. These are what a
+	// buyer clicking "Pricing" is really trying to find out.
+	commitments: [
+		{
+			title: "A written proposal first",
+			detail:
+				"Scope, deliverables, timeline, price and payment schedule — agreed in writing before any work starts.",
+		},
+		{
+			title: "No surprise invoices",
+			detail:
+				"Work outside the agreed scope is quoted separately and approved before it begins. If a change affects the timeline, we say so at the same time as the price.",
+		},
+		{
+			title: "You can stop",
+			detail:
+				"30 days' written notice, either side. You pay for work completed; we hand over all source, credentials and documentation. No exit fee.",
+		},
+	],
+	closingNote:
+		"Tell us what you're trying to build and you'll get a written proposal with scope, timeline and cost before anything is committed.",
+};
+
+// ============================================
+// DISCOVERY SPRINT — the low-commitment entry point
+// ============================================
+/**
+ * A buyer choosing a firm founded this year over an established one is taking a
+ * personal risk, and nothing else on the site reduces it. This turns a large,
+ * irreversible decision into a small, reversible one.
+ *
+ * Deliberately written without a number: the site's stated position is that it
+ * doesn't publish a rate card, and "fixed fee, agreed before it starts" is the
+ * commitment that actually removes the risk. Add `fee` here if that changes.
+ */
+export const discoverySprint = {
+	badge: "Start small",
+	title: "Start with a Discovery Sprint",
+	subtitle:
+		"Two weeks, a fixed fee agreed in writing before it begins, and you own everything it produces — whether or not you build with us afterwards.",
+	intro:
+		"Most projects go wrong before a line of code is written, in the gap between what was asked for and what was understood. A Discovery Sprint closes that gap first, and prices the build honestly once it's closed.",
+	deliverables: [
+		{
+			title: "Requirement specification",
+			detail:
+				"What the system has to do, written down and agreed — including the workflows we found that you didn't mention.",
+		},
+		{
+			title: "Solution architecture",
+			detail:
+				"How it will be built, which technologies it uses and why, and what it will cost to run.",
+		},
+		{
+			title: "Clickable prototype",
+			detail:
+				"The core screens as an interactive prototype, so your team reacts to something real rather than to a document.",
+		},
+		{
+			title: "Delivery plan and fixed-price estimate",
+			detail:
+				"Sequenced milestones with a fixed price for the build, so the next decision is made with a number in front of you.",
+		},
+	],
+	terms: [
+		"The fee is fixed and agreed in writing before the sprint starts.",
+		"You own the output outright — specification, architecture, designs and prototype.",
+		"There is no obligation to continue. If you take the output to another firm, that is yours to do.",
+	],
+	cta: { text: "Ask about a Discovery Sprint", href: "/contact" },
+};
+
+// ============================================
+// ENGINEERING PROCESS — Company Profile pp.15, 26
+// ============================================
+/**
+ * One source for the seven stages, consumed by the compact homepage section
+ * (`components/HowWeWork.tsx`) and the expanded accordion on `/services`.
+ * They were previously only defined inside the services page, so a homepage
+ * version would have been a second copy free to drift.
+ *
+ * `key` selects the icon in each consumer; icons are components and can't live
+ * in a config module.
+ */
+export const engineeringProcess = {
+	homepage: {
+		title: "What actually happens after you get in touch",
+		subtitle:
+			"Seven stages from first conversation to long-term support. Each one is agreed before the next begins, so there is never a question about where a project stands.",
+	},
+	services: {
+		title: "Seven stages, from first conversation to long-term support",
+		// The old "Select a stage to read what happens in it" described an
+		// accordion that no longer exists — the stages now open on hover as well
+		// as on tap, so an instruction would be both stale and unnecessary.
+		subtitle:
+			"A structured, transparent process designed to reduce risk and deliver predictable results — each stage agreed before the next one begins.",
+	},
+	steps: [
+		{
+			id: 1,
+			key: "discovery",
+			title: "Discovery",
+			description:
+				"Requirements, stakeholders, and how the business actually works — before any technology is recommended.",
+			color: "from-violet-500 to-purple-600",
+		},
+		{
+			id: 2,
+			key: "strategy",
+			title: "Solution Strategy",
+			description:
+				"Architecture, technology selection and a sequenced roadmap, chosen deliberately rather than by default.",
+			color: "from-blue-500 to-cyan-600",
+		},
+		{
+			id: 3,
+			key: "design",
+			title: "UI / UX Design",
+			description:
+				"Journey mapping, interactive prototypes and interface design — agreed before engineering starts.",
+			color: "from-pink-500 to-rose-600",
+		},
+		{
+			id: 4,
+			key: "engineering",
+			title: "Engineering",
+			description:
+				"Sprint-based development, integrations and review. Work is planned and tracked in sprints, so progress stays visible throughout.",
+			color: "from-indigo-500 to-violet-600",
+		},
+		{
+			id: 5,
+			key: "qa",
+			title: "Quality Assurance",
+			description:
+				"Testing and security review throughout the build, not only in the week before launch.",
+			color: "from-green-500 to-emerald-600",
+		},
+		{
+			id: 6,
+			key: "deployment",
+			title: "Deployment",
+			description:
+				"Production launch, configuration and performance validation, with handover of all source, credentials and documentation.",
+			color: "from-amber-500 to-orange-600",
+		},
+		{
+			id: 7,
+			key: "improvement",
+			title: "Continuous Improvement",
+			description:
+				"Monitoring, enhancements and support after launch. We measure success by long-term growth, not by project completion.",
+			color: "from-cyan-500 to-blue-600",
+		},
+	],
+} as const;
+
+// ============================================
+// BUSINESS CHALLENGES — Company Profile p.12
+// ============================================
+export const businessChallenges = {
+	title: "The problems we get called about",
+	subtitle:
+		"As businesses grow, the same operational problems show up. We start every engagement by understanding which of these you actually have.",
+	groups: [
+		{
+			name: "Operational",
+			items: [
+				"Manual and repetitive processes",
+				"Disconnected software systems",
+				"No centralised business data",
+				"Poor workflow visibility",
+				"Limited reporting and analytics",
+			],
+		},
+		{
+			name: "Customer Experience",
+			items: [
+				"Outdated websites and poor mobile experiences",
+				"Slow digital services",
+				"Complicated customer journeys",
+				"Low conversion rates",
+				"Limited self-service capabilities",
+			],
+		},
+		{
+			name: "Growth",
+			items: [
+				"Software that cannot scale",
+				"Legacy systems limiting innovation",
+				"Lack of automation",
+				"Difficult third-party integrations",
+				"Rising operational costs",
+			],
+		},
+	],
 };
 
 // ============================================
@@ -357,6 +725,63 @@ export const servicesPage = {
 };
 
 // ============================================
+// FAQ — also emitted as FAQPage structured data from app/page.tsx,
+// so the accordion and the schema can never drift apart.
+// ============================================
+/**
+ * The questions that actually block a deal, not the ones that are easy to
+ * answer. Ownership, exit terms and who writes the code are asked in every
+ * serious engagement — the previous set answered none of them.
+ */
+export const faqContent = [
+	{
+		question: "What does a custom build typically cost?",
+		answer:
+			"It depends entirely on scope, so we don't publish a rate card — a number without a scope behind it is meaningless. What we can promise is a written proposal with scope, timeline and cost before anything is committed, and no invoice for work you didn't agree to. Tell us the problem and we'll tell you what solving it takes.",
+	},
+	{
+		question: "Can we start with something smaller than a full build?",
+		answer:
+			"Yes — that is what our Discovery Sprint is for. Two weeks, a fixed fee agreed in writing before it starts, and at the end you own the requirement specification, the solution architecture, a clickable prototype and a fixed-price estimate for the build. If you decide not to continue, you keep all of it and we part ways. It turns a large decision into a small one, which is a reasonable thing to ask of a firm you haven't worked with before.",
+	},
+	{
+		question: "Who owns the code and the intellectual property?",
+		answer:
+			"You do. On full payment, all custom code, designs and documentation produced for your project transfer to you outright. Two exceptions, stated upfront in every proposal: third-party open-source components stay under their own licences, and any pre-existing Drox Dev tooling used in your build stays ours but is licensed to you perpetually and royalty-free.",
+	},
+	{
+		question: "Who actually writes the code? Is any of it subcontracted?",
+		answer:
+			"The four founders and our own engineers. Architecture and engineering standards sit with our CTO, delivery with our COO, and feature quality with our Head of Engineering — all named on our About page. Nothing is passed to an agency or a freelancer marketplace, and the person who scopes your project stays on it.",
+	},
+	{
+		question: "How long does a project take?",
+		answer:
+			"A defined business platform is typically 6–12 weeks from first conversation to launch; smaller internal tools are faster. We work in sprints with visible progress throughout, and where a change affects the timeline we tell you at the same time as the price — not afterwards.",
+	},
+	{
+		question: "What happens if we need to stop, or it goes wrong?",
+		answer:
+			"Either side can end an engagement with 30 days' written notice. You pay for work completed and costs already committed; we hand over all deliverables, source code, credentials and documentation. There is no exit fee, and we don't hold work hostage. We also fix defects reported within 30 days of delivery at no charge.",
+	},
+	{
+		question: "Will you sign an NDA?",
+		answer:
+			"Yes. We'll sign yours or provide ours before receiving any confidential material. We also won't name you as a client or publish a case study about your project without your written consent.",
+	},
+	{
+		question: "What happens after launch?",
+		answer:
+			"Launch is a stage in our process, not the end of it. Monitoring, security updates, bug resolution and feature enhancements are available under a monthly technology-partner retainer. We measure success by whether your system still holds up in three years, not by whether we shipped on a Friday.",
+	},
+	{
+		question: "Do you work with small businesses, or only larger companies?",
+		answer:
+			"Both. Our work spans startups, small and mid-sized businesses and growing enterprises. What matters more than size is whether there's a real operational problem worth solving with software — if there isn't, we'll say so.",
+	},
+];
+
+// ============================================
 // CONTACT PAGE CONTENT
 // ============================================
 export const contactPage = {
@@ -380,8 +805,9 @@ export const contactPage = {
 			whatsapp: "919946642643", // For WhatsApp (no + or spaces)
 		},
 		location: {
-			address: "Hilite Business Park, Calicut, Kerala, India",
-			link: "#",
+			address: "Hilite Business Park, Kozhikode, Kerala, India",
+			// Was "#" — a location card that looked clickable and went nowhere.
+			link: "https://www.google.com/maps/search/?api=1&query=Hilite+Business+Park+Kozhikode+Kerala",
 		},
 	},
 	form: {
@@ -394,24 +820,29 @@ export const contactPage = {
 		fields: {
 			name: {
 				label: "Name",
-				placeholder: "Your name",
+				// No placeholder. It read "Your name", which is exactly what the
+				// label above the field already says — grey text repeating the label
+				// is noise, and it makes an empty field look filled in.
 			},
 			email: {
 				label: "Email",
 				placeholder: "your.email@example.com",
 			},
-			subject: {
-				label: "Subject",
-				placeholder: "What's this about?",
-			},
 			message: {
 				label: "Message",
-				placeholder: "Tell us about your project...",
+				// Was a worked example lifted almost verbatim from the Alfa Events
+				// case study — which quietly told anyone without an event-scheduling
+				// problem that this form wasn't for them, and filled two lines of the
+				// field doing it. The label already asks the question; a placeholder's
+				// job here is to say how much detail is expected, which is the thing
+				// that actually stops people starting.
+				placeholder:
+					"A few lines is plenty — what's not working, and what you'd like instead.",
 			},
 		},
 		submitButton: {
-			text: "Send Message",
-			loadingText: "Sending...",
+			text: "Send enquiry via WhatsApp",
+			loadingText: "Opening WhatsApp…",
 		},
 	},
 	social: {

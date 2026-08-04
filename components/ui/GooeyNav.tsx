@@ -21,6 +21,46 @@ export interface GooeyNavProps {
 let persistedActiveIndex: number | null = null;
 let hasInitialized = false;
 
+/**
+ * The particle maths lives at module scope rather than inside the component.
+ * These are pure functions of their arguments, and declaring them in the render
+ * body put `Math.random()` calls somewhere the React Compiler has to assume
+ * could run during render — which is both a lint error and, if it ever did run
+ * during render, a hydration hazard. They're only ever called from a click
+ * handler.
+ */
+const noise = (n = 1) => n / 2 - Math.random() * n;
+
+const getXY = (
+	distance: number,
+	pointIndex: number,
+	totalPoints: number,
+): [number, number] => {
+	const angle = ((360 + noise(8)) / totalPoints) * pointIndex * (Math.PI / 180);
+
+	return [distance * Math.cos(angle), distance * Math.sin(angle)];
+};
+
+const createParticle = (
+	i: number,
+	t: number,
+	d: [number, number],
+	r: number,
+	particleCount: number,
+	colors: number[],
+) => {
+	const rotate = noise(r / 10);
+
+	return {
+		start: getXY(d[0], particleCount - i, particleCount),
+		end: getXY(d[1] + noise(7), particleCount - i, particleCount),
+		time: t,
+		scale: 1 + noise(0.2),
+		color: colors[Math.floor(Math.random() * colors.length)],
+		rotate: rotate > 0 ? (rotate + r / 20) * 10 : (rotate - r / 20) * 10,
+	};
+};
+
 const GooeyNav: React.FC<GooeyNavProps> = ({
 	items,
 	animationTime = 600,
@@ -45,58 +85,34 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
 		return initialActiveIndex;
 	});
 
-	// Initialize only once across all remounts
+	// Initialize only once across all remounts. The restore-from-persisted case
+	// used to setState here, but the `useState` initializer above already reads
+	// the same value on mount — so the effect only has to seed the module state.
 	useEffect(() => {
 		if (!hasInitialized) {
 			persistedActiveIndex = initialActiveIndex;
 			hasInitialized = true;
-		} else if (persistedActiveIndex !== null) {
-			// Restore persisted state
-			setActiveIndex(persistedActiveIndex);
-		}
-	}, []); // Only run once per component lifecycle
-
-	// Sync with external navigation (e.g., CTA buttons, Links outside navbar)
-	useEffect(() => {
-		if (activeIndex !== initialActiveIndex) {
-			setActiveIndex(initialActiveIndex);
-			persistedActiveIndex = initialActiveIndex;
 		}
 	}, [initialActiveIndex]);
 
-	// Persist activeIndex changes
+	// Sync with external navigation (e.g. CTA buttons, Links outside the navbar).
+	// Adjusting state during render rather than in an effect: React re-runs this
+	// component immediately without committing the stale pass, so the nav never
+	// paints the wrong item. https://react.dev/reference/react/useState
+	const [syncedIndex, setSyncedIndex] = useState(initialActiveIndex);
+
+	if (syncedIndex !== initialActiveIndex) {
+		setSyncedIndex(initialActiveIndex);
+		setActiveIndex(initialActiveIndex);
+	}
+
+	// Persist activeIndex changes. This is also what carries the sync above into
+	// module state — writing the global during render would be a side effect in
+	// a pass React may never commit.
 	useEffect(() => {
 		persistedActiveIndex = activeIndex;
 	}, [activeIndex]);
 
-	const noise = (n = 1) => n / 2 - Math.random() * n;
-	const getXY = (
-		distance: number,
-		pointIndex: number,
-		totalPoints: number,
-	): [number, number] => {
-		const angle =
-			((360 + noise(8)) / totalPoints) * pointIndex * (Math.PI / 180);
-
-		return [distance * Math.cos(angle), distance * Math.sin(angle)];
-	};
-	const createParticle = (
-		i: number,
-		t: number,
-		d: [number, number],
-		r: number,
-	) => {
-		let rotate = noise(r / 10);
-
-		return {
-			start: getXY(d[0], particleCount - i, particleCount),
-			end: getXY(d[1] + noise(7), particleCount - i, particleCount),
-			time: t,
-			scale: 1 + noise(0.2),
-			color: colors[Math.floor(Math.random() * colors.length)],
-			rotate: rotate > 0 ? (rotate + r / 20) * 10 : (rotate - r / 20) * 10,
-		};
-	};
 	const makeParticles = (element: HTMLElement) => {
 		const d: [number, number] = particleDistances;
 		const r = particleR;
@@ -105,7 +121,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
 		element.style.setProperty("--time", `${bubbleTime}ms`);
 		for (let i = 0; i < particleCount; i++) {
 			const t = animationTime * 2 + noise(timeVariance * 2);
-			const p = createParticle(i, t, d, r);
+			const p = createParticle(i, t, d, r, particleCount, colors);
 
 			element.classList.remove("active");
 			setTimeout(() => {
@@ -401,4 +417,10 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
 	);
 };
 
-export default GooeyNav;
+/**
+ * Memoised because it renders a large inline <style> block. Without this it
+ * re-rendered on every mobile-menu toggle — the navbar owns that state and
+ * GooeyNav is its child — and rebuilding that CSS string was the most
+ * expensive thing in the frame the user tapped.
+ */
+export default React.memo(GooeyNav);

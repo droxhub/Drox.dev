@@ -8,7 +8,7 @@ const Footer = () => {
 	const currentYear = new Date().getFullYear();
 
 	return (
-		<footer className="relative w-full bg-[#030014] pt-16 md:pt-24 pb-8 md:pb-12 overflow-hidden border-t border-white/5">
+		<footer className="relative w-full bg-[#030014] mt-[100px] pt-16 md:pt-24 pb-8 md:pb-12 overflow-hidden border-t border-white/5">
 			{/* Large Background Branding */}
 			<div className="absolute bottom-[2%] md:bottom-[-5%] lg:bottom-[-10%] left-1/2 -translate-x-1/2 w-full text-center pointer-events-none select-none z-0">
 				<h2 className="no-gradient text-[28vw] md:text-[18vw] lg:text-[20vw] font-bold text-white/3 leading-none tracking-tighter uppercase whitespace-nowrap">
@@ -34,10 +34,26 @@ const Footer = () => {
 								className="brightness-200 h-auto"
 							/>
 						</Link>
-						<p className="text-gray-400 text-[13px] md:text-sm leading-relaxed max-w-[280px]">
-							Crafting digital experiences that inspire and innovate. Let&apos;s
-							build something remarkable together.
+						<p className="text-gray-400 text-sm leading-relaxed max-w-[280px]">
+							Custom software, AI and business automation for growing companies.
 						</p>
+						{/* Enterprise buyers look for a real address. It was absent. */}
+						<address className="not-italic text-gray-500 text-sm leading-relaxed space-y-1">
+							<span className="block">Hilite Business Park</span>
+							<span className="block">Kozhikode, Kerala, India</span>
+							<a
+								className="block hover:text-white transition-colors"
+								href="mailto:hello@droxdev.com"
+							>
+								hello@droxdev.com
+							</a>
+							<a
+								className="block hover:text-white transition-colors"
+								href="tel:+919946642643"
+							>
+								+91 9946 642 643
+							</a>
+						</address>
 					</div>
 
 					{/* Navigation Links */}
@@ -72,10 +88,10 @@ const Footer = () => {
 							</li>
 							<li>
 								<Link
-									href="/portfolio"
+									href="/work"
 									className="text-gray-500 hover:text-white transition-colors text-sm"
 								>
-									Portfolio
+									Our Work
 								</Link>
 							</li>
 							<li>
@@ -94,47 +110,25 @@ const Footer = () => {
 						<h4 className="text-white text-sm md:text-base font-medium mb-5 md:mb-6">
 							Services
 						</h4>
+						{/* Was five links to the same URL, two of them ("Web Design",
+						    "Branding") naming services that don't exist on /services. */}
 						<ul className="grid grid-cols-2 sm:grid-cols-1 gap-y-3.5 md:gap-y-4">
-							<li>
-								<Link
-									href="/services"
-									className="text-gray-500 hover:text-white transition-colors text-sm"
-								>
-									Web Design
-								</Link>
-							</li>
-							<li>
-								<Link
-									href="/services"
-									className="text-gray-500 hover:text-white transition-colors text-sm"
-								>
-									UI/UX Design
-								</Link>
-							</li>
-							<li>
-								<Link
-									href="/services"
-									className="text-gray-500 hover:text-white transition-colors text-sm"
-								>
-									Branding
-								</Link>
-							</li>
-							<li>
-								<Link
-									href="/services"
-									className="text-gray-500 hover:text-white transition-colors text-sm"
-								>
-									Web Development
-								</Link>
-							</li>
-							<li>
-								<Link
-									href="/services"
-									className="text-gray-500 hover:text-white transition-colors text-sm"
-								>
-									App Development
-								</Link>
-							</li>
+							{[
+								"Custom Software",
+								"AI Solutions",
+								"Business Automation",
+								"Web & Mobile Apps",
+								"UI/UX Design",
+							].map((service) => (
+								<li key={service}>
+									<Link
+										href="/services"
+										className="text-gray-500 hover:text-white transition-colors text-sm"
+									>
+										{service}
+									</Link>
+								</li>
+							))}
 						</ul>
 					</div>
 

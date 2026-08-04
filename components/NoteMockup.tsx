@@ -190,10 +190,12 @@ export function NoteMockup() {
 													{getOrdinalSuffix(currentDay)}, {currentYear}
 												</div>
 											</div>
-											<h1 className="text-lg font-normal text-gray-200 mb-3">
+											{/* Decorative text inside a mock UI, not a document heading.
+											    It was an <h1>, which gave the homepage two. */}
+											<p className="text-lg font-normal text-gray-200 mb-3">
 												Today I partnered with{" "}
 												<span className="text-indigo-300">Drox Dev!</span>
-											</h1>
+											</p>
 										</div>
 
 										{/* Content */}

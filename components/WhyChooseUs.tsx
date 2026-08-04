@@ -59,21 +59,31 @@ const AnimatedCounter = ({
 	);
 };
 
+/**
+ * Company-level figures only. Per-project numbers (Alfa's 100+ events, 200+
+ * staff) belong on the case study at /work/alfa-events, not in a section about
+ * why you'd choose the company.
+ *
+ * Each figure still has to survive being questioned in a sales call, so "26+"
+ * carries its qualifier in the description: the Company Profile reports 2
+ * company projects (p.5) alongside 26+ across the founders' prior careers
+ * (p.22), and an unqualified 26 is the claim a buyer checks first.
+ */
 const stats = [
 	{
 		number: 26,
 		suffix: "+",
 		title: "Projects Delivered",
 		description:
-			"Projects shipped by our team across web, mobile, AI, and cloud.",
-		suffixClass: "text-violet-500", // Primary color
+			"Shipped by our founders across web, mobile, AI and cloud — before and since founding Drox Dev.",
+		suffixClass: "text-violet-500",
 	},
 	{
 		number: 9,
 		suffix: "+",
 		title: "Years Combined Experience",
 		description:
-			"Engineering experience across modern web, mobile, AI, and cloud technologies.",
+			"Engineering depth across modern web, mobile, AI and cloud technologies.",
 		suffixClass: "text-violet-500",
 	},
 	{
@@ -82,13 +92,13 @@ const stats = [
 		title: "Technologies",
 		description:
 			"We select the right tools for each project instead of forcing one stack on every problem.",
-		suffixClass: "text-violet-500", // Using violet/primary instead of orange to match theme
+		suffixClass: "text-violet-500",
 	},
 ];
 
 const WhyChooseUs = () => {
 	return (
-		<section className="flex flex-col items-center w-full my-20 md:my-[100px]">
+		<section className="flex flex-col items-center w-full my-16 md:my-24">
 			<SectionHeader
 				badge="Why Choose Us"
 				icon={Medal}

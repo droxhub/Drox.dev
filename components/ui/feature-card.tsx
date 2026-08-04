@@ -1,4 +1,5 @@
-import React, { useId } from "react";
+import { type ComponentPropsWithoutRef, useId, useMemo } from "react";
+import { seededRandom } from "@/lib/seeded-random";
 
 interface FeatureCardProps {
 	title: string;
@@ -26,34 +27,29 @@ export const Grid = ({
 	pattern?: number[][];
 	size?: number;
 }) => {
-	const [p, setP] = React.useState<number[][]>(
-		pattern ?? [
-			[7, 1],
-			[8, 2],
-			[9, 3],
-			[10, 4],
-			[7, 5],
-		],
-	);
+	// Seeded, so server and client produce the same squares. This used to render
+	// a fixed fallback pattern and then swap it for a random one in an effect,
+	// which meant every card re-rendered once after hydration for a purely
+	// decorative background. See lib/seeded-random.ts.
+	const p = useMemo(() => {
+		if (pattern) return pattern;
 
-	React.useEffect(() => {
-		if (!pattern) {
-			// Generate unique random patterns on client side only
-			const uniquePatterns = new Set<string>();
-			const patterns: number[][] = [];
+		const random = seededRandom(0x6c17_d5a1);
+		const seen = new Set<string>();
+		const patterns: number[][] = [];
 
-			while (patterns.length < 5) {
-				const x = Math.floor(Math.random() * 4) + 7;
-				const y = Math.floor(Math.random() * 6) + 1;
-				const key = `${x}-${y}`;
+		while (patterns.length < 5) {
+			const x = Math.floor(random() * 4) + 7;
+			const y = Math.floor(random() * 6) + 1;
+			const key = `${x}-${y}`;
 
-				if (!uniquePatterns.has(key)) {
-					uniquePatterns.add(key);
-					patterns.push([x, y]);
-				}
+			if (!seen.has(key)) {
+				seen.add(key);
+				patterns.push([x, y]);
 			}
-			setP(patterns);
 		}
+
+		return patterns;
 	}, [pattern]);
 
 	return (
@@ -72,7 +68,23 @@ export const Grid = ({
 	);
 };
 
-export function GridPattern({ width, height, x, y, squares, ...props }: any) {
+interface GridPatternProps extends ComponentPropsWithoutRef<"svg"> {
+	width: number;
+	height: number;
+	x: string | number;
+	y: string | number;
+	/** `[column, row]` pairs, in pattern-tile units. */
+	squares?: number[][];
+}
+
+export function GridPattern({
+	width,
+	height,
+	x,
+	y,
+	squares,
+	...props
+}: GridPatternProps) {
 	const patternId = useId();
 
 	return (
@@ -97,14 +109,14 @@ export function GridPattern({ width, height, x, y, squares, ...props }: any) {
 			/>
 			{squares && (
 				<svg className="overflow-visible" x={x} y={y}>
-					{squares.map(([x, y]: any) => (
+					{squares.map(([column, row]) => (
 						<rect
-							key={`${x}-${y}`}
+							key={`${column}-${row}`}
 							height={height + 1}
 							strokeWidth="0"
 							width={width + 1}
-							x={x * width}
-							y={y * height}
+							x={column * width}
+							y={row * height}
 						/>
 					))}
 				</svg>

@@ -28,6 +28,13 @@
 		--chart-4: 43 74% 66%;
 		--chart-5: 27 87% 67%;
 		--radius: 0.5rem;
+
+		/* The `subtitle` primitive in components/primitives.ts uses this
+		   unconditionally, but it was only ever defined inside `.dark` below — so
+		   in light mode the declaration was invalid and subtitle text fell back to
+		   whatever colour it inherited. Mirrors --muted-foreground (0 0% 45.1%) at
+		   the same 0.7 alpha the dark value uses. */
+		--reflect-sub: rgba(115, 115, 115, 0.7);
 	}
 
 	.dark {
@@ -419,4 +426,31 @@
 
 .space-dot-to-center {
 	animation: toCenter ease-in infinite;
+}
+
+/*
+ * Mobile menu item entrance. This was six framer-motion components, each with
+ * its own animation loop, all mounting in the same frame as the full-screen
+ * overlay itself — the most expensive moment in the interaction. A CSS
+ * animation with a per-item delay costs the main thread nothing at mount.
+ */
+@keyframes menu-item-in {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+.menu-item-in {
+	animation: menu-item-in 0.25s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.menu-item-in {
+		animation: none;
+	}
 }

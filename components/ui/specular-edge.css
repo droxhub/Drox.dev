@@ -1,0 +1,18 @@
+/*
+ * Companion to specular-edge.tsx. The canvas is inset past the element it
+ * outlines so the rim glow can bleed outside the edge — which means the host
+ * element must NOT have `overflow-hidden` on it. Clip the surface and glows in
+ * an inner wrapper instead; see BusinessChallenges for the pattern.
+ */
+.specular-edge {
+	position: absolute;
+	inset: -20px;
+	pointer-events: none;
+	z-index: 1;
+}
+
+.specular-edge canvas {
+	display: block;
+	width: 100%;
+	height: 100%;
+}

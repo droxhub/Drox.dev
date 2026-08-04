@@ -2,6 +2,7 @@
 
 import { Heart } from "lucide-react";
 import { motion } from "motion/react";
+import Image from "next/image";
 import Link from "next/link";
 import SectionHeader from "@/components/ui/section-header";
 
@@ -17,14 +18,14 @@ const testimonials: Testimonial[] = [
 	{
 		name: "Imthiyas Ahamed",
 		handle: "Manager Of Alfa Events",
-		avatar: "testimonials/imthiyas.png",
+		avatar: "/testimonials/imthiyas.webp",
 		content:
 			"We struggled to manage catering staff across multiple events at the same time. After sharing the issue with the team, they built a web app where we can list events and staff can view and book available jobs. It completely streamlined our workflow and turned our operations into a smart, organized system.",
 	},
 	{
 		name: "Sainul Abid",
 		handle: "Founder and MD of Alfa Events",
-		avatar: "testimonials/alfa.png",
+		avatar: "/testimonials/alfa.webp",
 		content:
 			"As founders, we wanted faster and more scalable operations. The team delivered a system that streamlined our workflow, improved coordination, and accelerated our growth significantly.",
 	},
@@ -34,10 +35,12 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
 	const content = (
 		<div className="bg-gradient-to-t from-[#0E0C1E] to-[#08061D] backdrop-blur-sm border border-[#1C1A31]/80 rounded-2xl p-3 md:p-5 h-full flex flex-col transition-colors">
 			<div className="flex items-center gap-3 mb-3">
-				<img
-					alt={testimonial.name}
+				<Image
+					alt={`${testimonial.name}, ${testimonial.handle}`}
 					className="w-8 h-8 md:w-11 md:h-11 rounded-full object-cover ring-2 ring-purple-500/20 flex-shrink-0"
+					height={44}
 					src={testimonial.avatar}
+					width={44}
 				/>
 				<div className="min-w-0 flex-1">
 					<h4 className="font-semibold text-sm md:text-base text-default-900 dark:text-white truncate">
@@ -77,16 +80,16 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
 
 const Testimonials = () => {
 	return (
-		<section className="flex flex-col items-center w-full py-16 md:py-26 overflow-hidden">
+		<section className="flex flex-col items-center w-full py-16 md:py-24 overflow-hidden">
 			<SectionHeader
-				badge="Wall of Love"
+				badge="Client Feedback"
 				icon={Heart}
-				title="Loved by Thinkers"
-				subtitle="Here's what people are saying about us"
+				title="What clients say"
+				subtitle="From the people who run the systems we built"
 				size="lg"
 			/>
 
-			<div className="w-full max-w-5xl px-4 md:px-6 mt-10 md:mt-14 flex flex-col md:flex-row items-stretch justify-center gap-5 md:gap-6">
+			<div className="w-full max-w-5xl mt-10 md:mt-14 flex flex-col md:flex-row items-stretch justify-center gap-5 md:gap-6">
 				{testimonials.map((testimonial, index) => (
 					<motion.div
 						key={testimonial.name}

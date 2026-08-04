@@ -1,12 +1,6 @@
 "use-client";
 
-import {
-	Card,
-	CardBody,
-	CardHeader,
-	LinkProps,
-	SlotsToClasses,
-} from "@heroui/react";
+import { Card, CardBody, CardHeader, LinkProps } from "@heroui/react";
 import { LinkIcon } from "@heroui/shared-icons";
 import React, { ReactNode } from "react";
 import { tv } from "tailwind-variants";
@@ -26,6 +20,20 @@ const styles = tv({
 
 export type FeaturesGridSlots = keyof ReturnType<typeof styles>;
 
+/**
+ * The class value the slot functions above actually accept.
+ *
+ * This prop used to be typed with HeroUI's `SlotsToClasses`, and every single
+ * use then needed `as any` — because HeroUI bundles its own copy of
+ * tailwind-merge while `tv()` here resolves the one under tailwind-variants.
+ * The two `ClassNameValue` types differ only in whether they admit `bigint`, so
+ * they're identical at runtime and incompatible to TypeScript. Deriving the
+ * type from the local `tv` instance removes the mismatch at its source.
+ */
+type SlotClass = NonNullable<
+	Parameters<ReturnType<typeof styles>["base"]>[0]
+>["class"];
+
 export interface Feature extends LinkProps {
 	title: string;
 	icon: ReactNode;
@@ -34,7 +42,7 @@ export interface Feature extends LinkProps {
 
 interface FeaturesGridProps {
 	features: Feature[];
-	classNames?: SlotsToClasses<FeaturesGridSlots>;
+	classNames?: Partial<Record<FeaturesGridSlots, SlotClass>>;
 }
 
 export const FeaturesGrid: React.FC<FeaturesGridProps> = ({
@@ -45,25 +53,23 @@ export const FeaturesGrid: React.FC<FeaturesGridProps> = ({
 	const slots = styles();
 
 	return (
-		<div className={slots.base({ class: classNames?.base as any })} {...props}>
+		<div className={slots.base({ class: classNames?.base })} {...props}>
 			{features.map((feat: Feature, index: number) => (
 				<Card
 					key={`${feat.title}_${index}`}
 					isBlurred
-					className={slots.card({ class: classNames?.card as any })}
+					className={slots.card({ class: classNames?.card })}
 					isPressable={!!feat.href}
 				>
-					<CardHeader
-						className={slots.header({ class: classNames?.header as any })}
-					>
+					<CardHeader className={slots.header({ class: classNames?.header })}>
 						<div
 							className={slots.iconWrapper({
-								class: classNames?.iconWrapper as any,
+								class: classNames?.iconWrapper,
 							})}
 						>
 							{feat.icon}
 						</div>
-						<p className={slots.title({ class: classNames?.title as any })}>
+						<p className={slots.title({ class: classNames?.title })}>
 							{feat.title}
 						</p>
 						{feat.isExternal && (
@@ -71,12 +77,10 @@ export const FeaturesGrid: React.FC<FeaturesGridProps> = ({
 						)}
 					</CardHeader>
 					{feat.description ? (
-						<CardBody
-							className={slots.body({ class: classNames?.body as any })}
-						>
+						<CardBody className={slots.body({ class: classNames?.body })}>
 							<p
 								className={slots.description({
-									class: classNames?.description as any,
+									class: classNames?.description,
 								})}
 							>
 								{feat.description}

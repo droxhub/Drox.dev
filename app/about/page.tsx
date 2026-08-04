@@ -13,7 +13,9 @@ import {
 } from "@tabler/icons-react";
 import { Trophy, Users } from "lucide-react";
 import { motion } from "motion/react";
+import Founders from "@/components/Founders";
 import { title } from "@/components/primitives";
+import AmbientVideo from "@/components/ui/ambient-video";
 import CTAButton from "@/components/ui/cta-button";
 import SectionHeader from "@/components/ui/section-header";
 import { cn } from "@/lib/utils";
@@ -55,9 +57,10 @@ export default function AboutPage() {
 	return (
 		<div className="flex flex-col items-center w-full px-4 sm:px-6 xl:px-0 overflow-x-hidden">
 			{/* Hero Section */}
-			<section className="flex flex-col items-center justify-center gap-4 py-16 md:py-24 px-4 sm:px-0">
+			<section className="flex flex-col items-center justify-center gap-4 py-12 md:py-20">
 				<SectionHeader
-					badge="About Drox"
+					as="h1"
+					badge="About Drox Dev"
 					icon={Users}
 					title={
 						<>
@@ -86,16 +89,11 @@ export default function AboutPage() {
 						viewport={{ once: true, margin: "-100px" }}
 						whileInView={{ opacity: 1, scale: 1 }}
 					>
-						{/* Video Background */}
-						<video
-							autoPlay
-							loop
-							muted
-							playsInline
+						{/* Video Background — lazy, desktop-only, reduced-motion aware */}
+						<AmbientVideo
 							className="absolute inset-0 w-full h-full object-cover opacity-60 transition-opacity duration-700 group-hover:opacity-80"
-						>
-							<source src="/video/silk-1770108089707.webm" type="video/webm" />
-						</video>
+							src="/video/silk.webm"
+						/>
 
 						<div className="absolute inset-x-0 -top-px h-px w-full bg-gradient-to-r from-transparent via-violet-500/50 to-transparent" />
 						<div className="absolute inset-y-0 -left-px w-px h-full bg-gradient-to-b from-transparent via-violet-500/50 to-transparent" />
@@ -127,16 +125,11 @@ export default function AboutPage() {
 						viewport={{ once: true, margin: "-100px" }}
 						whileInView={{ opacity: 1, scale: 1 }}
 					>
-						{/* Video Background */}
-						<video
-							autoPlay
-							loop
-							muted
-							playsInline
+						{/* Video Background — lazy, desktop-only, reduced-motion aware */}
+						<AmbientVideo
 							className="absolute inset-0 w-full h-full object-cover opacity-60 transition-opacity duration-700 group-hover:opacity-80"
-						>
-							<source src="/video/silk-1770108089707.webm" type="video/webm" />
-						</video>
+							src="/video/silk.webm"
+						/>
 
 						<div className="absolute inset-x-0 -top-px h-px w-full bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
 						<div className="absolute inset-y-0 -right-px w-px h-full bg-gradient-to-b from-transparent via-purple-500/50 to-transparent" />
@@ -150,18 +143,23 @@ export default function AboutPage() {
 									Our Vision
 								</h2>
 							</div>
+							{/* Was "to become the world's most trusted technology partner" —
+							    unearned for a firm founded this year, and it made a buyer
+							    discount the claims that were true. */}
 							<p className="text-lg md:text-xl text-gray-200 font-normal leading-relaxed">
-								To become the world&apos;s most trusted technology partner,
-								empowering businesses
-								through intelligent software, AI, automation, and digital
-								innovation that transforms the way organizations operate,
-								compete, and grow.
+								To be the team businesses call first when software has to
+								actually work — and to still be maintaining it five years later.
 							</p>
 							<div className="absolute bottom-[-20%] right-[-10%] w-64 h-64 bg-purple-600/10 blur-[80px] rounded-full group-hover:bg-purple-600/20 transition-colors" />
 						</div>
 					</motion.div>
 				</div>
 			</section>
+
+			<Divider className="w-full max-w-7xl my-16 md:my-24 bg-white/5" />
+
+			{/* Who is actually accountable — the first thing a buyer looks for. */}
+			<Founders />
 
 			<Divider className="w-full max-w-7xl my-16 md:my-24 bg-white/5" />
 
@@ -175,7 +173,7 @@ export default function AboutPage() {
 				/>
 
 				{/* Cards Container */}
-				<div className="w-full max-w-6xl mb-12 px-4 sm:px-6 xl:px-0">
+				<div className="w-full max-w-7xl mb-12">
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 						{values.map((value, index) => (
 							<motion.div

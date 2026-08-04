@@ -5,15 +5,27 @@ import { motion } from "motion/react";
 import { title as titleStyle } from "@/components/primitives";
 import { cn } from "@/lib/utils";
 
+/**
+ * Callers pass icons from three libraries (lucide, Phosphor, react-icons) and
+ * only ever `className` is applied to them here — so the contract is the
+ * intersection, not `any`.
+ */
+type IconComponent = React.ComponentType<{ className?: string }>;
+
 interface SectionHeaderProps {
 	badge: string;
-	icon?: LucideIcon | React.ComponentType<any>;
+	icon?: LucideIcon | IconComponent;
 	title: string | React.ReactNode;
 	subtitle?: string;
 	centered?: boolean;
 	className?: string;
 	titleClassName?: string;
 	size?: "sm" | "md" | "lg" | "xl";
+	/**
+	 * Heading level. Defaults to h2 — pass "h1" when this header IS the page
+	 * heading, as on /about, so the page isn't published without an h1.
+	 */
+	as?: "h1" | "h2";
 }
 
 const SectionHeader = ({
@@ -25,7 +37,10 @@ const SectionHeader = ({
 	className,
 	titleClassName,
 	size = "md",
+	as = "h2",
 }: SectionHeaderProps) => {
+	const Heading = as === "h1" ? motion.h1 : motion.h2;
+
 	return (
 		<div
 			className={cn(
@@ -46,7 +61,7 @@ const SectionHeader = ({
 				{badge}
 			</motion.div>
 
-			<motion.h2
+			<Heading
 				className={cn(
 					titleStyle({ size, fullWidth: !centered }),
 					"text-white mb-8 !inline-block",
@@ -62,7 +77,7 @@ const SectionHeader = ({
 				) : (
 					title
 				)}
-			</motion.h2>
+			</Heading>
 
 			{subtitle && (
 				<motion.p

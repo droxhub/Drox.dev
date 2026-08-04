@@ -3,6 +3,7 @@
 import Lenis from "lenis";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
+import { MOBILE_MENU_EVENT, type MobileMenuEvent } from "@/lib/utils";
 
 export default function SmoothScroll({
 	children,
@@ -41,6 +42,33 @@ export default function SmoothScroll({
 		return () => {
 			cancelAnimationFrame(rafId);
 			lenis.destroy();
+		};
+	}, []);
+
+	// Freeze the page while the mobile menu overlay is open. Both halves are
+	// needed: Lenis intercepts the wheel, so `stop()` is what holds a desktop
+	// scroll, but this instance runs without `syncTouch`, which means touch
+	// scrolling stays native and only `overflow: hidden` stops it — i.e. the
+	// overflow lock is the half that matters on a phone. Measured at no cost to
+	// the open animation. Mobile-only, so there is no scrollbar-width shift.
+	useEffect(() => {
+		const onMenu = (event: Event) => {
+			const { open } = (event as MobileMenuEvent).detail;
+
+			if (open) {
+				lenisRef.current?.stop();
+				document.body.style.overflow = "hidden";
+			} else {
+				lenisRef.current?.start();
+				document.body.style.overflow = "";
+			}
+		};
+
+		window.addEventListener(MOBILE_MENU_EVENT, onMenu);
+
+		return () => {
+			window.removeEventListener(MOBILE_MENU_EVENT, onMenu);
+			document.body.style.overflow = "";
 		};
 	}, []);
 

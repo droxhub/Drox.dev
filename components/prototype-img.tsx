@@ -1,39 +1,45 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
+import { seededRandom } from "@/lib/seeded-random";
+import { fromCentre } from "@/lib/utils";
 
 import { HeroScrollDemo } from "./HeroScrollDemo";
 
 function PrototypeImg() {
 	const containerRef = useRef<HTMLDivElement>(null);
-	const [spaceDots, setSpaceDots] = React.useState<
-		Array<{
-			x: number;
-			y: number;
-			size: number;
-			opacity: number;
-			duration: number;
-			delay: number;
-		}>
-	>([]);
 
-	useEffect(() => {
-		// Generate space dots on client side only to avoid hydration mismatch
-		const dots = [...Array(120)].map(() => {
-			const angle = Math.random() * 360;
+	// Seeded rather than random, so the server and the client lay the dots out
+	// identically. That removes the effect-then-setState round trip this used to
+	// need to avoid a hydration mismatch, and the field now paints with the
+	// first render instead of after hydration.
+	//
+	// Values are rounded HERE rather than at render, and that rounding is load
+	// bearing: the CSS parser re-serialises inline styles to a few significant
+	// figures, so `width: 2.21784882619977px` comes back as `2.21785px` and
+	// every dot fails hydration on a value that was never meaningfully precise.
+	// Rounding also makes the output immune to any last-digit float divergence
+	// between the Node and browser engines.
+	const spaceDots = useMemo(() => {
+		const random = seededRandom(0x5eed_51de);
+		const round = (n: number) => Number(n.toFixed(2));
+
+		return [...Array(120)].map(() => {
+			const angle = random() * 360;
 			const maxRadius = 800;
-			const distance = Math.random() * maxRadius;
-			const x = Math.cos((angle * Math.PI) / 180) * distance;
-			const y = Math.sin((angle * Math.PI) / 180) * distance;
-			const size = Math.random() * 2 + 0.5;
-			const opacity = Math.random() * 0.7 + 0.3;
-			const duration = 12 + Math.random() * 10;
-			const delay = Math.random() * 20;
+			const distance = random() * maxRadius;
 
-			return { x, y, size, opacity, duration, delay };
+			return {
+				// Whole pixels: these are 1–3px dots scattered over an 800px radius,
+				// so sub-pixel placement buys nothing and costs exact round-tripping.
+				x: Math.round(Math.cos((angle * Math.PI) / 180) * distance),
+				y: Math.round(Math.sin((angle * Math.PI) / 180) * distance),
+				size: round(random() * 2 + 0.5),
+				opacity: round(random() * 0.7 + 0.3),
+				duration: round(12 + random() * 10),
+				delay: round(random() * 20),
+			};
 		});
-
-		setSpaceDots(dots);
 	}, []);
 
 	useEffect(() => {
@@ -137,8 +143,8 @@ function PrototypeImg() {
 									className="absolute bg-white rounded-full space-dot-to-center"
 									style={
 										{
-											left: `calc(50% + ${dot.x}px)`,
-											top: `calc(50% + ${dot.y}px)`,
+											left: fromCentre(dot.x),
+											top: fromCentre(dot.y),
 											width: `${dot.size}px`,
 											height: `${dot.size}px`,
 											opacity: dot.opacity,

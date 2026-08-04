@@ -1,11 +1,14 @@
 "use client";
 
 import {
+	Brain,
 	CaretDown,
 	ChartLineUp,
+	Cube,
 	DeviceMobile,
 	Gear,
 	Globe,
+	Lightning,
 	Palette,
 	ShoppingCart,
 } from "@phosphor-icons/react";
@@ -13,104 +16,95 @@ import { motion } from "motion/react";
 import { useState } from "react";
 
 import { title } from "@/components/primitives";
+import CTAButton from "@/components/ui/cta-button";
 import { Grid } from "@/components/ui/feature-card";
 import SectionHeader from "@/components/ui/section-header";
 
+/**
+ * The nine service lines from the 2026 Company Profile (p.14), in the order a
+ * buyer should meet them: engineering first, marketing last.
+ *
+ * Previously this listed six, and omitted AI Solutions and Business Automation
+ * entirely — the two capabilities that separate Drox Dev from a web agency.
+ * `sub` carries the profile's own sub-capability lists.
+ */
 const services = [
+	{
+		icon: Cube,
+		title: "Software Engineering",
+		description:
+			"Custom software designed around each business's unique processes, not around a template.",
+		sub: "Business management systems · ERP · CRM · Internal platforms · SaaS applications · Custom dashboards · API development",
+	},
+	{
+		icon: Brain,
+		title: "AI Solutions",
+		description:
+			"Helping organisations use AI where it improves productivity, decisions and engagement — and saying so when it wouldn't.",
+		sub: "AI assistants & chatbots · Document processing · Business intelligence · LLM integration · AI-powered internal tools",
+	},
+	{
+		icon: Lightning,
+		title: "Business Automation",
+		description:
+			"Automating repetitive work so your team can spend its time on the things that actually need a person.",
+		sub: "Workflow automation · CRM & HR automation · Finance process automation · Approval workflows · Notification systems",
+	},
 	{
 		icon: Globe,
 		title: "Web Development",
 		description:
-			"Custom web applications built with modern technologies. From responsive websites to complex web platforms, we deliver scalable solutions that perform.",
-		gradient: "from-violet-400 to-purple-600",
-		features: [
-			"React & Next.js Development",
-			"Full-Stack Solutions",
-			"API Integration",
-			"Performance Optimization",
-		],
+			"Modern web platforms combining performance, usability and scalability.",
+		sub: "Corporate websites · Customer portals · Web applications · CMS solutions · Progressive web apps",
 	},
 	{
 		icon: DeviceMobile,
-		title: "Mobile App Development",
+		title: "Mobile Applications",
 		description:
-			"Native and cross-platform mobile applications for iOS and Android. We create intuitive, high-performance apps that users love.",
-		gradient: "from-blue-400 to-cyan-600",
-		features: [
-			"iOS & Android Apps",
-			"React Native Development",
-			"UI/UX Design",
-			"App Store Optimization",
-		],
+			"Applications built for performance, usability and long-term maintainability.",
+		sub: "Android · iOS · Cross-platform · Customer apps · Internal business apps",
 	},
 	{
 		icon: Palette,
 		title: "UI/UX Design",
 		description:
-			"Beautiful, user-centered designs that combine aesthetics with functionality. We create interfaces that engage users and drive conversions.",
-		gradient: "from-pink-400 to-rose-600",
-		features: [
-			"User Research",
-			"Wireframing & Prototyping",
-			"Visual Design",
-			"Design Systems",
-		],
+			"Digital experiences that are intuitive, accessible and aligned with business goals.",
+		sub: "User research · UX strategy · Interface design · Wireframing · Interactive prototypes · Design systems",
 	},
 	{
 		icon: ShoppingCart,
 		title: "E-Commerce Solutions",
 		description:
-			"Complete e-commerce platforms that drive sales. From product catalogs to payment integration, we build online stores that convert.",
-		gradient: "from-yellow-400 to-orange-600",
-		features: [
-			"Online Store Development",
-			"Payment Gateway Integration",
-			"Inventory Management",
-			"Analytics & Reporting",
-		],
+			"Commerce platforms built to improve the buying experience and grow online sales.",
+		sub: "Custom e-commerce · Shopify & WooCommerce · Inventory & payment integration · Order management · Marketplaces",
+	},
+	{
+		icon: Gear,
+		title: "Support & Continuous Improvement",
+		description:
+			"Keeping systems reliable and evolving after launch — the part most vendors treat as an afterthought.",
+		sub: "Performance monitoring · Bug resolution · Security updates · Infrastructure maintenance · Feature enhancements",
 	},
 	{
 		icon: ChartLineUp,
 		title: "Digital Marketing",
 		description:
-			"Data-driven marketing strategies that grow your business. We help you reach the right audience and maximize your ROI.",
-		gradient: "from-green-400 to-emerald-600",
-		features: [
-			"SEO & SEM",
-			"Social Media Marketing",
-			"Content Strategy",
-			"Analytics & Insights",
-		],
-	},
-	{
-		icon: Gear,
-		title: "Maintenance & Support",
-		description:
-			"Ongoing support and maintenance to keep your digital assets running smoothly. We ensure your systems stay updated and secure.",
-		gradient: "from-cyan-400 to-blue-600",
-		features: [
-			"Performance Monitoring",
-			"Security Updates",
-			"Bug Resolution",
-			"Technical Support",
-		],
+			"Measurable strategies that support growth, usually alongside a platform we've already built for you.",
+		sub: "SEO · Social media marketing · Google & Meta ads · Content strategy · Conversion optimisation",
 	},
 ];
 
 interface ServiceCardsProps {
-	showChip?: boolean;
+	/** Suppresses the section header — `/services` already has its own. */
 	hideHeader?: boolean;
 }
 
-const ServiceCards = ({
-	showChip = false,
-	hideHeader = false,
-}: ServiceCardsProps) => {
+const ServiceCards = ({ hideHeader = false }: ServiceCardsProps) => {
 	const [showAll, setShowAll] = useState(false);
 	const MOBILE_VISIBLE_COUNT = 3;
 
 	return (
-		<section className="flex flex-col items-center w-full my-16 md:my-24 px-4 md:px-6 lg:px-8">
+		<section className="flex flex-col items-center w-full my-16 md:my-24">
 			{!hideHeader && (
 				<SectionHeader
 					badge="Services"
@@ -157,11 +151,16 @@ const ServiceCards = ({
 											weight="regular"
 										/>
 									</div>
-									<h3 className="text-lg font-semibold mb-3 text-white relative z-20 transition-all duration-300 group-hover:scale-110 origin-center inline-block group-hover:drop-shadow-[0_2px_4px_rgba(168,85,247,0.4)]">
+									<h3 className="text-lg font-semibold mb-3 text-white relative z-20">
 										{service.title}
 									</h3>
-									<p className="text-sm text-gray-400 leading-relaxed relative z-20 transition-all duration-300 group-hover:scale-110 origin-center inline-block group-hover:drop-shadow-[0_2px_4px_rgba(168,85,247,0.4)]">
+									<p className="text-sm text-gray-400 leading-relaxed relative z-20">
 										{service.description}
+									</p>
+									{/* The profile's own sub-capability list — what a buyer
+									    scans for to check you do their specific thing. */}
+									<p className="mt-4 pt-4 border-t border-white/5 text-xs leading-relaxed text-gray-500 relative z-20">
+										{service.sub}
 									</p>
 								</div>
 							</motion.div>
@@ -175,31 +174,17 @@ const ServiceCards = ({
 						{/* Gradient blur overlay */}
 						<div className="h-40 bg-gradient-to-t from-[#030014] via-[#030014]/95 to-transparent" />
 
-						{/* Button container */}
+						{/* Button container. This button's styling WAS the site's de facto
+						    button language — it now lives in CTAButton, so the hero,
+						    projects and closing CTA all share it. */}
 						<div className="absolute bottom-4 left-0 right-0 flex justify-center pointer-events-auto mb-[-55px]">
-							<button
-								className="group relative inline-flex items-center justify-center px-8 py-3.5 text-base font-semibold text-white transition-all duration-300 bg-gradient-to-t from-[#1a0b2e] to-[#0a0525] border border-gray-800/80 rounded-full hover:border-purple-500/60 hover:shadow-2xl hover:shadow-purple-900/40 overflow-hidden"
+							<CTAButton
+								icon={<CaretDown size={18} weight="bold" />}
+								iconMotion="down"
+								location="services_show_all"
 								onClick={() => setShowAll(true)}
-							>
-								{/* Subtle purple glow on hover */}
-								<span className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-purple-600/20 via-violet-600/20 to-purple-600/20 transition-opacity duration-300" />
-
-								{/* Text container with slide animation */}
-								<span className="relative z-10 overflow-hidden inline-block">
-									{/* Original text - slides up and fades out */}
-									<span className="inline-block transition-all duration-300 group-hover:-translate-y-full group-hover:opacity-0">
-										Show All Services
-									</span>
-									{/* Duplicate text - slides up from bottom */}
-									<span className="absolute left-0 top-0 inline-block translate-y-full opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-										Show All Services
-									</span>
-								</span>
-
-								<span className="relative z-10 ml-2 transition-transform duration-300 group-hover:translate-y-1">
-									<CaretDown size={18} weight="bold" />
-								</span>
-							</button>
+								text="Show All Services"
+							/>
 						</div>
 					</div>
 				)}

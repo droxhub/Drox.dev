@@ -8,23 +8,32 @@ import React, {
 	useState,
 } from "react";
 
-export type LogoItem =
-	| {
-			node: React.ReactNode;
-			href?: string;
-			title?: string;
-			ariaLabel?: string;
-	  }
-	| {
-			src: string;
-			alt?: string;
-			href?: string;
-			title?: string;
-			srcSet?: string;
-			sizes?: string;
-			width?: number;
-			height?: number;
-	  };
+export interface LogoNodeItem {
+	node: React.ReactNode;
+	href?: string;
+	title?: string;
+	ariaLabel?: string;
+}
+
+export interface LogoImageItem {
+	src: string;
+	alt?: string;
+	href?: string;
+	title?: string;
+	srcSet?: string;
+	sizes?: string;
+	width?: number;
+	height?: number;
+}
+
+export type LogoItem = LogoNodeItem | LogoImageItem;
+
+/**
+ * A real type guard, so the two branches of the union narrow properly. The
+ * render path used to test `"node" in item` inline and then cast every single
+ * property access to `any` to get at the other branch's fields.
+ */
+const isNodeItem = (item: LogoItem): item is LogoNodeItem => "node" in item;
 
 export interface LogoLoopProps {
 	logos: LogoItem[];
@@ -388,11 +397,9 @@ export const LogoLoop = React.memo<LogoLoopProps>(
 					);
 				}
 
-				const isNodeItem = "node" in item;
-
-				const content = isNodeItem ? (
+				const content = isNodeItem(item) ? (
 					<span
-						aria-hidden={!!(item as any).href && !(item as any).ariaLabel}
+						aria-hidden={!!item.href && !item.ariaLabel}
 						className={cx(
 							"inline-flex items-center",
 							"motion-reduce:transition-none",
@@ -400,11 +407,15 @@ export const LogoLoop = React.memo<LogoLoopProps>(
 								"transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover/item:scale-120",
 						)}
 					>
-						{(item as any).node}
+						{item.node}
 					</span>
 				) : (
+					// Not next/image on purpose: this is a generic marquee whose logo
+					// sources come from the consumer and may be any remote host, which
+					// next/image would require to be allow-listed in next.config.js.
+					// eslint-disable-next-line @next/next/no-img-element
 					<img
-						alt={(item as any).alt ?? ""}
+						alt={item.alt ?? ""}
 						className={cx(
 							"h-[var(--logoloop-logoHeight)] w-auto block object-contain",
 							"[-webkit-user-drag:none] pointer-events-none",
@@ -415,21 +426,21 @@ export const LogoLoop = React.memo<LogoLoopProps>(
 						)}
 						decoding="async"
 						draggable={false}
-						height={(item as any).height}
+						height={item.height}
 						loading="lazy"
-						sizes={(item as any).sizes}
-						src={(item as any).src}
-						srcSet={(item as any).srcSet}
-						title={(item as any).title}
-						width={(item as any).width}
+						sizes={item.sizes}
+						src={item.src}
+						srcSet={item.srcSet}
+						title={item.title}
+						width={item.width}
 					/>
 				);
 
-				const itemAriaLabel = isNodeItem
-					? ((item as any).ariaLabel ?? (item as any).title)
-					: ((item as any).alt ?? (item as any).title);
+				const itemAriaLabel = isNodeItem(item)
+					? (item.ariaLabel ?? item.title)
+					: (item.alt ?? item.title);
 
-				const inner = (item as any).href ? (
+				const inner = item.href ? (
 					<a
 						aria-label={itemAriaLabel || "logo link"}
 						className={cx(
@@ -438,7 +449,7 @@ export const LogoLoop = React.memo<LogoLoopProps>(
 							"hover:opacity-80",
 							"focus-visible:outline focus-visible:outline-current focus-visible:outline-offset-2",
 						)}
-						href={(item as any).href}
+						href={item.href}
 						rel="noreferrer noopener"
 						target="_blank"
 					>

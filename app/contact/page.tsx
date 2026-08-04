@@ -8,16 +8,27 @@ import {
 	InstagramLogo,
 	LinkedinLogo,
 	MapPin,
-	PaperPlaneTilt,
 	Phone,
 	WhatsappLogo,
 } from "@phosphor-icons/react";
+import { track } from "@vercel/analytics";
 import { motion } from "motion/react";
+import Link from "next/link";
 import React, { useState } from "react";
 import Badge from "@/components/chip";
 import { subtitle, title } from "@/components/primitives";
+import { CalInline, isBookingEnabled } from "@/components/ui/cal-booking";
 import { contactPage } from "@/config/content";
+import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
+
+// Fields previously had no <label> at all (placeholder-only), `outline-none`
+// with no focus replacement, and a hardcoded dark-purple background forced on
+// in both themes.
+const labelClass =
+	"block mb-2 text-sm font-medium text-default-700 dark:text-default-200";
+const fieldClass =
+	"w-full px-4 py-3 rounded-2xl border-2 border-default-200 bg-default-50 text-default-900 placeholder-default-400 transition-colors duration-200 dark:border-white/10 dark:bg-[#200045] dark:text-white dark:placeholder-default-400 hover:border-default-300 dark:hover:bg-[#2a0055] focus-visible:outline-none focus-visible:border-violet-500 focus-visible:ring-2 focus-visible:ring-violet-400/40";
 
 // Map icons to social links
 const socialIconMap: Record<string, typeof GithubLogo> = {
@@ -69,43 +80,79 @@ export default function ContactPage() {
 	const [formData, setFormData] = useState({
 		name: "",
 		email: "",
-		subject: "",
+		// "Subject" replaced with two qualifiers — they cost less completion than a
+		// free-text line and tell us far more about whether we can help.
+		budget: "",
+		timeline: "",
 		message: "",
+		// Honeypot. Hidden from people, filled by bots.
+		company: "",
 	});
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [status, setStatus] = useState<"idle" | "sent" | "blocked">("idle");
 
 	const handleChange = (
-		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+		e: React.ChangeEvent<
+			HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+		>,
 	) => {
 		const { name, value } = e.target;
 
 		setFormData((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleSubmit = async (e: React.FormEvent) => {
+	const whatsappNumber = contactPage.contactInfo.phone.whatsapp;
+
+	const buildWhatsappUrl = () => {
+		const lines = [
+			`Hello! I'm ${formData.name}.`,
+			"",
+			`Email: ${formData.email}`,
+			formData.budget ? `Budget: ${formData.budget}` : null,
+			formData.timeline ? `Timeline: ${formData.timeline}` : null,
+			"",
+			formData.message,
+		].filter((line) => line !== null);
+
+		return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(lines.join("\n"))}`;
+	};
+
+	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
+
+		// Honeypot: bots fill hidden fields, people don't.
+		if (formData.company) return;
+
 		setIsSubmitting(true);
+		track("contact_form_submit", { channel: "whatsapp" });
 
-		// Create WhatsApp message with form data
-		const whatsappNumber = contactPage.contactInfo.phone.whatsapp;
-		const message = `Hello! I'm ${formData.name}.\n\nSubject: ${formData.subject}\n\nEmail: ${formData.email}\n\nMessage: ${formData.message}`;
-		const encodedMessage = encodeURIComponent(message);
-		const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+		const opened = window.open(buildWhatsappUrl(), "_blank");
 
-		// Redirect to WhatsApp
-		window.open(whatsappUrl, "_blank");
+		// window.open returns null when a popup blocker intervenes, or when the
+		// browser has no WhatsApp handler. Previously this failed silently and the
+		// enquiry was lost with no feedback; now we show the user a fallback.
+		if (opened) {
+			setStatus("sent");
+			setFormData({
+				name: "",
+				email: "",
+				budget: "",
+				timeline: "",
+				message: "",
+				company: "",
+			});
+		} else {
+			setStatus("blocked");
+			track("contact_form_blocked", { channel: "whatsapp" });
+		}
 
-		// Reset form after a short delay
-		setTimeout(() => {
-			setIsSubmitting(false);
-			setFormData({ name: "", email: "", subject: "", message: "" });
-		}, 500);
+		setIsSubmitting(false);
 	};
 
 	return (
 		<div className="flex flex-col items-center w-full px-4 sm:px-6 xl:px-0">
 			{/* Hero Section */}
-			<section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
+			<section className="flex flex-col items-center justify-center gap-4 py-12 md:py-20">
 				<motion.div
 					animate={{ opacity: 1, y: 0 }}
 					initial={{ opacity: 0, y: 20 }}
@@ -142,9 +189,41 @@ export default function ContactPage() {
 				</motion.p>
 			</section>
 
+			{/* Booking. First thing on the page when it's configured: picking a slot
+			    removes the email round-trip entirely, which is the largest structural
+			    conversion gain available to a services site. Renders nothing until a
+			    Cal.com event type is set in config/site.ts. */}
+			{isBookingEnabled && (
+				<section
+					className="flex w-full max-w-4xl scroll-mt-28 flex-col items-center my-12 md:my-16"
+					id="book"
+				>
+					<motion.div
+						className="w-full text-center"
+						initial={{ opacity: 0, y: 20 }}
+						transition={{ duration: 0.5 }}
+						viewport={{ once: true, margin: "-100px" }}
+						whileInView={{ opacity: 1, y: 0 }}
+					>
+						<h2 className={title({ size: "lg" })}>
+							<span className="gradient-line">Book a scoping call</span>
+						</h2>
+						<p className="mx-auto mt-4 max-w-2xl text-base text-default-500 md:text-lg">
+							{siteConfig.booking.duration} with a founder. Pick a time that
+							works — no form, no waiting for a reply. Prefer to write first?
+							The form is further down this page.
+						</p>
+					</motion.div>
+
+					<div className="mt-10 w-full">
+						<CalInline />
+					</div>
+				</section>
+			)}
+
 			{/* Contact Info Cards */}
 			<section className="flex flex-col items-center w-full my-16 md:my-24">
-				<div className="w-full max-w-6xl px-4 sm:px-6 xl:px-0">
+				<div className="w-full max-w-6xl">
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
 						{contactInfo.map((info, index) => (
 							<motion.a
@@ -226,70 +305,185 @@ export default function ContactPage() {
 						<form onSubmit={handleSubmit}>
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
 								<div>
+									<label className={labelClass} htmlFor="name">
+										Your name
+									</label>
 									<input
-										type="text"
+										autoComplete="name"
+										className={fieldClass}
+										id="name"
 										name="name"
-										placeholder={contactPage.form.fields.name.placeholder}
-										className="w-full px-4 py-3 bg-[#200045] dark:bg-[#200045] rounded-2xl text-white placeholder-default-400 outline-none border-2 border-transparent focus:border-violet-500 dark:focus:border-violet-400 hover:bg-[#2a0055] dark:hover:bg-[#2a0055] transition-all duration-200"
 										onChange={handleChange}
-										value={formData.name}
 										required
+										type="text"
+										value={formData.name}
 									/>
 								</div>
 								<div>
+									<label className={labelClass} htmlFor="email">
+										Work email
+									</label>
 									<input
-										type="email"
+										autoComplete="email"
+										className={fieldClass}
+										id="email"
+										inputMode="email"
 										name="email"
-										placeholder={contactPage.form.fields.email.placeholder}
-										className="w-full px-4 py-3 bg-[#200045] dark:bg-[#200045] rounded-2xl text-white placeholder-default-400 outline-none border-2 border-transparent focus:border-violet-500 dark:focus:border-violet-400 hover:bg-[#2a0055] dark:hover:bg-[#2a0055] transition-all duration-200"
 										onChange={handleChange}
-										value={formData.email}
+										placeholder={contactPage.form.fields.email.placeholder}
 										required
+										type="email"
+										value={formData.email}
 									/>
 								</div>
 							</div>
-							<div className="mb-4">
-								<input
-									type="text"
-									name="subject"
-									placeholder={contactPage.form.fields.subject.placeholder}
-									className="w-full px-4 py-3 bg-[#200045] dark:bg-[#200045] rounded-2xl text-white placeholder-default-400 outline-none border-2 border-transparent focus:border-violet-500 dark:focus:border-violet-400 hover:bg-[#2a0055] dark:hover:bg-[#2a0055] transition-all duration-200"
-									onChange={handleChange}
-									value={formData.subject}
-									required
-								/>
+
+							{/* Qualifiers. Optional, so they cost no completion. */}
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+								<div>
+									<label className={labelClass} htmlFor="budget">
+										Approximate budget{" "}
+										<span className="font-normal text-default-500">
+											(optional)
+										</span>
+									</label>
+									<select
+										className={fieldClass}
+										id="budget"
+										name="budget"
+										onChange={handleChange}
+										value={formData.budget}
+									>
+										<option value="">Not sure yet</option>
+										<option value="Under ₹5 lakh">Under ₹5 lakh</option>
+										<option value="₹5–15 lakh">₹5–15 lakh</option>
+										<option value="₹15–50 lakh">₹15–50 lakh</option>
+										<option value="Over ₹50 lakh">Over ₹50 lakh</option>
+									</select>
+								</div>
+								<div>
+									<label className={labelClass} htmlFor="timeline">
+										Timeline{" "}
+										<span className="font-normal text-default-500">
+											(optional)
+										</span>
+									</label>
+									<select
+										className={fieldClass}
+										id="timeline"
+										name="timeline"
+										onChange={handleChange}
+										value={formData.timeline}
+									>
+										<option value="">Not sure yet</option>
+										<option value="As soon as possible">
+											As soon as possible
+										</option>
+										<option value="1–3 months">1–3 months</option>
+										<option value="3–6 months">3–6 months</option>
+										<option value="Just exploring">Just exploring</option>
+									</select>
+								</div>
 							</div>
+
 							<div className="mb-5">
+								<label className={labelClass} htmlFor="message">
+									What are you trying to build or fix?
+								</label>
 								<textarea
+									className={`${fieldClass} h-[150px] resize-y`}
+									id="message"
 									name="message"
-									placeholder={contactPage.form.fields.message.placeholder}
-									rows={8}
-									className="w-full px-5 py-3 h-[170px] bg-[#200045] dark:bg-[#200045] rounded-2xl text-white placeholder-default-400 outline-none border-2 border-transparent focus:border-violet-500 dark:focus:border-violet-400 hover:bg-[#2a0055] dark:hover:bg-[#2a0055] resize-y transition-all duration-200"
 									onChange={handleChange}
-									value={formData.message}
+									placeholder={contactPage.form.fields.message.placeholder}
 									required
+									rows={5}
+									value={formData.message}
 								/>
 							</div>
+
+							{/* Honeypot — hidden from people, filled by bots. */}
+							<div aria-hidden="true" className="hidden">
+								<label htmlFor="company">Company (leave blank)</label>
+								<input
+									autoComplete="off"
+									id="company"
+									name="company"
+									onChange={handleChange}
+									tabIndex={-1}
+									type="text"
+									value={formData.company}
+								/>
+							</div>
+
 							<div className="flex justify-center">
 								<button
-									type="submit"
+									className="w-full md:w-[68%] flex justify-center items-center group bg-gradient-to-br from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white font-medium py-3 px-4 rounded-xl cursor-pointer transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030014]"
 									disabled={isSubmitting}
-									className="w-full md:w-[68%] flex justify-center items-center group bg-gradient-to-br from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white font-medium py-3 px-4 rounded-xl cursor-pointer transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50"
+									type="submit"
 								>
 									{isSubmitting ? (
-										<span>Sending...</span>
+										<span>{contactPage.form.submitButton.loadingText}</span>
 									) : (
 										<>
-											<PaperPlaneTilt
-												className="mr-2"
-												size={20}
-												weight="fill"
-											/>
+											<WhatsappLogo className="mr-2" size={20} weight="fill" />
 											{contactPage.form.submitButton.text}
 										</>
 									)}
 								</button>
 							</div>
+
+							{/* The form used to say "Sending…" and then go silent, whether
+							    or not the handoff worked. Both outcomes now say so. */}
+							<div aria-live="polite" className="mt-5 min-h-[1.5rem]">
+								{status === "sent" && (
+									<p className="text-center text-sm text-emerald-400">
+										WhatsApp should have opened in a new tab with your message
+										ready to send. Press send there and we&apos;ll reply within
+										one business day.
+									</p>
+								)}
+								{status === "blocked" && (
+									<p className="text-center text-sm text-amber-400">
+										We couldn&apos;t open WhatsApp — your browser may have
+										blocked the popup.{" "}
+										<a
+											className="underline underline-offset-4 hover:text-white"
+											href={buildWhatsappUrl()}
+											rel="noopener noreferrer"
+											target="_blank"
+										>
+											Open it manually
+										</a>{" "}
+										or email{" "}
+										<a
+											className="underline underline-offset-4 hover:text-white"
+											href={contactPage.contactInfo.email.link}
+										>
+											{contactPage.contactInfo.email.address}
+										</a>
+										.
+									</p>
+								)}
+							</div>
+
+							<p className="mt-4 text-center text-xs text-default-500">
+								This opens WhatsApp with your details filled in. Prefer email?{" "}
+								<a
+									className="underline underline-offset-4 hover:text-white"
+									href={contactPage.contactInfo.email.link}
+								>
+									{contactPage.contactInfo.email.address}
+								</a>
+								. We only use your details to reply — see our{" "}
+								<Link
+									className="underline underline-offset-4 hover:text-white"
+									href="/privacy"
+								>
+									Privacy Policy
+								</Link>
+								.
+							</p>
 						</form>
 					</div>
 				</motion.div>
