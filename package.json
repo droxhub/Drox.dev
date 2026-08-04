@@ -4,14 +4,15 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev --turbo",
-		"build": "biome check --write . && next build",
+		"build": "biome check --write . && eslint . && next build",
 		"start": "next start",
-		"lint": "biome check --write .",
-		"format": "biome format --write .",
-		"check": "biome check ."
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix",
+		"format": "biome check --write .",
+		"format:check": "biome check .",
+		"check": "biome check . && eslint ."
 	},
 	"dependencies": {
-		"@gsap/react": "^2.1.2",
 		"@heroui/react": "^2.8.2",
 		"@heroui/system": "^2.4.25",
 		"@heroui/theme": "^2.4.26",
@@ -19,10 +20,9 @@
 		"@react-aria/ssr": "3.9.4",
 		"@react-aria/visually-hidden": "3.8.12",
 		"@tabler/icons-react": "^3.36.0",
+		"@vercel/analytics": "^2.0.1",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
-		"framer-motion": "^12.23.16",
-		"gsap": "^3.14.2",
 		"intl-messageformat": "^10.5.0",
 		"lenis": "^1.3.17",
 		"lucide-react": "^0.562.0",
@@ -42,6 +42,8 @@
 		"@types/node": "20.5.7",
 		"@types/react": "^19.1.13",
 		"@types/react-dom": "^19.1.9",
+		"eslint": "^9.39.5",
+		"eslint-config-next": "^16.2.12",
 		"tailwind-variants": "0.1.20",
 		"tailwindcss": "^4.0.11",
 		"typescript": "^5.9.2"
