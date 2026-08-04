@@ -453,4 +453,31 @@
 	.menu-item-in {
 		animation: none;
 	}
+
+	/*
+	 * WCAG 2.2 SC 2.3.3, for the animation `motion` cannot reach.
+	 *
+	 * <MotionConfig reducedMotion="user"> in app/providers.tsx covers every
+	 * `motion` component; this covers CSS keyframes. The seven infinite ones are
+	 * the point — orbit, spiral, gravity, twinkle, drift, toCenter and pulse all
+	 * run forever behind the hero, and forever is exactly what a vestibular
+	 * disorder cannot tolerate.
+	 *
+	 * Near-zero rather than `none`, and iteration-count 1 rather than 0, because
+	 * an animation that never runs also never fires `animationend` — code that
+	 * waits on that event would hang. This is the widely used form of this rule
+	 * for that reason.
+	 *
+	 * Transitions are included: a hover that takes 300ms to travel is motion too.
+	 * Both are still *applied*, so an element animating in from `opacity: 0`
+	 * still ends up visible — it just gets there immediately.
+	 */
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
 }

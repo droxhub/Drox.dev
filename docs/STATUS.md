@@ -428,11 +428,41 @@ the section screenshotted at all three.
 ## Still outstanding — Priority 4 onward
 
 ### Priority 4 — Accessibility & performance
-- **`prefers-reduced-motion` is honoured in only 2 files** (`LogoLoop.tsx`,
-  `ambient-video.tsx`). Lenis smooth scroll, the ~170 hero particles and every
-  `motion` component ignore it. WCAG 2.2 SC 2.3.3 — the largest remaining
-  accessibility gap, and it's already disclosed on `/accessibility` with a
-  **30 September 2026** target date.
+- ~~**`prefers-reduced-motion`**~~ ✅ **done 5 August.** Was honoured in 8 of the
+  24 files importing `motion/react`, with Lenis ignoring it entirely.
+
+  Fixed centrally rather than file by file. **`<MotionConfig reducedMotion="user">`**
+  in `app/providers.tsx` covers every `motion` component at once — transform and
+  layout animations are dropped, opacity and colour still cross-fade. That split
+  matters: killing opacity too would leave everything that animates in from
+  `opacity: 0` permanently invisible. It also cannot rot, because a new component
+  inherits it by existing rather than by someone remembering.
+
+  Four things `motion` cannot reach, handled where they live:
+  - **Lenis is not started at all** under reduce — `stop()` would leave it
+    intercepting the wheel. A `change` listener handles the setting being toggled
+    mid-session. The route-change scroll reset needed a `window.scrollTo`
+    fallback, or navigation would land readers halfway down every page.
+  - **The hero video** starts from an effect instead of an `autoPlay` attribute.
+    Toggling that attribute client-side would change server-rendered markup and
+    fail hydration; this way the element still paints its first frame, a static
+    violet halo.
+  - **The 50 CSS particles** are never created, not created and paused.
+  - **A global CSS rule** collapses all keyframes and transitions to 0.01ms. Near
+    zero rather than `none`, and iteration-count 1 rather than 0, so anything
+    waiting on `animationend` still fires.
+
+  Verified by comparing both modes on a real browser: Lenis present/absent, hero
+  video playing/paused, 50 particles/0, specular canvases 3/0, and the page
+  gliding after a wheel stops / not. Then swept all 10 routes scrolling top to
+  bottom in both modes: **0 text blocks stuck invisible in either**, which is the
+  failure this change could plausibly have caused.
+
+  **`/accessibility` was updated in the same change** — it publicly listed this
+  as an open issue with a 30 September target, so leaving it would have been a
+  false statement on a public page. Motion moved from "known issues" to "what
+  currently works"; the other four disclosed issues are untouched and still
+  carry that date.
 - Reduce hero particle count on mobile (120 React dots + 50 DOM particles).
   The 120 React dots now render server-side: they were generated with
   `Math.random()` in an effect purely to dodge a hydration mismatch, so they

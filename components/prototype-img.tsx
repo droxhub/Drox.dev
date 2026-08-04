@@ -1,5 +1,6 @@
 "use client";
 
+import { useReducedMotion } from "motion/react";
 import React, { useEffect, useMemo, useRef } from "react";
 import { seededRandom } from "@/lib/seeded-random";
 import { fromCentre } from "@/lib/utils";
@@ -8,6 +9,29 @@ import { HeroScrollDemo } from "./HeroScrollDemo";
 
 function PrototypeImg() {
 	const containerRef = useRef<HTMLDivElement>(null);
+	const videoRef = useRef<HTMLVideoElement>(null);
+	const reduceMotion = useReducedMotion();
+
+	// Playback is started here rather than with an `autoPlay` attribute, so it can
+	// be withheld under reduced motion without the server and client disagreeing
+	// about the markup. WCAG 2.2 SC 2.3.3.
+	useEffect(() => {
+		const video = videoRef.current;
+
+		if (!video) return;
+
+		if (reduceMotion) {
+			video.pause();
+
+			return;
+		}
+
+		video.play().catch(() => {
+			// Browsers refuse autoplay in low-power mode and some mobile contexts.
+			// The first frame stays on screen, which is the same still image the
+			// reduced-motion path shows — nothing to recover from.
+		});
+	}, [reduceMotion]);
 
 	// Seeded rather than random, so the server and the client lay the dots out
 	// identically. That removes the effect-then-setState round trip this used to
@@ -47,6 +71,11 @@ function PrototypeImg() {
 		const container = containerRef.current;
 
 		if (!container) return;
+
+		// Fifty CSS-animated particles spiralling into a black hole is the most
+		// motion on the site. Under reduced motion they are never created at all
+		// rather than created and paused — no elements, no work.
+		if (reduceMotion) return;
 
 		const particleCount = 50; // Reduced from 90 to 50 for better performance
 
@@ -113,7 +142,9 @@ function PrototypeImg() {
 
 			particles.forEach((particle) => particle.remove());
 		};
-	}, []);
+		// Re-runs if the setting is toggled mid-session; the cleanup above removes
+		// the particles it created, so the swap is clean in both directions.
+	}, [reduceMotion]);
 
 	return (
 		<div className="flex flex-col justify-center items-center mx-auto relative w-full mb-[-200px] sm:mb-[-300px] md:mb-[-400px] lg:mb-[-500px] overflow-hidden">
@@ -121,13 +152,18 @@ function PrototypeImg() {
 			<div className="absolute top-0 w-full flex justify-center pointer-events-none overflow-hidden">
 				<div className="origin-top scale-[0.7] sm:scale-[0.5] md:scale-[0.65] lg:scale-[0.85] xl:scale-[1.0]">
 					<div className="relative w-[1200px] h-[800px] flex items-center justify-center">
-						{/* Center video */}
+						{/* Center video. No `autoPlay` attribute: playback is started from
+						    an effect instead, so it can be withheld under reduced motion.
+						    Toggling the attribute on the client would change server-rendered
+						    markup and fail hydration — this is the SSR-safe way to do it.
+						    Withheld, the element still paints its first frame, which is a
+						    static violet halo. */}
 						<video
-							autoPlay
 							loop
 							muted
 							playsInline
 							className="absolute inset-0 w-full h-full object-cover"
+							ref={videoRef}
 							src="/video/black-hole.webm"
 						/>
 

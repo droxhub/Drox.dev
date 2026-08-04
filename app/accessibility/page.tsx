@@ -44,6 +44,11 @@ export default function AccessibilityPage() {
 					<li>Text alternatives on meaningful images.</li>
 					<li>Labelled form fields with autofill support.</li>
 					<li>Layouts that reflow to 320px without horizontal scrolling.</li>
+					<li>
+						Respect for the operating-system &quot;reduce motion&quot; setting.
+						Smooth scrolling, background effects, the hero animation and every
+						transition are disabled when it is on.
+					</li>
 				</ul>
 			</LegalSection>
 
@@ -53,11 +58,6 @@ export default function AccessibilityPage() {
 					<strong>30 September 2026</strong>.
 				</p>
 				<ul>
-					<li>
-						<strong>Motion.</strong> Several animations — including background
-						effects and smooth scrolling — do not yet fully respect the
-						operating-system &quot;reduce motion&quot; setting.
-					</li>
 					<li>
 						<strong>Colour contrast.</strong> Some secondary text over gradient
 						and video backgrounds falls below the 4.5:1 ratio, and some

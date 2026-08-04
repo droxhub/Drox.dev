@@ -13,35 +13,65 @@ export default function SmoothScroll({
 	const lenisRef = useRef<Lenis | null>(null);
 	const pathname = usePathname();
 
+	/**
+	 * Smooth scroll is the single worst thing on this site for anyone with a
+	 * vestibular disorder: it takes the one interaction a reader cannot avoid and
+	 * makes the page keep gliding after they have stopped. WCAG 2.2 SC 2.3.3.
+	 *
+	 * So Lenis is not started at all under `prefers-reduced-motion: reduce` —
+	 * `stop()` would still leave it intercepting the wheel. Without it the browser
+	 * scrolls natively, which is exactly what was asked for.
+	 *
+	 * The listener matters as much as the initial check: the setting can be
+	 * changed while the page is open, and on macOS it commonly is.
+	 */
 	useEffect(() => {
-		// Initialize Lenis
-		const lenis = new Lenis({
-			duration: 1.2,
-			easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-			orientation: "vertical",
-			gestureOrientation: "vertical",
-			smoothWheel: true,
-			wheelMultiplier: 1,
-			touchMultiplier: 2,
-			infinite: false,
-			autoResize: true, // Auto resize on window resize
-		});
+		const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+		let rafId = 0;
 
-		lenisRef.current = lenis;
+		const start = () => {
+			if (lenisRef.current) return;
 
-		// Request animation frame loop
-		let rafId: number;
-		function raf(time: number) {
-			lenis.raf(time);
+			const lenis = new Lenis({
+				duration: 1.2,
+				easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+				orientation: "vertical",
+				gestureOrientation: "vertical",
+				smoothWheel: true,
+				wheelMultiplier: 1,
+				touchMultiplier: 2,
+				infinite: false,
+				autoResize: true, // Auto resize on window resize
+			});
+
+			lenisRef.current = lenis;
+
+			const raf = (time: number) => {
+				lenis.raf(time);
+				rafId = requestAnimationFrame(raf);
+			};
+
 			rafId = requestAnimationFrame(raf);
-		}
+		};
 
-		rafId = requestAnimationFrame(raf);
+		const stop = () => {
+			if (rafId) cancelAnimationFrame(rafId);
+			rafId = 0;
+			lenisRef.current?.destroy();
+			lenisRef.current = null;
+		};
 
-		// Cleanup on unmount
+		const sync = () => {
+			if (query.matches) stop();
+			else start();
+		};
+
+		sync();
+		query.addEventListener("change", sync);
+
 		return () => {
-			cancelAnimationFrame(rafId);
-			lenis.destroy();
+			query.removeEventListener("change", sync);
+			stop();
 		};
 	}, []);
 
@@ -72,10 +102,14 @@ export default function SmoothScroll({
 		};
 	}, []);
 
-	// Reset scroll position on route change
+	// Reset scroll position on route change. The native fallback is not optional:
+	// under reduced motion there is no Lenis instance, and without this the reader
+	// would land halfway down every page they navigate to.
 	useEffect(() => {
 		if (lenisRef.current) {
 			lenisRef.current.scrollTo(0, { immediate: true });
+		} else {
+			window.scrollTo(0, 0);
 		}
 	}, [pathname]);
 
