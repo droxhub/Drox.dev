@@ -488,6 +488,13 @@ transparent so what you measure is genuinely what is behind them.
 (NVDA / JAWS / VoiceOver). That one needs a human with a screen reader — it
 cannot be automated, and until it is done conformance should not be claimed.
 
+**The 30 September 2026 target date was removed from the page on 5 August, by
+decision.** The page now names the open item without committing to a date. The
+argument for keeping one was that a dated commitment reads as credible in
+procurement and is what made the rest of this work happen; the argument against
+is that a missed date on a public page is worse than no date. That was the
+client's call. If a date goes back on, it should be one that will be met.
+
 `/accessibility` was rewritten to match: the four old items are gone (two were
 already fixed and the page was understating the site — the skip link is in the
 root layout and present on 9/9 routes, and the Services process steps are real

@@ -82,9 +82,6 @@ export default function AccessibilityPage() {
 						until we have we will not claim conformance.
 					</li>
 				</ul>
-				<p>
-					Target date: <strong>30 September 2026</strong>.
-				</p>
 			</LegalSection>
 
 			<LegalSection title="How we assess">
