@@ -42,7 +42,14 @@ export default function BusinessChallenges() {
 	const reduceMotion = useReducedMotion();
 
 	return (
-		<section className="flex w-full flex-col items-center py-16 md:py-24">
+		// `overflow-x-clip`, because the specular overlay on each card is inset
+		// past its edges and this grid runs the full width of a phone. `clip`
+		// rather than `hidden`: it does not create a scroll container and leaves
+		// the other axis `visible`, so the glow still bleeds vertically. Covers
+		// the case the CSS `:has(canvas)` guard cannot — a hover-capable browser
+		// zoomed to 200%, where the canvas does mount and the viewport is narrow
+		// anyway (WCAG 2.2 SC 1.4.4).
+		<section className="flex w-full flex-col items-center overflow-x-clip py-16 md:py-24">
 			<SectionHeader
 				badge="The Problem"
 				icon={Target}

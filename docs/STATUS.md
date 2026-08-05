@@ -167,6 +167,35 @@ that moved into an effect with no dependency array.
 the card must not have `overflow-hidden` on it. The surface and glows are
 clipped by an inner wrapper instead — keep that structure if you touch it.
 
+**That inset caused 4px of horizontal page scroll on every phone**, found on
+5 August by diffing against the deployed commit. `specular-edge.tsx` *always*
+renders its host span — it is the ref the effect measures — and the WebGL,
+pointer and reduced-motion guards only skip the canvas *inside* it. So the box
+was inflated 20px past every edge precisely on the devices that never draw a
+glow. On desktop the card sits well inside the viewport and the slack is
+invisible; on a phone the card runs the full width, so 20px past its right edge
+is 4px past the viewport.
+
+Fixed in two places, because there are two distinct cases:
+
+- `.specular-edge` is now `inset: 0`, widening to `-20px` only under
+  `:has(canvas)`. No canvas, no bleed box. This fixes every touch device and
+  helps any future host, since the component no longer reserves space it isn't
+  using.
+- `BusinessChallenges`'s section carries `overflow-x-clip`. `:has(canvas)`
+  cannot help when the canvas *does* mount and the viewport is still narrow —
+  a hover-capable browser at 200% zoom, which WCAG 2.2 SC 1.4.4 requires to
+  work. `clip` rather than `hidden`: it creates no scroll container and leaves
+  the vertical axis `visible`, so the glow still bleeds up and down.
+
+Verified 0 overflow on an iPhone 13 profile, at 360 and 390px with hover, at
+640px (1280 at 200% zoom) and at 1440 — and the rim glow still renders and
+bleeds on desktop hover.
+
+**The lesson worth keeping: measure the page against the deployed commit, not
+against itself.** This shipped through several "no horizontal overflow" checks
+because those confirmed the page was consistent, not that it was unchanged.
+
 **`ogl` is now a used dependency.** The P4 note below says to drop it after
 deleting the unused components; that no longer applies — `specular-edge.tsx`
 imports it.

@@ -6,9 +6,23 @@
  */
 .specular-edge {
 	position: absolute;
-	inset: -20px;
 	pointer-events: none;
 	z-index: 1;
+	/*
+	 * No bleed until there is something to bleed.
+	 *
+	 * The span always renders — it is the ref host the effect measures — but the
+	 * canvas inside it only mounts with a hover-capable pointer, WebGL2 and
+	 * motion allowed. Inflating the box unconditionally left 20px of empty
+	 * overlay past every edge on exactly the devices that never draw a glow, and
+	 * on a card that runs the full width of a phone that is 4px of horizontal
+	 * page scroll.
+	 */
+	inset: 0;
+}
+
+.specular-edge:has(canvas) {
+	inset: -20px;
 }
 
 .specular-edge canvas {
