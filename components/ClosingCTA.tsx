@@ -11,6 +11,7 @@ import { CalInline, isBookingEnabled } from "@/components/ui/cal-booking";
 import CTAButton from "@/components/ui/cta-button";
 import { contactPage, homepage } from "@/config/content";
 import { siteConfig } from "@/config/site";
+import { DURATION } from "@/lib/motion";
 
 const { closingCta } = homepage;
 const { email, phone } = contactPage.contactInfo;
@@ -32,11 +33,11 @@ export default function ClosingCTA() {
 			<motion.div
 				className="w-full max-w-4xl"
 				initial={{ opacity: 0, y: 30 }}
-				transition={{ duration: 0.6 }}
+				transition={{ duration: DURATION.slow }}
 				viewport={{ once: true, margin: "-100px" }}
 				whileInView={{ opacity: 1, y: 0 }}
 			>
-				<div className="rounded-[2rem] border border-violet-500/20 bg-gradient-to-br from-violet-500/10 to-purple-600/10 p-8 md:p-14 text-center">
+				<div className="rounded-panel border border-violet-500/20 bg-gradient-to-br from-violet-500/10 to-purple-600/10 p-8 md:p-14 text-center">
 					<h2 className={title({ size: "lg" })}>
 						<span className="gradient-line">{closingCta.title}</span>
 					</h2>
@@ -88,7 +89,7 @@ export default function ClosingCTA() {
 										? { opacity: 1, height: "auto" }
 										: { opacity: 0, height: 0 }
 								}
-								transition={{ duration: reduceMotion ? 0 : 0.4 }}
+								transition={{ duration: reduceMotion ? 0 : DURATION.base }}
 							>
 								<CalInline />
 							</motion.div>
@@ -104,7 +105,7 @@ export default function ClosingCTA() {
 					<p className="mt-3 text-sm text-default-400">
 						{closingCta.lowCommitment.lead}{" "}
 						<Link
-							className="text-purple-300 underline underline-offset-4 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 rounded"
+							className="text-purple-300 underline underline-offset-4 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 rounded-inline"
 							href={closingCta.lowCommitment.href}
 							onClick={() =>
 								track("cta_click", {
@@ -122,7 +123,7 @@ export default function ClosingCTA() {
 					{/* Direct channels, for buyers who won't use a form. */}
 					<div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 border-t border-white/5 pt-8 text-sm">
 						<a
-							className="inline-flex items-center gap-2 text-default-400 hover:text-white transition-colors rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+							className="inline-flex items-center gap-2 text-default-400 hover:text-white transition-colors rounded-inline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
 							href={email.link}
 							onClick={() =>
 								track("contact_click", {
@@ -135,7 +136,7 @@ export default function ClosingCTA() {
 							{email.address}
 						</a>
 						<a
-							className="inline-flex items-center gap-2 text-default-400 hover:text-white transition-colors rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+							className="inline-flex items-center gap-2 text-default-400 hover:text-white transition-colors rounded-inline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
 							href={phone.link}
 							onClick={() =>
 								track("contact_click", {
@@ -148,7 +149,7 @@ export default function ClosingCTA() {
 							{phone.display}
 						</a>
 						<a
-							className="inline-flex items-center gap-2 text-default-400 hover:text-white transition-colors rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+							className="inline-flex items-center gap-2 text-default-400 hover:text-white transition-colors rounded-inline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
 							href={`https://wa.me/${phone.whatsapp}`}
 							onClick={() =>
 								track("contact_click", {

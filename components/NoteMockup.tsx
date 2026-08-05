@@ -67,14 +67,14 @@ export function NoteMockup() {
 					    rgb(173,120,234) under some of its text, where even white only
 					    manages 3.16:1. A dark translucent surface keeps the glass effect
 					    and gives every label inside it a predictable background. */}
-					<div className="w-full h-full backdrop-blur-xl p-2 border border-white/10 rounded-3xl backdrop-blur-sm bg-[#0b0620]/75">
-						<div className="border border-white/10 rounded-2xl w-full h-full">
-							<div className="w-full h-full rounded-2xl overflow-hidden relative">
+					<div className="w-full h-full backdrop-blur-xl p-2 border border-white/10 rounded-card backdrop-blur-sm bg-[#0b0620]/75">
+						<div className="border border-white/10 rounded-tile w-full h-full">
+							<div className="w-full h-full rounded-tile overflow-hidden relative">
 								{/* Main container */}
 								<div className="relative h-full p-6 flex gap-4">
 									{/* Left Sidebar - Hidden on mobile and small, visible on tablet and desktop */}
-									<div className="w-0 md:w-56 hidden md:block backdrop-blur-md bg-transparent rounded-2xl p-4 shadow-lg border border-white/10">
-										<div className="flex items-center gap-2 mb-6 px-3 py-1.5 bg-white/5 rounded-2xl">
+									<div className="w-0 md:w-56 hidden md:block backdrop-blur-md bg-transparent rounded-tile p-4 shadow-lg border border-white/10">
+										<div className="flex items-center gap-2 mb-6 px-3 py-1.5 bg-white/5 rounded-tile">
 											<svg
 												className="w-3.5 h-3.5 text-gray-400"
 												fill="none"
@@ -97,7 +97,7 @@ export function NoteMockup() {
 
 										{/* Menu items */}
 										<div className="space-y-1">
-											<div className="flex items-center gap-2.5 px-3 py-1.5 bg-indigo-500/15 rounded-2xl text-indigo-300">
+											<div className="flex items-center gap-2.5 px-3 py-1.5 bg-indigo-500/15 rounded-tile text-indigo-300">
 												<svg
 													className="w-4 h-4"
 													fill="none"
@@ -113,7 +113,7 @@ export function NoteMockup() {
 												</svg>
 												<span className="text-xs font-normal">Daily notes</span>
 											</div>
-											<div className="flex items-center gap-2.5 px-3 py-1.5 text-gray-300 hover:bg-white/5 rounded-2xl transition">
+											<div className="flex items-center gap-2.5 px-3 py-1.5 text-gray-300 hover:bg-white/5 rounded-tile transition">
 												<svg
 													className="w-4 h-4"
 													fill="none"
@@ -129,7 +129,7 @@ export function NoteMockup() {
 												</svg>
 												<span className="text-xs font-light">All notes</span>
 											</div>
-											<div className="flex items-center gap-2.5 px-3 py-1.5 text-gray-400 hover:bg-white/5 rounded-2xl transition">
+											<div className="flex items-center gap-2.5 px-3 py-1.5 text-gray-400 hover:bg-white/5 rounded-tile transition">
 												<svg
 													className="w-4 h-4"
 													fill="none"
@@ -145,7 +145,7 @@ export function NoteMockup() {
 												</svg>
 												<span className="text-xs font-light">Tasks</span>
 											</div>
-											<div className="flex items-center gap-2.5 px-3 py-1.5 text-gray-400 hover:bg-white/5 rounded-2xl transition">
+											<div className="flex items-center gap-2.5 px-3 py-1.5 text-gray-400 hover:bg-white/5 rounded-tile transition">
 												<svg
 													className="w-4 h-4"
 													fill="none"
@@ -184,7 +184,7 @@ export function NoteMockup() {
 									</div>
 
 									{/* Main Content - Hidden on mobile, visible on small and up */}
-									<div className="hidden sm:block flex-1 backdrop-blur-md bg-transparent rounded-2xl p-3 sm:p-3 md:p-4 shadow-lg border border-white/10 overflow-hidden">
+									<div className="hidden sm:block flex-1 backdrop-blur-md bg-transparent rounded-tile p-3 sm:p-3 md:p-4 shadow-lg border border-white/10 overflow-hidden">
 										{/* Header */}
 										<div className="mb-4">
 											<div className="flex items-center gap-2 mb-3">
@@ -303,7 +303,7 @@ export function NoteMockup() {
 									</div>
 
 									{/* Right Sidebar - Calendar - Always visible, fixed width */}
-									<div className="w-64 backdrop-blur-md bg-transparent rounded-2xl p-4 sm:p-5 shadow-lg border border-white/10">
+									<div className="w-64 backdrop-blur-md bg-transparent rounded-tile p-4 sm:p-5 shadow-lg border border-white/10">
 										<div className="text-right mb-5">
 											<div className="text-[15px] text-gray-300 font-light">
 												{monthName} {currentYear}
@@ -337,8 +337,8 @@ export function NoteMockup() {
 													key={day}
 													className={
 														day === currentDay
-															? "bg-indigo-500 text-white rounded-md font-normal text-[14px] aspect-square flex items-center justify-center"
-															: "text-gray-300 hover:bg-indigo-900 rounded-md transition cursor-pointer text-[14px] font-light aspect-square flex items-center justify-center"
+															? "bg-indigo-500 text-white rounded-control font-normal text-[14px] aspect-square flex items-center justify-center"
+															: "text-gray-300 hover:bg-indigo-900 rounded-control transition cursor-pointer text-[14px] font-light aspect-square flex items-center justify-center"
 													}
 												>
 													{day}

@@ -20,6 +20,7 @@ import { title } from "@/components/primitives";
 import CTAButton from "@/components/ui/cta-button";
 import { Grid } from "@/components/ui/feature-card";
 import SectionHeader from "@/components/ui/section-header";
+import { DURATION, STAGGER } from "@/lib/motion";
 
 /**
  * The nine service lines from the 2026 Company Profile (p.14), in the order a
@@ -138,15 +139,15 @@ const ServiceCards = ({ hideHeader = false }: ServiceCardsProps) => {
 								key={index}
 								className={isHiddenOnMobile ? "hidden md:block" : ""}
 								initial={{ opacity: 0, y: 20 }}
-								transition={{ duration: 0.5, delay: index * 0.1 }}
+								transition={{ duration: DURATION.slow, delay: index * STAGGER }}
 								viewport={{ once: true, margin: "-100px" }}
 								whileInView={{ opacity: 1, y: 0 }}
 							>
-								<div className="relative bg-gradient-to-b flex flex-col justify-start from-surface-muted to-surface p-8 rounded-3xl overflow-hidden border border-hairline/50 transition-all duration-300 h-full group hover:scale-[0.96] hover:shadow-2xl">
+								<div className="relative bg-gradient-to-b flex flex-col justify-start from-surface-muted to-surface p-8 rounded-card overflow-hidden border border-hairline/50 transition-all duration-base h-full group hover:scale-[0.96] hover:shadow-2xl">
 									<Grid size={20} />
 									<div className="mb-6 relative z-20">
 										<service.icon
-											className="text-purple-600 dark:text-purple-400 block transition-all duration-300 group-hover:scale-[1.2] group-hover:ml-[-10px] group-hover:drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]"
+											className="text-purple-600 dark:text-purple-400 block transition-all duration-base group-hover:scale-[1.2] group-hover:ml-[-10px] group-hover:drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]"
 											size={32}
 											style={{ transformOrigin: "center" }}
 										/>

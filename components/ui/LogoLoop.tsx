@@ -404,7 +404,7 @@ export const LogoLoop = React.memo<LogoLoopProps>(
 							"inline-flex items-center",
 							"motion-reduce:transition-none",
 							scaleOnHover &&
-								"transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover/item:scale-120",
+								"transition-transform duration-base group-hover/item:scale-120",
 						)}
 					>
 						{item.node}
@@ -422,7 +422,7 @@ export const LogoLoop = React.memo<LogoLoopProps>(
 							"[image-rendering:-webkit-optimize-contrast]",
 							"motion-reduce:transition-none",
 							scaleOnHover &&
-								"transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover/item:scale-120",
+								"transition-transform duration-base group-hover/item:scale-120",
 						)}
 						decoding="async"
 						draggable={false}
@@ -450,8 +450,8 @@ export const LogoLoop = React.memo<LogoLoopProps>(
 						   — WCAG 4.1.2, and axe's aria-hidden-focus. */
 						tabIndex={focusable ? undefined : -1}
 						className={cx(
-							"inline-flex items-center no-underline rounded",
-							"transition-opacity duration-200 ease-linear",
+							"inline-flex items-center no-underline rounded-inline",
+							"transition-opacity duration-fast",
 							"hover:opacity-80",
 							"focus-visible:outline focus-visible:outline-current focus-visible:outline-offset-2",
 						)}

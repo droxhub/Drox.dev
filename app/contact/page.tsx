@@ -21,6 +21,7 @@ import { subtitle, title } from "@/components/primitives";
 import { CalInline, isBookingEnabled } from "@/components/ui/cal-booking";
 import { contactPage } from "@/config/content";
 import { siteConfig } from "@/config/site";
+import { DURATION, STAGGER } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 // Fields previously had no <label> at all (placeholder-only), `outline-none`
@@ -29,7 +30,7 @@ import { cn } from "@/lib/utils";
 const labelClass =
 	"block mb-2 text-sm font-medium text-default-700 dark:text-default-200";
 const fieldClass =
-	"w-full px-4 py-3 rounded-2xl border-2 border-default-200 bg-default-50 text-default-900 placeholder-default-400 transition-colors duration-200 dark:border-white/10 dark:bg-[#200045] dark:text-white dark:placeholder-default-400 hover:border-default-300 dark:hover:bg-[#2a0055] focus-visible:outline-none focus-visible:border-violet-500 focus-visible:ring-2 focus-visible:ring-violet-400/40";
+	"w-full px-4 py-3 rounded-tile border-2 border-default-200 bg-default-50 text-default-900 placeholder-default-400 transition-colors duration-fast dark:border-white/10 dark:bg-[#200045] dark:text-white dark:placeholder-default-400 hover:border-default-300 dark:hover:bg-[#2a0055] focus-visible:outline-none focus-visible:border-violet-500 focus-visible:ring-2 focus-visible:ring-violet-400/40";
 
 /**
  * Both icon sets are represented here: lucide carries the general UI set and the
@@ -169,7 +170,7 @@ export default function ContactPage() {
 				<motion.div
 					animate={{ opacity: 1, y: 0 }}
 					initial={{ opacity: 0, y: 20 }}
-					transition={{ duration: 0.5 }}
+					transition={{ duration: DURATION.slow }}
 				>
 					<Badge />
 				</motion.div>
@@ -178,7 +179,7 @@ export default function ContactPage() {
 					animate={{ opacity: 1, y: 0 }}
 					className="inline-block max-w-sm lg:max-w-4xl text-center justify-center"
 					initial={{ opacity: 0, y: 20 }}
-					transition={{ duration: 0.5, delay: 0.1 }}
+					transition={{ duration: DURATION.slow, delay: 0.1 }}
 				>
 					<h1 className={title({ size: "lg" })}>
 						<span className="gradient-line">
@@ -196,7 +197,7 @@ export default function ContactPage() {
 						class: "max-w-3xl text-center text-gray-400 py-2",
 					})}
 					initial={{ opacity: 0 }}
-					transition={{ duration: 0.5, delay: 0.2 }}
+					transition={{ duration: DURATION.slow, delay: 0.2 }}
 				>
 					{contactPage.hero.subtitle}
 				</motion.p>
@@ -214,7 +215,7 @@ export default function ContactPage() {
 					<motion.div
 						className="w-full text-center"
 						initial={{ opacity: 0, y: 20 }}
-						transition={{ duration: 0.5 }}
+						transition={{ duration: DURATION.slow }}
 						viewport={{ once: true, margin: "-100px" }}
 						whileInView={{ opacity: 1, y: 0 }}
 					>
@@ -243,7 +244,7 @@ export default function ContactPage() {
 								key={index}
 								href={info.link}
 								initial={{ opacity: 0, y: 20 }}
-								transition={{ duration: 0.5, delay: index * 0.1 }}
+								transition={{ duration: DURATION.slow, delay: index * STAGGER }}
 								viewport={{ once: true, margin: "-100px" }}
 								whileInView={{ opacity: 1, y: 0 }}
 								className={cn(
@@ -252,13 +253,13 @@ export default function ContactPage() {
 									"border-b border-hairline lg:last:border-r-0",
 								)}
 							>
-								<div className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t from-purple-900/10 to-transparent pointer-events-none" />
+								<div className="opacity-0 group-hover/feature:opacity-100 transition duration-fast absolute inset-0 h-full w-full bg-gradient-to-t from-purple-900/10 to-transparent pointer-events-none" />
 								<div className="mb-4 relative z-10 px-10 text-purple-400">
 									<info.icon className="w-6 h-6" />
 								</div>
 								<div className="text-lg font-bold mb-2 relative z-10 px-10">
-									<div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-hairline-strong group-hover/feature:bg-purple-500 transition-all duration-200 origin-center" />
-									<span className="group-hover/feature:translate-x-2 transition duration-200 inline-block text-white">
+									<div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-hairline-strong group-hover/feature:bg-purple-500 transition-all duration-fast origin-center" />
+									<span className="group-hover/feature:translate-x-2 transition duration-fast inline-block text-white">
 										{info.title}
 									</span>
 								</div>
@@ -278,7 +279,7 @@ export default function ContactPage() {
 				<motion.div
 					className="flex flex-col items-center mb-12 md:mb-16"
 					initial={{ opacity: 0, y: 20 }}
-					transition={{ duration: 0.5 }}
+					transition={{ duration: DURATION.slow }}
 					viewport={{ once: true, margin: "-100px" }}
 					whileInView={{ opacity: 1, y: 0 }}
 				>
@@ -304,12 +305,12 @@ export default function ContactPage() {
 					initial={{ opacity: 0, scale: 0.95 }}
 					animate={{ opacity: 1, scale: 1 }}
 					transition={{
-						duration: 0.4,
+						duration: DURATION.slow,
 						scale: { type: "spring", visualDuration: 0.8, bounce: 0.2 },
 					}}
 				>
 					<div
-						className="bg-gradient-to-b from-default-50 to-default-100/80 dark:from-default-100/10 dark:to-default-50/5 backdrop-blur-sm rounded-3xl shadow-lg p-6 md:p-8 mx-auto relative z-10 border border-default-200/50 dark:border-default-100/20"
+						className="bg-gradient-to-b from-default-50 to-default-100/80 dark:from-default-100/10 dark:to-default-50/5 backdrop-blur-sm rounded-card shadow-lg p-6 md:p-8 mx-auto relative z-10 border border-default-200/50 dark:border-default-100/20"
 						style={{
 							boxShadow:
 								"0 15px 30px rgba(0, 0, 0, 0.1), -20px 0 30px rgba(0, 0, 0, 0.05)",
@@ -431,7 +432,7 @@ export default function ContactPage() {
 
 							<div className="flex justify-center">
 								<button
-									className="w-full md:w-[68%] flex justify-center items-center group bg-gradient-to-br from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white font-medium py-3 px-4 rounded-xl cursor-pointer transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+									className="w-full md:w-[68%] flex justify-center items-center group bg-gradient-to-br from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white font-medium py-3 px-4 rounded-tile cursor-pointer transition-all duration-base disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
 									disabled={isSubmitting}
 									type="submit"
 								>
@@ -513,7 +514,7 @@ export default function ContactPage() {
 				<motion.div
 					className="flex flex-col items-center mb-12 md:mb-16"
 					initial={{ opacity: 0, y: 20 }}
-					transition={{ duration: 0.5 }}
+					transition={{ duration: DURATION.slow }}
 					viewport={{ once: true, margin: "-100px" }}
 					whileInView={{ opacity: 1, y: 0 }}
 				>
@@ -541,11 +542,11 @@ export default function ContactPage() {
 							initial={{ opacity: 0, scale: 0.8 }}
 							rel="noopener noreferrer"
 							target="_blank"
-							transition={{ duration: 0.4, delay: index * 0.1 }}
+							transition={{ duration: DURATION.slow, delay: index * STAGGER }}
 							viewport={{ once: true, margin: "-100px" }}
 							whileInView={{ opacity: 1, scale: 1 }}
 						>
-							<Card className="bg-default-100/50 border border-default-200/50 hover:border-primary/50 transition-all duration-300 w-20 h-20 flex items-center justify-center group-hover:scale-110 rounded-2xl">
+							<Card className="bg-default-100/50 border border-default-200/50 hover:border-primary/50 transition-all duration-base w-20 h-20 flex items-center justify-center group-hover:scale-110 rounded-tile">
 								<CardBody className="p-0 flex items-center justify-center">
 									<social.icon
 										aria-hidden="true"
@@ -564,11 +565,11 @@ export default function ContactPage() {
 				<motion.div
 					className="w-full max-w-4xl"
 					initial={{ opacity: 0, y: 30 }}
-					transition={{ duration: 0.6 }}
+					transition={{ duration: DURATION.slow }}
 					viewport={{ once: true, margin: "-100px" }}
 					whileInView={{ opacity: 1, y: 0 }}
 				>
-					<Card className="bg-gradient-to-br from-violet-500/10 to-purple-600/10 border border-violet-500/20 rounded-2xl">
+					<Card className="bg-gradient-to-br from-violet-500/10 to-purple-600/10 border border-violet-500/20 rounded-tile">
 						<CardBody className="p-8 md:p-12">
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 								<div>

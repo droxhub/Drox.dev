@@ -7,6 +7,7 @@ import PrototypeImg from "@/components/prototype-img";
 import ColourfulText from "@/components/ui/colourful-text";
 import CTAButton from "@/components/ui/cta-button";
 import { homepage } from "@/config/content";
+import { DURATION } from "@/lib/motion";
 
 const { hero } = homepage;
 
@@ -19,7 +20,7 @@ export default function Hero() {
 				animate={{ opacity: 1, y: 0 }}
 				className="relative z-10"
 				initial={{ opacity: 0, y: 20 }}
-				transition={{ duration: 0.5 }}
+				transition={{ duration: DURATION.slow }}
 			>
 				<Badge />
 			</motion.div>
@@ -28,7 +29,7 @@ export default function Hero() {
 				animate={{ opacity: 1, y: 0 }}
 				className="relative z-10 mt-7 md:mt-8 w-full max-w-[34rem] md:max-w-3xl lg:max-w-4xl text-center"
 				initial={{ opacity: 0, y: 20 }}
-				transition={{ duration: 0.5, delay: 0.1 }}
+				transition={{ duration: DURATION.slow, delay: 0.1 }}
 			>
 				{/* One h1 per page. The highlight is a span, not a second heading.
 				    The <br> only applies from sm up — on a phone the headline wraps
@@ -56,7 +57,7 @@ export default function Hero() {
 				animate={{ opacity: 1, y: 0 }}
 				className="relative z-10 mt-9 md:mt-10 flex w-full max-w-[19rem] flex-col items-stretch gap-3 sm:max-w-none sm:flex-row sm:items-center sm:justify-center sm:gap-4"
 				initial={{ opacity: 0, y: 20 }}
-				transition={{ duration: 0.5, delay: 0.2 }}
+				transition={{ duration: DURATION.slow, delay: 0.2 }}
 			>
 				{hero.ctaButtons.map((cta) => (
 					<CTAButton
@@ -76,7 +77,7 @@ export default function Hero() {
 				animate={{ opacity: 1, y: 0 }}
 				className="w-full mt-0 sm:mt-[-10px] md:mt-[-20px] lg:mt-[-30px]"
 				initial={{ opacity: 0, y: 20 }}
-				transition={{ duration: 0.6, delay: 0.5 }}
+				transition={{ duration: DURATION.slow, delay: 0.5 }}
 			>
 				<div className="mt-[-40px] sm:mt-[-60px] md:mt-[-70px]">
 					<PrototypeImg />

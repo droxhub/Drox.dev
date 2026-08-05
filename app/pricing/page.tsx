@@ -6,6 +6,7 @@ import DiscoverySprint from "@/components/DiscoverySprint";
 import CTAButton from "@/components/ui/cta-button";
 import SectionHeader from "@/components/ui/section-header";
 import { engagementModels } from "@/config/content";
+import { DURATION, STAGGER } from "@/lib/motion";
 
 /**
  * Reached from a nav item labelled "Pricing". The price question is therefore
@@ -33,9 +34,9 @@ export default function PricingPage() {
 					{engagementModels.commitments.map((commitment, index) => (
 						<motion.div
 							key={commitment.title}
-							className="flex flex-col rounded-[1.75rem] border-2 border-dashed border-default-200 p-7 dark:border-default-100 md:p-8"
+							className="flex flex-col rounded-panel border-2 border-dashed border-default-200 p-7 dark:border-default-100 md:p-8"
 							initial={{ opacity: 0, y: 20 }}
-							transition={{ duration: 0.5, delay: index * 0.1 }}
+							transition={{ duration: DURATION.slow, delay: index * STAGGER }}
 							viewport={{ once: true, margin: "-80px" }}
 							whileInView={{ opacity: 1, y: 0 }}
 						>
@@ -75,9 +76,9 @@ export default function PricingPage() {
 						{engagementModels.models.map((model, index) => (
 							<motion.div
 								key={model.name}
-								className="flex w-full flex-col rounded-[1.75rem] border-2 border-dashed border-default-200 bg-transparent p-7 transition-colors duration-300 hover:border-violet-500/50 dark:border-default-100 md:w-[calc(50%-1rem)] md:p-8 lg:w-[calc(33.333%-1.34rem)]"
+								className="flex w-full flex-col rounded-panel border-2 border-dashed border-default-200 bg-transparent p-7 transition-colors duration-base hover:border-violet-500/50 dark:border-default-100 md:w-[calc(50%-1rem)] md:p-8 lg:w-[calc(33.333%-1.34rem)]"
 								initial={{ opacity: 0, y: 20 }}
-								transition={{ duration: 0.5, delay: index * 0.08 }}
+								transition={{ duration: DURATION.slow, delay: index * STAGGER }}
 								viewport={{ once: true, margin: "-80px" }}
 								whileInView={{ opacity: 1, y: 0 }}
 							>
@@ -98,9 +99,9 @@ export default function PricingPage() {
 				</div>
 
 				<motion.div
-					className="mt-16 w-full max-w-3xl rounded-[1.75rem] border border-violet-500/20 bg-gradient-to-br from-violet-500/10 to-purple-600/10 p-8 text-center md:p-12"
+					className="mt-16 w-full max-w-3xl rounded-panel border border-violet-500/20 bg-gradient-to-br from-violet-500/10 to-purple-600/10 p-8 text-center md:p-12"
 					initial={{ opacity: 0, y: 20 }}
-					transition={{ duration: 0.5 }}
+					transition={{ duration: DURATION.slow }}
 					viewport={{ once: true, margin: "-80px" }}
 					whileInView={{ opacity: 1, y: 0 }}
 				>

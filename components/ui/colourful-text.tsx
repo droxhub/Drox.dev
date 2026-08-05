@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "motion/react";
 import React from "react";
+import { DURATION } from "@/lib/motion";
 
 export default function ColourfulText({ text }: { text: string }) {
 	const colors = [
@@ -45,7 +46,7 @@ export default function ColourfulText({ text }: { text: string }) {
 				y: 0,
 			}}
 			transition={{
-				duration: 0.5,
+				duration: DURATION.slow,
 				delay: index * 0.05,
 			}}
 		>

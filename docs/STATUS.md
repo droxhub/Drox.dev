@@ -8,7 +8,7 @@ Companion to [`UX-AUDIT-2026-07-29.md`](./UX-AUDIT-2026-07-29.md) (Revision 2).
 **Read this first** before picking up work — it says what's already shipped, so
 the audit's roadmap isn't re-done from the top.
 
-Last updated: **4 August 2026.** Nothing below is committed to git yet.
+Last updated: **5 August 2026.**
 
 ---
 
@@ -658,7 +658,78 @@ buttons that respond to focus), and the two genuinely open items above carry the
   correctly at opacity 1 in both motion modes. Two runs of the same build are
   0.0000% apart, so the capture is deterministic — the before-image artifact is
   not explained, only bounded.
-- One radius scale; standardise motion durations and easings
+- ~~One radius scale; standardise motion durations and easings~~ ✅ **done
+  5 August.** Ten radius values became **five plus `rounded-full`**, and the
+  motion vocabulary — five CSS durations, six JS durations, four easings —
+  became **three durations and two curves**. Both scales are `@theme` tokens in
+  `styles/globals.css`, alongside the colour tokens.
+
+  **Radius, named by what the element is rather than how round it is.** Every
+  step is a multiple of 4px and the gaps widen as the surface grows, because a
+  corner has to keep its share of an increasingly large box to read as the same
+  shape:
+
+  | Token | Value | Role | Was |
+  | --- | --- | --- | --- |
+  | `rounded-inline` | 4px | focus rings on inline text links | `rounded` |
+  | `rounded-control` | 8px | icon buttons, the skip link, the scrollbar | 6, 8, 10px |
+  | `rounded-tile` | 16px | inputs, icon tiles, list rows, FAQ rows | 12, 16, 20px |
+  | `rounded-card` | 24px | cards, the nav pill, project imagery | 20, 24px |
+  | `rounded-panel` | 32px | large feature surfaces | 28, 30, 32, 40px |
+
+  These deliberately **do not overwrite Tailwind's own `--radius-sm … -4xl`**.
+  HeroUI's components use those internally, and redefining them would move
+  corners inside a dependency.
+
+  **Motion.** `--transition-duration-fast|base|slow` (200/300/500ms) and
+  `--ease-standard` / `--ease-entrance`, with the same numbers in seconds in
+  **`lib/motion.ts`** as `DURATION`, `EASE` and `STAGGER` for `motion/react`.
+  CSS and JS animate the same site, so a value on one side and not the other is
+  how a scale comes apart — change one, change both. There is no `--ease-exit`:
+  the two things that close reverse the entrance at a shorter duration, and an
+  unused `@theme` token resolves to nothing anyway.
+
+  Four things worth knowing:
+
+  - **The biggest win was one line, not the sweep.** Tailwind's
+    `--default-transition-duration` is 150ms, which is off the scale, and a bare
+    `transition-colors` with no duration class lands on it — **94 elements on
+    the homepage alone**, including HeroUI internals that no amount of sweeping
+    this repo would have reached. It now points at `fast`. Like
+    `<MotionConfig reducedMotion="user">`, it cannot rot: a `transition-colors`
+    written next year is on the scale by existing, not by someone remembering.
+  - **`SpecularEdge` takes its radius as a number in px** — the shader draws the
+    corner itself and cannot read a class. `BusinessChallenges` passes `32`;
+    keep it in step with `--radius-panel` by hand.
+  - **700ms and 1000ms are gone.** They were hover transitions on photographs
+    (the /about mission images, the project thumbnails) and simply read as lag.
+    Both are `slow` now.
+  - **`components/text-animations/BlurText.tsx` is orphaned** — nothing imports
+    it. The P4 unused-component sweep missed it. Left in place because deleting
+    a component is the client's call, but it is dead code.
+
+  **Deliberately left off the scale**, so the claim below is bounded rather than
+  absolute: the ported React Bits **ProfileCard**'s internal transitions
+  (1s, 0.8s, 0.12s) are the physics of a pointer-tracking tilt, and **GooeyNav**'s
+  `--linear-ease` is an overshoot curve baked into the particle effect. Neither
+  is a UI transition. ProfileCard's *radius* did join the scale — its upstream
+  30px now reads `var(--radius-panel)`, so the leadership cards match the
+  mission cards directly above them on /about. Lenis's `duration: 1.2` is scroll
+  physics, and the black-hole keyframes are multi-second decorative artwork.
+
+  **Verified in a real browser, which is the only way this claim means
+  anything.** Every element on all 10 routes at 1440 and 390px was queried for
+  computed `border-radius`, `transition-duration`, `transition-timing-function`
+  and `animation-duration`: **0 off-scale values** of any of the four. The radii
+  in use across the whole site are exactly `0px, 4px, 8px, 16px, 24px, 32px, 50%`
+  and `rounded-full`. Reduced motion still collapses everything to 0.01ms,
+  including the now-token-driven `menu-item-in` animation. Build, ESLint, Biome
+  and TypeScript clean; the only console error is the pre-existing 404 for
+  `/_vercel/insights/script.js`, which only exists on Vercel.
+
+  This is **not** a visually neutral refactor and was not meant to be — six
+  surfaces went 40px → 32px, ten went 28px → 32px, the project thumbnails went
+  16/20px → 24px and the /about icon tiles 20px → 16px.
 - Three engineering blog posts (`/blog` was deleted — recreate when there's content)
 
 ### Contact form storage — decided against, 5 August

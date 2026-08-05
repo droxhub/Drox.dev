@@ -121,7 +121,7 @@ export function CalInline({ className = "" }: { className?: string }) {
 	return (
 		<div
 			ref={container}
-			className={`w-full overflow-hidden rounded-[1.75rem] border border-violet-500/20 bg-[#0a0817] ${className}`}
+			className={`w-full overflow-hidden rounded-panel border border-violet-500/20 bg-[#0a0817] ${className}`}
 			style={{ minHeight: "620px" }}
 		/>
 	);

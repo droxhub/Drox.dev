@@ -9,6 +9,7 @@ import { SiWhatsapp } from "react-icons/si";
 import { bookingHref } from "@/components/ui/cal-booking";
 import { contactPage } from "@/config/content";
 import { siteConfig } from "@/config/site";
+import { DURATION, EASE } from "@/lib/motion";
 import { MOBILE_MENU_EVENT, type MobileMenuEvent } from "@/lib/utils";
 
 const { phone } = contactPage.contactInfo;
@@ -94,13 +95,13 @@ export default function StickyMobileCTA() {
 					initial={reduceMotion ? { opacity: 0 } : { y: "100%", opacity: 0 }}
 					style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
 					transition={{
-						duration: reduceMotion ? 0.15 : 0.3,
-						ease: [0.23, 1, 0.32, 1],
+						duration: reduceMotion ? DURATION.fast : DURATION.base,
+						ease: EASE.entrance,
 					}}
 				>
 					<div className="flex items-center gap-3 px-4 py-3">
 						<Link
-							className="flex flex-1 items-center justify-center rounded-full border border-gray-800/80 bg-gradient-to-t from-cta-top to-cta-bottom px-5 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:border-purple-500/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+							className="flex flex-1 items-center justify-center rounded-full border border-gray-800/80 bg-gradient-to-t from-cta-top to-cta-bottom px-5 py-3 text-sm font-semibold text-white transition-colors duration-base hover:border-purple-500/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
 							href={bookingHref}
 							onClick={() =>
 								track("cta_click", {
@@ -115,7 +116,7 @@ export default function StickyMobileCTA() {
 
 						<a
 							aria-label="Message us on WhatsApp"
-							className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-gray-800/80 bg-gradient-to-t from-cta-top to-cta-bottom text-purple-300 transition-colors duration-300 hover:border-purple-500/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+							className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-gray-800/80 bg-gradient-to-t from-cta-top to-cta-bottom text-purple-300 transition-colors duration-base hover:border-purple-500/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
 							href={`https://wa.me/${phone.whatsapp}`}
 							onClick={() =>
 								track("contact_click", {

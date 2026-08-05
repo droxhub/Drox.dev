@@ -34,7 +34,7 @@ npx tsc --noEmit
 npm run build
 ```
 
-**Work is committed, on a branch.** Ten commits on **`site-rebuild`**;
+**Work is committed, on a branch.** Fourteen commits on **`site-rebuild`**;
 `main` is still at `f99124e`. To land it:
 
 ```
@@ -149,7 +149,7 @@ contrast checker.
 
 Two card treatments, and both are deliberate:
 
-- **The dashed house card** — `rounded-[1.75rem] border-2 border-dashed
+- **The dashed house card** — `rounded-panel border-2 border-dashed
   border-default-200 bg-transparent p-7 md:p-8 hover:border-violet-500/50
   dark:border-default-100`. Used by `WhyChooseUs`, `DiscoverySprint`, the
   pricing commitment and engagement-model cards.
@@ -167,6 +167,22 @@ Other rules:
   `styles/globals.css` (`canvas`, `surface`, `hairline`, `card-*`, `cta-*`).
   Use them; don't paste hexes back in. There is **no brand-violet token on
   purpose** — the violet is Tailwind's `violet-*` scale.
+- **Corners and motion have names too**, in the same `@theme` block. Radius is
+  `rounded-inline|control|tile|card|panel` (4/8/16/24/32px) plus `rounded-full`;
+  motion is `duration-fast|base|slow` (200/300/500ms) and
+  `ease-standard|entrance`. **No `rounded-2xl`, no `duration-300`, no arbitrary
+  `rounded-[…]`** — a browser sweep asserts every rendered corner and duration
+  is on the scale, so an off-scale value is a regression, not a choice.
+  - The JS half is **`lib/motion.ts`** (`DURATION`, `EASE`, `STAGGER`) for
+    `motion/react`, which wants seconds and raw bezier points. Same numbers.
+    Change one side, change the other.
+  - **A bare `transition-colors` is already on the scale.** Tailwind's
+    `--default-transition-duration` is overridden to `fast`, so you only need a
+    `duration-*` class when you want something other than 200ms.
+  - `STAGGER` is for `delay: index * STAGGER`. A delay that sequences one
+    specific element against another is composition and stays hand-set.
+  - Two things are off the scale on purpose and documented in STATUS: the ported
+    **ProfileCard**'s internal tilt timings and **GooeyNav**'s `--linear-ease`.
 - **One button treatment**: the dark bordered pill in `components/ui/cta-button.tsx`.
   A solid violet "primary" variant was rejected.
 - **One spacing system**: `py-16 md:py-24` section rhythm, `py-12 md:py-20` page
@@ -223,13 +239,17 @@ Other rules:
 
 ### Priority 5 — the remaining build work
 
-7. **One radius scale**, and standardised motion durations and easings. The
-   icon consolidation and colour tokens are done.
-8. **A screen-reader pass** (NVDA / JAWS / VoiceOver). This is the only
+Icons, colour tokens, the radius scale and the motion scale are all done. What
+is left:
+
+7. **A screen-reader pass** (NVDA / JAWS / VoiceOver). This is the only
    accessibility item left and it cannot be automated. `/accessibility`
    publicly commits to updating when it's done — with no date, by decision.
-9. **Three engineering blog posts.** `/blog` was deleted; recreate when there
+8. **Three engineering blog posts.** `/blog` was deleted; recreate when there
    is content.
+9. **`components/text-animations/BlurText.tsx` is orphaned** — nothing imports
+   it, and the P4 unused-component sweep missed it. Deleting a component is the
+   client's call, so it was left; it is dead code either way.
 
 ### Decided, don't reopen without new information
 

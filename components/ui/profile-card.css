@@ -629,6 +629,14 @@
    upstream's full rainbow to a violet/magenta family. Deleting this block
    restores the original spectrum. */
 .founder-profile-card {
+	/* Upstream's 30px was the one corner on the site that belonged to no scale.
+	   These cards sit on /about directly under the mission cards, which are
+	   --radius-panel; matching them is the whole point of having a scale.
+	   Overridden here rather than at the declaration above so the upstream
+	   block stays untouched — the derived radii inside the card
+	   (`calc(--card-radius - --ui-inset …)`) still follow from it. */
+	--card-radius: var(--radius-panel);
+
 	--sunpillar-1: hsl(258, 90%, 74%);
 	--sunpillar-2: hsl(272, 88%, 76%);
 	--sunpillar-3: hsl(287, 82%, 74%);

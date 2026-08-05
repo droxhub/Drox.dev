@@ -6,6 +6,7 @@ import { motion } from "motion/react";
 import { title } from "@/components/primitives";
 import SectionHeader from "@/components/ui/section-header";
 import { faqContent } from "@/config/content";
+import { DURATION } from "@/lib/motion";
 
 export default function FAQ() {
 	return (
@@ -33,13 +34,13 @@ export default function FAQ() {
 					initial={{ opacity: 0, y: 20 }}
 					whileInView={{ opacity: 1, y: 0 }}
 					viewport={{ once: true, margin: "-100px" }}
-					transition={{ duration: 0.5, delay: 0.3 }}
+					transition={{ duration: DURATION.slow, delay: 0.3 }}
 					className="w-full mt-12 md:mt-20"
 				>
 					<Accordion
 						variant="splitted"
 						itemClasses={{
-							base: "group-[.is-splitted]:px-6 group-[.is-splitted]:bg-transparent group-[.is-splitted]:shadow-none group-[.is-splitted]:hover:bg-default-100 dark:group-[.is-splitted]:hover:bg-white/5 transition-colors rounded-[1rem] mb-4 data-[open=true]:bg-default-100 bg-[#0c0d21] dark:data-[open=true]:bg-white/5",
+							base: "group-[.is-splitted]:px-6 group-[.is-splitted]:bg-transparent group-[.is-splitted]:shadow-none group-[.is-splitted]:hover:bg-default-100 dark:group-[.is-splitted]:hover:bg-white/5 transition-colors rounded-tile mb-4 data-[open=true]:bg-default-100 bg-[#0c0d21] dark:data-[open=true]:bg-white/5",
 							title: "font-medium text-lg text-default-900 text-left",
 							trigger: "py-6 data-[hover=true]:bg-transparent",
 							content:

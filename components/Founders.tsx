@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "motion/react";
 import ProfileCard from "@/components/ui/profile-card";
 import SectionHeader from "@/components/ui/section-header";
 import { founders } from "@/config/content";
+import { DURATION, STAGGER } from "@/lib/motion";
 
 /**
  * Four named, accountable founders — from Company Profile p.24.
@@ -42,7 +43,7 @@ export default function Founders() {
 						className="mx-auto flex w-full max-w-[320px] flex-col sm:max-w-[340px] lg:max-w-none"
 						initial={{ opacity: 0, y: 20 }}
 						key={person.name}
-						transition={{ duration: 0.5, delay: index * 0.08 }}
+						transition={{ duration: DURATION.slow, delay: index * STAGGER }}
 						viewport={{ once: true, margin: "-80px" }}
 						whileInView={{ opacity: 1, y: 0 }}
 					>

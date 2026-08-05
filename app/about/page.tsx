@@ -18,6 +18,7 @@ import { title } from "@/components/primitives";
 import AmbientVideo from "@/components/ui/ambient-video";
 import CTAButton from "@/components/ui/cta-button";
 import SectionHeader from "@/components/ui/section-header";
+import { DURATION, STAGGER } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 const values = [
@@ -83,24 +84,24 @@ export default function AboutPage() {
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 max-w-7xl w-full">
 					{/* Mission Card */}
 					<motion.div
-						className="relative group p-[1px] rounded-[2.5rem] bg-gradient-to-br from-violet-500/20 to-transparent overflow-hidden shadow-2xl min-h-[400px]"
+						className="relative group p-[1px] rounded-panel bg-gradient-to-br from-violet-500/20 to-transparent overflow-hidden shadow-2xl min-h-[400px]"
 						initial={{ opacity: 0, scale: 0.95 }}
-						transition={{ duration: 0.6 }}
+						transition={{ duration: DURATION.slow }}
 						viewport={{ once: true, margin: "-100px" }}
 						whileInView={{ opacity: 1, scale: 1 }}
 					>
 						{/* Video Background — lazy, desktop-only, reduced-motion aware */}
 						<AmbientVideo
-							className="absolute inset-0 w-full h-full object-cover opacity-60 transition-opacity duration-700 group-hover:opacity-80"
+							className="absolute inset-0 w-full h-full object-cover opacity-60 transition-opacity duration-slow group-hover:opacity-80"
 							src="/video/silk.webm"
 						/>
 
 						<div className="absolute inset-x-0 -top-px h-px w-full bg-gradient-to-r from-transparent via-violet-500/50 to-transparent" />
 						<div className="absolute inset-y-0 -left-px w-px h-full bg-gradient-to-b from-transparent via-violet-500/50 to-transparent" />
 
-						<div className="relative bg-surface/60 backdrop-blur-md p-8 md:p-12 h-full rounded-[2.5rem] flex flex-col gap-8">
+						<div className="relative bg-surface/60 backdrop-blur-md p-8 md:p-12 h-full rounded-panel flex flex-col gap-8">
 							<div className="flex items-center gap-6">
-								<div className="w-16 h-16 rounded-[1.25rem] bg-violet-600 flex items-center justify-center shadow-[0_0_30px_-10px_rgba(124,58,237,0.5)]">
+								<div className="w-16 h-16 rounded-tile bg-violet-600 flex items-center justify-center shadow-[0_0_30px_-10px_rgba(124,58,237,0.5)]">
 									<Rocket className="text-white" size={32} />
 								</div>
 								<h2 className="text-3xl md:text-4xl font-medium text-white tracking-tight">
@@ -119,24 +120,24 @@ export default function AboutPage() {
 
 					{/* Vision Card */}
 					<motion.div
-						className="relative group p-[1px] rounded-[2.5rem] bg-gradient-to-br from-purple-500/20 to-transparent overflow-hidden shadow-2xl min-h-[400px]"
+						className="relative group p-[1px] rounded-panel bg-gradient-to-br from-purple-500/20 to-transparent overflow-hidden shadow-2xl min-h-[400px]"
 						initial={{ opacity: 0, scale: 0.95 }}
-						transition={{ duration: 0.6, delay: 0.2 }}
+						transition={{ duration: DURATION.slow, delay: 0.2 }}
 						viewport={{ once: true, margin: "-100px" }}
 						whileInView={{ opacity: 1, scale: 1 }}
 					>
 						{/* Video Background — lazy, desktop-only, reduced-motion aware */}
 						<AmbientVideo
-							className="absolute inset-0 w-full h-full object-cover opacity-60 transition-opacity duration-700 group-hover:opacity-80"
+							className="absolute inset-0 w-full h-full object-cover opacity-60 transition-opacity duration-slow group-hover:opacity-80"
 							src="/video/silk.webm"
 						/>
 
 						<div className="absolute inset-x-0 -top-px h-px w-full bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
 						<div className="absolute inset-y-0 -right-px w-px h-full bg-gradient-to-b from-transparent via-purple-500/50 to-transparent" />
 
-						<div className="relative bg-surface/60 backdrop-blur-md p-8 md:p-12 h-full rounded-[2.5rem] flex flex-col gap-8">
+						<div className="relative bg-surface/60 backdrop-blur-md p-8 md:p-12 h-full rounded-panel flex flex-col gap-8">
 							<div className="flex items-center gap-6">
-								<div className="w-16 h-16 rounded-[1.25rem] bg-purple-600 flex items-center justify-center shadow-[0_0_30px_-10px_rgba(168,85,247,0.5)]">
+								<div className="w-16 h-16 rounded-tile bg-purple-600 flex items-center justify-center shadow-[0_0_30px_-10px_rgba(168,85,247,0.5)]">
 									<Lightbulb className="text-white" size={32} />
 								</div>
 								<h2 className="text-3xl md:text-4xl font-medium text-white tracking-tight">
@@ -181,7 +182,7 @@ export default function AboutPage() {
 								initial={{ opacity: 0, y: 20 }}
 								whileInView={{ opacity: 1, y: 0 }}
 								viewport={{ once: true, margin: "-100px" }}
-								transition={{ duration: 0.5, delay: index * 0.1 }}
+								transition={{ duration: DURATION.slow, delay: index * STAGGER }}
 								className={cn(
 									"flex flex-col border-r py-10 relative group/feature border-hairline",
 									(index === 0 || index === 3) && "border-l border-hairline",
@@ -189,17 +190,17 @@ export default function AboutPage() {
 								)}
 							>
 								{index < 3 && (
-									<div className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t from-purple-900/10 to-transparent pointer-events-none" />
+									<div className="opacity-0 group-hover/feature:opacity-100 transition duration-fast absolute inset-0 h-full w-full bg-gradient-to-t from-purple-900/10 to-transparent pointer-events-none" />
 								)}
 								{index >= 3 && (
-									<div className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-b from-purple-900/10 to-transparent pointer-events-none" />
+									<div className="opacity-0 group-hover/feature:opacity-100 transition duration-fast absolute inset-0 h-full w-full bg-gradient-to-b from-purple-900/10 to-transparent pointer-events-none" />
 								)}
 								<div className="mb-4 relative z-10 px-10 text-purple-400">
 									{value.icon}
 								</div>
 								<div className="text-lg font-bold mb-2 relative z-10 px-10">
-									<div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-hairline-strong group-hover/feature:bg-purple-500 transition-all duration-200 origin-center" />
-									<span className="group-hover/feature:translate-x-2 transition duration-200 inline-block text-white">
+									<div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-hairline-strong group-hover/feature:bg-purple-500 transition-all duration-fast origin-center" />
+									<span className="group-hover/feature:translate-x-2 transition duration-fast inline-block text-white">
 										{value.title}
 									</span>
 								</div>
@@ -219,7 +220,7 @@ export default function AboutPage() {
 				<motion.div
 					className="flex flex-col items-center mb-16 md:mb-24 text-center px-4"
 					initial={{ opacity: 0, y: 20 }}
-					transition={{ duration: 0.5 }}
+					transition={{ duration: DURATION.slow }}
 					viewport={{ once: true, margin: "-100px" }}
 					whileInView={{ opacity: 1, y: 0 }}
 				>
@@ -244,13 +245,13 @@ export default function AboutPage() {
 									index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
 								)}
 								initial={{ opacity: 0, y: 50 }}
-								transition={{ duration: 0.7, delay: index * 0.1 }}
+								transition={{ duration: DURATION.slow, delay: index * STAGGER }}
 								viewport={{ once: true, margin: "-100px" }}
 								whileInView={{ opacity: 1, y: 0 }}
 							>
 								<div className="w-full md:w-[45%]">
 									<div className={cn(
-										"p-8 md:p-10 rounded-[2.5rem] bg-[#0d0c1d] border border-white/5 shadow-2xl transition-all duration-300 hover:border-violet-500/30",
+										"p-8 md:p-10 rounded-panel bg-[#0d0c1d] border border-white/5 shadow-2xl transition-all duration-base hover:border-violet-500/30",
 										index % 2 === 0 ? "text-left md:text-right" : "text-left"
 									)}>
 										<span className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-violet-400 to-purple-500 bg-clip-text text-transparent mb-4 block">
@@ -279,11 +280,11 @@ export default function AboutPage() {
 				<motion.div
 					className="flex flex-col items-center max-w-3xl w-full"
 					initial={{ opacity: 0, y: 30 }}
-					transition={{ duration: 0.6 }}
+					transition={{ duration: DURATION.slow }}
 					viewport={{ once: true, margin: "-100px" }}
 					whileInView={{ opacity: 1, y: 0 }}
 				>
-					<div className="bg-gradient-to-br from-violet-500/10 to-purple-600/10 border border-violet-500/20 rounded-2xl p-8 md:p-12 w-full">
+					<div className="bg-gradient-to-br from-violet-500/10 to-purple-600/10 border border-violet-500/20 rounded-tile p-8 md:p-12 w-full">
 						<h2 className={title({ size: "lg", color: "violet" })}>
 							Ready to Start Your Journey?
 						</h2>

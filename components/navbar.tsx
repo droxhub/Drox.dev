@@ -8,6 +8,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { navigation } from "@/config/content";
+import { DURATION, EASE } from "@/lib/motion";
 import { MOBILE_MENU_EVENT } from "@/lib/utils";
 import CTAButton from "./ui/cta-button";
 import GooeyNav from "./ui/GooeyNav";
@@ -153,16 +154,16 @@ export default function Navigation() {
 		<>
 			<motion.nav
 				animate={{ y: scrollDir === "down" ? -100 : 0 }} // move out when scrolling down
-				className="fixed top-0 left-0 right-0 z-40 transition-all duration-300 mt-5 px-2 md:px-0"
+				className="fixed top-0 left-0 right-0 z-40 transition-all duration-base mt-5 px-2 md:px-0"
 				initial={{ y: 0 }}
-				transition={{ duration: 0.4, ease: "easeInOut" }}
+				transition={{ duration: DURATION.base, ease: EASE.standard }}
 			>
 				{/* While the menu is open the bar empties out to just the close
 				    button, as on apple.com — the logo and the CTA would otherwise sit
 				    in a bordered pill floating on an otherwise plain overlay. `border`
 				    stays applied and only its colour changes, so nothing shifts. */}
 				<div
-					className={`max-w-7xl mx-auto px-6 flex items-center justify-between border rounded-3xl h-20 overflow-hidden transition-colors duration-200 md:bg-surface-nav md:border-white/10 ${
+					className={`max-w-7xl mx-auto px-6 flex items-center justify-between border rounded-card h-20 overflow-hidden transition-colors duration-fast md:bg-surface-nav md:border-white/10 ${
 						isOpen
 							? "bg-transparent border-transparent"
 							: "bg-surface-nav border-white/10"
@@ -170,7 +171,7 @@ export default function Navigation() {
 				>
 					{/* Logo */}
 					<div
-						className={`flex-1 flex items-center transition-opacity duration-200 md:opacity-100 md:pointer-events-auto ${
+						className={`flex-1 flex items-center transition-opacity duration-fast md:opacity-100 md:pointer-events-auto ${
 							isOpen ? "opacity-0 pointer-events-none" : ""
 						}`}
 					>
@@ -213,7 +214,7 @@ export default function Navigation() {
 						    repo — so this rendered as unstyled text. Same component as every
 						    other button on the site now, at the compact size. */}
 						<CTAButton
-							className={`whitespace-nowrap transition-opacity duration-200 md:ml-2 md:opacity-100 md:pointer-events-auto ${
+							className={`whitespace-nowrap transition-opacity duration-fast md:ml-2 md:opacity-100 md:pointer-events-auto ${
 								isOpen ? "opacity-0 pointer-events-none" : ""
 							}`}
 							href={navigation.contactButton.href}
@@ -227,7 +228,7 @@ export default function Navigation() {
 							aria-controls="mobile-nav"
 							aria-expanded={isOpen}
 							aria-label={isOpen ? "Close menu" : "Open menu"}
-							className="md:hidden text-white p-2 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+							className="md:hidden text-white p-2 rounded-control focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
 							onClick={() => setIsOpen(!isOpen)}
 							ref={toggleRef}
 							type="button"
@@ -256,7 +257,7 @@ export default function Navigation() {
 				   an extra 16ms on the worst frame, and the reference is flat colour
 				   anyway. */
 				className={`fixed inset-0 z-30 bg-surface-deep md:hidden ${
-					reduceMotion ? "" : "transition-opacity duration-200 ease-out"
+					reduceMotion ? "" : "transition-opacity duration-fast"
 				} ${isOpen ? "opacity-100" : "pointer-events-none opacity-0"}`}
 				id="mobile-nav"
 				ref={panelRef}

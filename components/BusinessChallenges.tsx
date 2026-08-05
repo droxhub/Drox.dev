@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from "motion/react";
 import SectionHeader from "@/components/ui/section-header";
 import SpecularEdge from "@/components/ui/specular-edge";
 import { businessChallenges } from "@/config/content";
+import { DURATION } from "@/lib/motion";
 
 /**
  * Icons are presentation, so they live here rather than in `config/content.ts`
@@ -60,10 +61,10 @@ export default function BusinessChallenges() {
 							/* No `overflow-hidden` here: the specular canvas is inset -20px
 							   so its glow can bleed past the edge. The surface and glows are
 							   clipped by the inner wrapper instead. */
-							className="group relative rounded-[1.75rem] p-7 ring-1 ring-inset ring-white/[0.06] transition-shadow duration-500 hover:shadow-2xl hover:shadow-violet-950/50 md:p-8"
+							className="group relative rounded-panel p-7 ring-1 ring-inset ring-white/[0.06] transition-shadow duration-slow hover:shadow-2xl hover:shadow-violet-950/50 md:p-8"
 							initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
 							transition={{
-								duration: reduceMotion ? 0 : 0.5,
+								duration: reduceMotion ? 0 : DURATION.slow,
 								delay: reduceMotion ? 0 : index * 0.1,
 							}}
 							viewport={{ once: true, margin: "-100px" }}
@@ -76,22 +77,24 @@ export default function BusinessChallenges() {
 							    outside it survives. */}
 							<span
 								aria-hidden="true"
-								className="absolute inset-0 overflow-hidden rounded-[1.75rem]"
+								className="absolute inset-0 overflow-hidden rounded-panel"
 							>
 								<span className="absolute inset-0 bg-gradient-to-b from-card-top via-card-mid to-card-bottom" />
 								{/* Opacity only on hover, never `scale` — animating a 70px blur
 								    means recomputing it every frame, on three cards at once. */}
-								<span className="absolute -bottom-24 -left-20 h-64 w-64 rounded-full bg-violet-600/50 opacity-30 blur-[70px] transition-opacity duration-500 group-hover:opacity-70" />
-								<span className="absolute -right-16 -top-20 h-56 w-56 rounded-full bg-purple-600/40 opacity-20 blur-[70px] transition-opacity duration-500 group-hover:opacity-50" />
-								<span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-400/50 to-transparent transition-opacity duration-500 group-hover:via-violet-400/80" />
+								<span className="absolute -bottom-24 -left-20 h-64 w-64 rounded-full bg-violet-600/50 opacity-30 blur-[70px] transition-opacity duration-slow group-hover:opacity-70" />
+								<span className="absolute -right-16 -top-20 h-56 w-56 rounded-full bg-purple-600/40 opacity-20 blur-[70px] transition-opacity duration-slow group-hover:opacity-50" />
+								<span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-400/50 to-transparent transition-opacity duration-slow group-hover:via-violet-400/80" />
 							</span>
 
-							{/* radius matches rounded-[1.75rem] = 28px. */}
+							{/* The shader draws the corner itself, so this has to be told the
+							    host's radius in px — it cannot read the class. Keep in step
+							    with --radius-panel (2rem = 32px) in styles/globals.css. */}
 							<SpecularEdge
 								baseColor="#2a1a52"
 								lineColor="#ddd6fe"
 								proximity={280}
-								radius={28}
+								radius={32}
 								shineFade={45}
 								shineSize={12}
 								thickness={1.5}
@@ -100,7 +103,7 @@ export default function BusinessChallenges() {
 							<div className="relative z-10">
 								<div className="mb-7 flex items-center gap-4">
 									{/* Scaled-down twin of the /about mission-card icon tile. */}
-									<span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[1rem] bg-violet-600 shadow-[0_0_30px_-10px_rgba(124,58,237,0.6)]">
+									<span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-tile bg-violet-600 shadow-[0_0_30px_-10px_rgba(124,58,237,0.6)]">
 										{Icon ? (
 											<Icon
 												aria-hidden="true"

@@ -16,6 +16,7 @@ import {
 import { title } from "@/components/primitives";
 import LogoLoop from "@/components/ui/LogoLoop";
 import SectionHeader from "@/components/ui/section-header";
+import { DURATION } from "@/lib/motion";
 
 // Define responsive icon sizes
 const iconSize = { mobile: 32, desktop: 48 };
@@ -93,7 +94,7 @@ const TechStack = () => {
 			<motion.div
 				className="w-full max-w-7xl h-[80px] md:h-[120px]"
 				initial={{ opacity: 0, y: 20 }}
-				transition={{ duration: 0.5, delay: 0.2 }}
+				transition={{ duration: DURATION.slow, delay: 0.2 }}
 				viewport={{ once: true, margin: "-100px" }}
 				whileInView={{ opacity: 1, y: 0 }}
 			>

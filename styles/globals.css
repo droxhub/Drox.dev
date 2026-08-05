@@ -39,6 +39,63 @@
 	   use, and most remaining occurrences are `rgba(124,58,237,…)` inside shadow
 	   strings where a hex token cannot carry the alpha anyway. A --color-brand
 	   would be a second name for a colour that already has one. */
+
+	/*
+	 * Corner radius, named by what the element is rather than how round it is.
+	 * Five steps and `rounded-full`; there was no sixth thing these ten values
+	 * were expressing.
+	 *
+	 * Every step is a multiple of 4px, and the gaps widen as the surface grows,
+	 * because a corner has to keep its share of an increasingly large box to
+	 * read as the same shape.
+	 *
+	 * These deliberately do not overwrite Tailwind's own --radius-sm … --radius-4xl.
+	 * HeroUI's components use those internally, and redefining them would move
+	 * corners inside a dependency.
+	 */
+	--radius-inline: 0.25rem; /* 4px  — focus rings on inline text links */
+	--radius-control: 0.5rem; /* 8px  — icon buttons, the skip link, small chips */
+	--radius-tile: 1rem; /* 16px — inputs, icon tiles, images, list rows */
+	--radius-card: 1.5rem; /* 24px — cards, the nav pill, the contact form */
+	--radius-panel: 2rem; /* 32px — large feature surfaces */
+
+	/*
+	 * Motion. Three durations and two curves, and the same numbers exist in
+	 * seconds in lib/motion.ts for `motion/react` — CSS and JS animate the same
+	 * site, so they cannot be on different scales. Change one, change both.
+	 *
+	 * `fast` is for a state flip the eye should not have to wait for, `base` for
+	 * anything on screen changing appearance, `slow` for a large surface or an
+	 * element arriving. Anything longer than `slow` was a hover on a photograph,
+	 * and 700ms and 1000ms simply read as lag.
+	 */
+	--transition-duration-fast: 200ms;
+	--transition-duration-base: 300ms;
+	--transition-duration-slow: 500ms;
+
+	/* Matches Tailwind's default transition timing function, so a bare
+	   `transition-colors` is already on the scale and needs no ease-* class. */
+	--ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+	/* A hard decelerate, for something arriving or expanding: most of the
+	   distance is covered early, so the element reads as already in place. */
+	--ease-entrance: cubic-bezier(0.32, 0.72, 0, 1);
+	/* No matching --ease-exit. Nothing here accelerates away — the two things
+	   that close (the accordion, the mobile menu) reverse the entrance at a
+	   shorter duration, and an unused @theme token resolves to nothing anyway. */
+
+	/*
+	 * A bare `transition-colors` with no duration class falls back to these.
+	 * Tailwind ships 150ms, which is off the scale, and 94 elements on the
+	 * homepage alone were landing on it — including HeroUI's own internals,
+	 * which no amount of sweeping this repo would have reached.
+	 *
+	 * Pointing the fallback at the scale fixes all of them at once and cannot
+	 * rot: a new `transition-colors` written next year is on the scale by
+	 * existing, not by someone remembering. Same argument as <MotionConfig
+	 * reducedMotion="user"> in app/providers.tsx.
+	 */
+	--default-transition-duration: var(--transition-duration-fast);
+	--default-transition-timing-function: var(--ease-standard);
 }
 
 @layer base {
@@ -261,12 +318,12 @@
 
 ::-webkit-scrollbar-track {
 	background: #08061d;
-	border-radius: 10px;
+	border-radius: var(--radius-control);
 }
 
 ::-webkit-scrollbar-thumb {
 	background: linear-gradient(180deg, #7c3aed 0%, #a855f7 100%);
-	border-radius: 10px;
+	border-radius: var(--radius-control);
 	border: 2px solid #08061d;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
@@ -508,7 +565,11 @@
 }
 
 .menu-item-in {
-	animation: menu-item-in 0.25s ease-out both;
+	/* Deliberately `fast` while the overlay itself fades at `base`: the rows are
+	   staggered 30ms apart, so anything slower has the last of six still moving
+	   after the surface underneath has settled. */
+	animation: menu-item-in var(--transition-duration-fast) var(--ease-entrance)
+		both;
 }
 
 @media (prefers-reduced-motion: reduce) {

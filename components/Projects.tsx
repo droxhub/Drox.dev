@@ -9,6 +9,7 @@ import { title } from "@/components/primitives";
 import CTAButton from "@/components/ui/cta-button";
 import SectionHeader from "@/components/ui/section-header";
 import { caseStudies } from "@/config/content";
+import { DURATION, STAGGER } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 /**
@@ -71,13 +72,13 @@ const Projects = () => {
 							initial={{ opacity: 0, y: 40 }}
 							viewport={{ once: true, margin: "-100px" }}
 							whileInView={{ opacity: 1, y: 0 }}
-							transition={{ duration: 0.8, delay: index * 0.1 }}
+							transition={{ duration: DURATION.slow, delay: index * STAGGER }}
 							className="group relative"
 						>
 							{/* The hover arrow used to imply a link on a plain div. The whole
 							    card is now genuinely clickable and keyboard-focusable. */}
 							<Link
-								className="block rounded-[1rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
+								className="block rounded-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
 								href={project.href}
 								onClick={() =>
 									track("project_click", {
@@ -86,19 +87,19 @@ const Projects = () => {
 									})
 								}
 							>
-								<div className="relative aspect-[16/11] w-full overflow-hidden rounded-[1rem] bg-surface-inset shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] border border-white/5 transition-all duration-500">
+								<div className="relative aspect-[16/11] w-full overflow-hidden rounded-card bg-surface-inset shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] border border-white/5 transition-all duration-slow">
 									<Image
 										src={project.src}
 										alt={project.alt}
 										fill
 										sizes="(max-width: 768px) 100vw, 50vw"
-										className="object-cover transition-transform duration-1000 group-hover:scale-105"
+										className="object-cover transition-transform duration-slow group-hover:scale-105"
 									/>
 									{/* Gradient Overlay */}
-									<div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+									<div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-slow" />
 
 									{/* Floating FAB */}
-									<div className="absolute bottom-8 right-8 w-16 h-16 bg-black rounded-full flex items-center justify-center border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.8)] transition-all duration-500 group-hover:bg-white group-hover:text-black z-20 group-hover:scale-110">
+									<div className="absolute bottom-8 right-8 w-16 h-16 bg-black rounded-full flex items-center justify-center border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.8)] transition-all duration-slow group-hover:bg-white group-hover:text-black z-20 group-hover:scale-110">
 										<ArrowUpRight className="w-7 h-7 text-white group-hover:text-black transition-colors" />
 									</div>
 								</div>

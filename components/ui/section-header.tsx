@@ -3,6 +3,7 @@
 import { LucideIcon } from "lucide-react";
 import { motion } from "motion/react";
 import { title as titleStyle } from "@/components/primitives";
+import { DURATION } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 /**
@@ -68,7 +69,7 @@ const SectionHeader = ({
 					titleClassName,
 				)}
 				initial={{ opacity: 0, y: 20 }}
-				transition={{ duration: 0.6, delay: 0.1 }}
+				transition={{ duration: DURATION.slow, delay: 0.1 }}
 				viewport={{ once: true }}
 				whileInView={{ opacity: 1, y: 0 }}
 			>
@@ -83,7 +84,7 @@ const SectionHeader = ({
 				<motion.p
 					className="text-gray-400 text-lg md:text-xl font-normal leading-relaxed max-w-3xl"
 					initial={{ opacity: 0, y: 20 }}
-					transition={{ duration: 0.6, delay: 0.2 }}
+					transition={{ duration: DURATION.slow, delay: 0.2 }}
 					viewport={{ once: true }}
 					whileInView={{ opacity: 1, y: 0 }}
 				>

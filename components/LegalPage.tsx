@@ -39,7 +39,7 @@ export default function LegalPage({
 				<p className="text-sm text-default-400 leading-relaxed">
 					Questions about this page? Email{" "}
 					<a
-						className="text-violet-400 hover:text-violet-300 underline underline-offset-4 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+						className="text-violet-400 hover:text-violet-300 underline underline-offset-4 rounded-inline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
 						href="mailto:hello@droxdev.com"
 					>
 						hello@droxdev.com

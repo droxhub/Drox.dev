@@ -5,6 +5,7 @@ import { motion, useInView } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { title } from "@/components/primitives";
 import SectionHeader from "@/components/ui/section-header";
+import { DURATION, STAGGER } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 // Counter animation component
@@ -121,9 +122,12 @@ const WhyChooseUs = () => {
 				{stats.map((stat, index) => (
 					<motion.div
 						key={index}
-						className="flex flex-col p-8 md:p-10 border-2 border-dashed border-default-200 dark:border-default-100 rounded-[2.5rem] bg-transparent hover:border-violet-500/50 transition-colors duration-300"
+						className="flex flex-col p-8 md:p-10 border-2 border-dashed border-default-200 dark:border-default-100 rounded-panel bg-transparent hover:border-violet-500/50 transition-colors duration-base"
 						initial={{ opacity: 0, y: 20 }}
-						transition={{ duration: 0.5, delay: 0.1 * (index + 1) }}
+						transition={{
+							duration: DURATION.slow,
+							delay: (index + 1) * STAGGER,
+						}}
 						viewport={{ once: true, margin: "-100px" }}
 						whileInView={{ opacity: 1, y: 0 }}
 					>

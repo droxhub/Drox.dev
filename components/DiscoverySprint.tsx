@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import CTAButton from "@/components/ui/cta-button";
 import SectionHeader from "@/components/ui/section-header";
 import { discoverySprint } from "@/config/content";
+import { DURATION, STAGGER } from "@/lib/motion";
 
 /**
  * The site's only risk-reduction surface. Everything else asks the buyer to
@@ -34,9 +35,9 @@ export default function DiscoverySprint() {
 				{discoverySprint.deliverables.map((item, index) => (
 					<motion.div
 						key={item.title}
-						className="flex flex-col rounded-[1.75rem] border-2 border-dashed border-default-200 bg-transparent p-7 transition-colors duration-300 hover:border-violet-500/50 dark:border-default-100 md:p-8"
+						className="flex flex-col rounded-panel border-2 border-dashed border-default-200 bg-transparent p-7 transition-colors duration-base hover:border-violet-500/50 dark:border-default-100 md:p-8"
 						initial={{ opacity: 0, y: 20 }}
-						transition={{ duration: 0.5, delay: index * 0.08 }}
+						transition={{ duration: DURATION.slow, delay: index * STAGGER }}
 						viewport={{ once: true, margin: "-80px" }}
 						whileInView={{ opacity: 1, y: 0 }}
 					>
@@ -54,9 +55,9 @@ export default function DiscoverySprint() {
 			    Violet panel, matching the closing note further down /pricing and the
 			    homepage closing CTA. */}
 			<motion.div
-				className="mt-8 w-full max-w-5xl rounded-[1.75rem] border border-violet-500/20 bg-gradient-to-br from-violet-500/10 to-purple-600/10 p-8 md:mt-10 md:p-12"
+				className="mt-8 w-full max-w-5xl rounded-panel border border-violet-500/20 bg-gradient-to-br from-violet-500/10 to-purple-600/10 p-8 md:mt-10 md:p-12"
 				initial={{ opacity: 0, y: 20 }}
-				transition={{ duration: 0.5 }}
+				transition={{ duration: DURATION.slow }}
 				viewport={{ once: true, margin: "-80px" }}
 				whileInView={{ opacity: 1, y: 0 }}
 			>

@@ -9,6 +9,7 @@ import ServiceCards from "@/components/ServiceCards";
 import TechStack from "@/components/TechStack";
 import CTAButton from "@/components/ui/cta-button";
 import WhyChooseUs from "@/components/WhyChooseUs";
+import { DURATION } from "@/lib/motion";
 
 export default function ServicesPage() {
 	return (
@@ -18,7 +19,7 @@ export default function ServicesPage() {
 				<motion.div
 					animate={{ opacity: 1, y: 0 }}
 					initial={{ opacity: 0, y: 20 }}
-					transition={{ duration: 0.5 }}
+					transition={{ duration: DURATION.slow }}
 				>
 					<Badge />
 				</motion.div>
@@ -27,7 +28,7 @@ export default function ServicesPage() {
 					animate={{ opacity: 1, y: 0 }}
 					className="inline-block max-w-sm lg:max-w-4xl text-center justify-center"
 					initial={{ opacity: 0, y: 20 }}
-					transition={{ duration: 0.5, delay: 0.1 }}
+					transition={{ duration: DURATION.slow, delay: 0.1 }}
 				>
 					<h1 className={title({ size: "xl" })}>
 						<span className="gradient-line">
@@ -45,7 +46,7 @@ export default function ServicesPage() {
 						class: "max-w-3xl text-center text-gray-400 py-2",
 					})}
 					initial={{ opacity: 0 }}
-					transition={{ duration: 0.5, delay: 0.2 }}
+					transition={{ duration: DURATION.slow, delay: 0.2 }}
 				>
 					Nine service lines, built around how your business operates rather
 					than around a template. We start with the business, not the software.
@@ -90,11 +91,11 @@ export default function ServicesPage() {
 				<motion.div
 					className="flex flex-col items-center max-w-3xl w-full"
 					initial={{ opacity: 0, y: 30 }}
-					transition={{ duration: 0.6 }}
+					transition={{ duration: DURATION.slow }}
 					viewport={{ once: true, margin: "-100px" }}
 					whileInView={{ opacity: 1, y: 0 }}
 				>
-					<div className="bg-gradient-to-br from-violet-500/10 to-purple-600/10 border border-violet-500/20 rounded-2xl p-8 md:p-12 w-full">
+					<div className="bg-gradient-to-br from-violet-500/10 to-purple-600/10 border border-violet-500/20 rounded-tile p-8 md:p-12 w-full">
 						<h2 className={title({ size: "lg", color: "violet" })}>
 							Ready to Get Started?
 						</h2>

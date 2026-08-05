@@ -118,7 +118,7 @@ export default function RootLayout({
 						<div className="relative flex flex-col min-h-screen pb-20 md:pb-0">
 							{/* Lets keyboard and screen-reader users bypass the nav. */}
 							<a
-								className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-violet-600 focus:px-4 focus:py-2 focus:text-white"
+								className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-control focus:bg-violet-600 focus:px-4 focus:py-2 focus:text-white"
 								href="#main"
 							>
 								Skip to content

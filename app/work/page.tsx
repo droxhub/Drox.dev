@@ -58,13 +58,13 @@ export default function WorkIndexPage() {
 					{caseStudies.map((study) => (
 						<Link
 							key={study.slug}
-							className="group block rounded-[1.25rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
+							className="group block rounded-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
 							href={`/work/${study.slug}`}
 						>
-							<div className="relative aspect-[16/10] w-full overflow-hidden rounded-[1.25rem] border border-white/5 bg-surface-inset shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)]">
+							<div className="relative aspect-[16/10] w-full overflow-hidden rounded-card border border-white/5 bg-surface-inset shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)]">
 								<Image
 									alt={study.imageAlt}
-									className="object-cover transition-transform duration-1000 group-hover:scale-105"
+									className="object-cover transition-transform duration-slow group-hover:scale-105"
 									fill
 									sizes="(max-width: 768px) 100vw, 900px"
 									src={study.image}

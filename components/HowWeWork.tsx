@@ -6,6 +6,7 @@ import { useState } from "react";
 import CTAButton from "@/components/ui/cta-button";
 import SectionHeader from "@/components/ui/section-header";
 import { engineeringProcess } from "@/config/content";
+import { DURATION, EASE } from "@/lib/motion";
 
 const { steps } = engineeringProcess;
 
@@ -51,17 +52,17 @@ function StageStrip({
 		: { type: "spring" as const, visualDuration: 0.55, bounce: 0.16 };
 
 	const surfaceTransition = {
-		duration: reduceMotion ? 0 : 0.5,
-		ease: [0.32, 0.72, 0, 1] as const,
+		duration: reduceMotion ? 0 : DURATION.slow,
+		ease: EASE.entrance,
 	};
 
 	const textTransition = (visible: boolean) =>
 		reduceMotion
 			? { duration: 0 }
 			: {
-					duration: visible ? 0.3 : 0.15,
+					duration: visible ? DURATION.base : DURATION.fast,
 					delay: visible ? 0.2 : 0,
-					ease: [0.32, 0.72, 0, 1] as const,
+					ease: EASE.entrance,
 				};
 
 	const number = (
@@ -83,7 +84,7 @@ function StageStrip({
 			    tabbing through walks the process in order. */}
 			<button
 				aria-expanded={isActive}
-				className="group relative h-full w-full overflow-hidden rounded-[1.75rem] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+				className="group relative h-full w-full overflow-hidden rounded-panel text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
 				onClick={onActivate}
 				onFocus={onActivate}
 				onMouseEnter={onActivate}

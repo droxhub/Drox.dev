@@ -8,12 +8,12 @@ interface FeatureCardProps {
 
 export default function FeatureCard({ title, description }: FeatureCardProps) {
 	return (
-		<div className="relative bg-gradient-to-b from-surface-muted to-surface p-6 rounded-3xl overflow-hidden border border-hairline/50 transition-transform duration-300 hover:scale-[0.98] group">
+		<div className="relative bg-gradient-to-b from-surface-muted to-surface p-6 rounded-card overflow-hidden border border-hairline/50 transition-transform duration-base hover:scale-[0.98] group">
 			<Grid size={20} />
-			<p className="text-base font-bold text-white relative z-20 transition-transform duration-300 group-hover:scale-105 origin-center inline-block">
+			<p className="text-base font-bold text-white relative z-20 transition-transform duration-base group-hover:scale-105 origin-center inline-block">
 				{title}
 			</p>
-			<p className="text-gray-400 mt-4 text-base font-normal relative z-20 transition-transform duration-300 group-hover:scale-105 origin-center inline-block">
+			<p className="text-gray-400 mt-4 text-base font-normal relative z-20 transition-transform duration-base group-hover:scale-105 origin-center inline-block">
 				{description}
 			</p>
 		</div>

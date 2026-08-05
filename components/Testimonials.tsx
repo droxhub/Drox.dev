@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import SectionHeader from "@/components/ui/section-header";
+import { DURATION, STAGGER } from "@/lib/motion";
 
 interface Testimonial {
 	name: string;
@@ -33,7 +34,7 @@ const testimonials: Testimonial[] = [
 
 const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
 	const content = (
-		<div className="bg-gradient-to-t from-surface-muted to-surface backdrop-blur-sm border border-hairline/80 rounded-2xl p-3 md:p-5 h-full flex flex-col transition-colors">
+		<div className="bg-gradient-to-t from-surface-muted to-surface backdrop-blur-sm border border-hairline/80 rounded-tile p-3 md:p-5 h-full flex flex-col transition-colors">
 			<div className="flex items-center gap-3 mb-3">
 				<Image
 					alt={`${testimonial.name}, ${testimonial.handle}`}
@@ -95,7 +96,7 @@ const Testimonials = () => {
 						key={testimonial.name}
 						className="flex justify-center flex-1"
 						initial={{ opacity: 0, y: 40 }}
-						transition={{ duration: 0.6, delay: 0.1 * index }}
+						transition={{ duration: DURATION.slow, delay: index * STAGGER }}
 						viewport={{ once: true, margin: "-100px" }}
 						whileInView={{ opacity: 1, y: 0 }}
 					>
