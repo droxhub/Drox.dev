@@ -203,39 +203,9 @@ export default function ContactPage() {
 				</motion.p>
 			</section>
 
-			{/* Booking. First thing on the page when it's configured: picking a slot
-			    removes the email round-trip entirely, which is the largest structural
-			    conversion gain available to a services site. Renders nothing until a
-			    Cal.com event type is set in config/site.ts. */}
-			{isBookingEnabled && (
-				<section
-					className="flex w-full max-w-4xl scroll-mt-28 flex-col items-center my-12 md:my-16"
-					id="book"
-				>
-					<motion.div
-						className="w-full text-center"
-						initial={{ opacity: 0, y: 20 }}
-						transition={{ duration: DURATION.slow }}
-						viewport={{ once: true, margin: "-100px" }}
-						whileInView={{ opacity: 1, y: 0 }}
-					>
-						<h2 className={title({ size: "lg" })}>
-							<span className="gradient-line">Book a scoping call</span>
-						</h2>
-						<p className="mx-auto mt-4 max-w-2xl text-base text-default-500 md:text-lg">
-							{siteConfig.booking.duration} with a founder. Pick a time that
-							works — no form, no waiting for a reply. Prefer to write first?
-							The form is further down this page.
-						</p>
-					</motion.div>
-
-					<div className="mt-10 w-full">
-						<CalInline />
-					</div>
-				</section>
-			)}
-
-			{/* Contact Info Cards */}
+			{/* Contact Info Cards. Above the booking widget: a visitor who already
+			    knows which channel they want — WhatsApp, in this market — should not
+			    have to scroll past a calendar to find it. */}
 			<section className="flex flex-col items-center w-full my-16 md:my-24">
 				<div className="w-full max-w-6xl">
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
@@ -271,6 +241,39 @@ export default function ContactPage() {
 					</div>
 				</div>
 			</section>
+
+			{/* Booking. Picking a slot removes the email round-trip entirely, which
+			    is the largest structural conversion gain available to a services
+			    site — so it stays ahead of the form, with the direct channels above
+			    it. Renders nothing until a Cal.com event type is set in
+			    config/site.ts. */}
+			{isBookingEnabled && (
+				<section
+					className="flex w-full max-w-4xl scroll-mt-28 flex-col items-center my-12 md:my-16"
+					id="book"
+				>
+					<motion.div
+						className="w-full text-center"
+						initial={{ opacity: 0, y: 20 }}
+						transition={{ duration: DURATION.slow }}
+						viewport={{ once: true, margin: "-100px" }}
+						whileInView={{ opacity: 1, y: 0 }}
+					>
+						<h2 className={title({ size: "lg" })}>
+							<span className="gradient-line">Book a scoping call</span>
+						</h2>
+						<p className="mx-auto mt-4 max-w-2xl text-base text-default-500 md:text-lg">
+							{siteConfig.booking.duration} with a founder. Pick a time that
+							works — no form, no waiting for a reply. Prefer to write first?
+							The form is further down this page.
+						</p>
+					</motion.div>
+
+					<div className="mt-10 w-full">
+						<CalInline />
+					</div>
+				</section>
+			)}
 
 			<Divider className="w-full max-w-7xl my-16 md:my-24" />
 
