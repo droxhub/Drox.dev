@@ -34,21 +34,24 @@ npx tsc --noEmit
 npm run build
 ```
 
-**The rebuild is on `main`.** Sixteen commits, fast-forwarded from
-`site-rebuild` on 5 August — the two branches point at the same commit, so
-`site-rebuild` can be deleted whenever you like.
+**The rebuild is live.** Merged to `main` and pushed on 5 August —
+`f99124e..1bc1b59`, eighteen commits. `origin/main` and `main` are level, the
+working tree is clean, and `site-rebuild` is fully contained in `main` so it can
+be deleted whenever you like.
 
-**Nothing is pushed.** `origin/main` is still at `f99124e`, sixteen behind. That
-is the whole rebuild sitting on one machine: everything in this file and in
-STATUS, ten routes, the design system, four founder portraits. Pushing it is a
-publishing decision — droxdev.com deploys from this repo — so it was left to
-the client rather than done on their behalf.
+**droxdev.com is serving it.** Verified against the deployed site, not just
+locally: 12/12 routes 200 (including `/work`, `/accessibility` and the legal
+pages, which did not exist before), one `<h1>` per page, no broken images, no
+console errors, no 4xx, no horizontal overflow at 1440 or on an iPhone 13
+profile. The four founder portraits and four role patterns all serve.
 
-```
-git push origin main    # when the client is ready for it to go live
-```
+Two things that could only be confirmed in production, and now are:
 
-The working tree is clean.
+- **`/_vercel/insights/script.js` returns 200.** It 404s on a local
+  `next start` by design — that is the one console error to expect locally and
+  it is not a fault.
+- **The specular-edge overflow fix is in the deployed CSS**
+  (`.specular-edge{inset:0}` widening under `:has(canvas)`).
 
 ---
 

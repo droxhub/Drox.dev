@@ -164,7 +164,7 @@ function PrototypeImg() {
 							loop
 							muted
 							playsInline
-							className="absolute inset-0 w-full h-full object-cover"
+							className="black-hole-video absolute inset-0 w-full h-full object-cover"
 							ref={videoRef}
 							src="/video/black-hole.webm"
 						/>

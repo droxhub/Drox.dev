@@ -482,6 +482,53 @@
 	}
 }
 
+/*
+ * The hero artwork is a fixed 1200x800 composition, scaled per breakpoint, so
+ * at almost every viewport it is narrower than the screen. Its own black is
+ * rgb(4,0,20) and the page behind it is rgb(0,0,20) — four levels of red apart.
+ * That is invisible on most monitors and clearly visible on an OLED phone in a
+ * dark room, where it reads as a lighter rectangle with hard vertical edges.
+ *
+ * Fading the outer few percent of each edge removes the boundary without
+ * touching the composition. Deliberately a narrow linear fade per axis rather
+ * than one radial: a radial wide enough to reach the corners also dims the
+ * halo, which is the whole point of the artwork. `intersect` applies both.
+ */
+.black-hole-video {
+	-webkit-mask-image:
+		linear-gradient(
+			to right,
+			transparent 0%,
+			#000 7%,
+			#000 93%,
+			transparent 100%
+		),
+		linear-gradient(
+			to bottom,
+			transparent 0%,
+			#000 6%,
+			#000 94%,
+			transparent 100%
+		);
+	-webkit-mask-composite: source-in;
+	mask-image:
+		linear-gradient(
+			to right,
+			transparent 0%,
+			#000 7%,
+			#000 93%,
+			transparent 100%
+		),
+		linear-gradient(
+			to bottom,
+			transparent 0%,
+			#000 6%,
+			#000 94%,
+			transparent 100%
+		);
+	mask-composite: intersect;
+}
+
 .black-hole-ring {
 	position: absolute;
 	border: 1px solid rgba(139, 92, 246, 0.2);

@@ -626,6 +626,36 @@ root layout and present on 9/9 routes, and the Services process steps are real
 buttons that respond to focus), and the two genuinely open items above carry the
 30 September date.
 
+### The hero artwork's edges — fixed 5 August
+
+Reported from a phone: the black-hole video read as a lighter rectangle with
+visible left and right margins.
+
+The artwork is a fixed 1200x800 composition scaled per breakpoint
+(`components/prototype-img.tsx`), so **at almost every viewport it is narrower
+than the screen** — measured side gaps of 20px at 640, 60px at 900, 120px at
+1440. Its own black is `rgb(4,0,20)`; the page behind it is `rgb(0,0,20)`. Four
+levels of red across a hard vertical edge: invisible on most monitors, obvious
+on an OLED phone in a dark room.
+
+`.black-hole-video` in `styles/globals.css` fades the outer few percent of each
+edge, which removes the boundary without touching the composition. A narrow
+linear fade per axis composited with `mask-composite: intersect`, deliberately
+not one radial — a radial wide enough to reach the corners also dims the halo,
+which is the point of the artwork.
+
+**Verified by sampling pixels either side of the edge**, since this is a
+4/255 difference that eyeballing will not settle: the step is now ≤1 level at
+640, 900 and 1440, down from 4. The halo is unchanged, reduced motion still
+withholds playback (paused, 0 particles), and the mask applies in both modes.
+
+**Still open, and a design decision rather than a bug:** the scale sequence is
+`0.7 → sm:0.5 → md:0.65 → lg:0.85 → xl:1.0`. It is **not monotonic** — the
+artwork is *smaller* on a 640px tablet than on a 390px phone, then grows again.
+Every other step increases with the viewport, so `sm:scale-[0.5]` looks like a
+typo, but changing it resizes the hero at those widths and that was not asked
+for. The masked edges mean it no longer produces a visible seam either way.
+
 ### Priority 4 — performance
 - ~~**`prefers-reduced-motion`**~~ ✅ **done 5 August.** Was honoured in 8 of the
   24 files importing `motion/react`, with Lenis ignoring it entirely.
