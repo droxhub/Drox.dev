@@ -379,7 +379,7 @@ export const LogoLoop = React.memo<LogoLoopProps>(
 		}, [effectiveHoverSpeed]);
 
 		const renderLogoItem = useCallback(
-			(item: LogoItem, key: React.Key) => {
+			(item: LogoItem, key: React.Key, focusable = true) => {
 				if (renderItem) {
 					return (
 						<li
@@ -443,6 +443,12 @@ export const LogoLoop = React.memo<LogoLoopProps>(
 				const inner = item.href ? (
 					<a
 						aria-label={itemAriaLabel || "logo link"}
+						/* The marquee repeats the same logos several times and marks every
+						   copy after the first `aria-hidden`. Their links stayed in the tab
+						   order, so a keyboard user tabbed through the same logos two or
+						   three times into content a screen reader had been told to ignore
+						   — WCAG 4.1.2, and axe's aria-hidden-focus. */
+						tabIndex={focusable ? undefined : -1}
 						className={cx(
 							"inline-flex items-center no-underline rounded",
 							"transition-opacity duration-200 ease-linear",
@@ -487,7 +493,11 @@ export const LogoLoop = React.memo<LogoLoopProps>(
 						className={cx("flex items-center", isVertical && "flex-col")}
 					>
 						{logos.map((item, itemIndex) =>
-							renderLogoItem(item, `${copyIndex}-${itemIndex}`),
+							renderLogoItem(
+								item,
+								`${copyIndex}-${itemIndex}`,
+								copyIndex === 0,
+							),
 						)}
 					</ul>
 				)),

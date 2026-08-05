@@ -114,6 +114,28 @@
 		font-family: var(--font-heading);
 	}
 
+	/*
+	 * Windows High Contrast Mode / forced-colors replaces author colours with the
+	 * user's own palette, but it cannot replace a gradient painted *through* the
+	 * glyphs. `-webkit-text-fill-color: transparent` survives, so every headline
+	 * using .gradient-line renders as invisible text — the reader sees a blank
+	 * space where the page's largest words should be.
+	 *
+	 * Handing the text back to `currentColor` lets forced-colors do its job.
+	 * WCAG 2.1 SC 1.4.3 / 1.4.8; this is the "gradient-filled headings may not
+	 * render legibly in high-contrast modes" item disclosed on /accessibility.
+	 */
+	@media (forced-colors: active) {
+		.gradient-line,
+		[class*="bg-clip-text"] {
+			background: none;
+			-webkit-background-clip: unset;
+			background-clip: unset;
+			-webkit-text-fill-color: currentColor;
+			color: CanvasText;
+		}
+	}
+
 	/* Allow nested colored text (like ColourfulText) to show */
 	.gradient-line span {
 		background: none;

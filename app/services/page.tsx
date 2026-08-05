@@ -42,7 +42,7 @@ export default function ServicesPage() {
 				<motion.p
 					animate={{ opacity: 1 }}
 					className={subtitle({
-						class: "max-w-3xl text-center text-gray-500 py-2",
+						class: "max-w-3xl text-center text-gray-400 py-2",
 					})}
 					initial={{ opacity: 0 }}
 					transition={{ duration: 0.5, delay: 0.2 }}

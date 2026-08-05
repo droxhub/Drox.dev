@@ -49,34 +49,47 @@ export default function AccessibilityPage() {
 						Smooth scrolling, background effects, the hero animation and every
 						transition are disabled when it is on.
 					</li>
+					<li>
+						A minimum text size of 12px, and body text at 4.5:1 contrast or
+						better against its background.
+					</li>
+					<li>
+						Headings that remain legible in Windows High Contrast Mode and other
+						forced-colour modes.
+					</li>
+					<li>
+						A skip-to-content link on every page, and keyboard operability
+						throughout — including the expandable process steps on Services.
+					</li>
 				</ul>
 			</LegalSection>
 
 			<LegalSection title="Known issues we are working on">
 				<p>
-					These are open and tracked. Target date for all of them:{" "}
-					<strong>30 September 2026</strong>.
+					We test against WCAG 2.2 Level AA, which includes the WCAG 2.1 Level
+					AA criteria that India&apos;s IS 17802 standard is built on. At our
+					last audit no automated Level A or AA failures remained across any
+					page.
+				</p>
+				<p>
+					Two things we have not been able to verify automatically, and are
+					checking by hand:
 				</p>
 				<ul>
 					<li>
-						<strong>Colour contrast.</strong> Some secondary text over gradient
-						and video backgrounds falls below the 4.5:1 ratio, and some
-						gradient-filled headings may not render legibly in high-contrast
-						modes.
+						<strong>Text over video and gradients.</strong> Automated tools
+						cannot measure contrast where text sits over moving or
+						gradient-filled backgrounds. We are reviewing these manually.
 					</li>
 					<li>
-						<strong>Interactive process steps.</strong> The expandable process
-						section on the Services page is not yet fully keyboard operable.
-					</li>
-					<li>
-						<strong>Small text.</strong> Some supporting text is below our
-						intended minimum size.
-					</li>
-					<li>
-						<strong>Skip link.</strong> A skip-to-content link is not yet
-						present on every page.
+						<strong>Screen reader testing.</strong> Our checks so far are
+						automated and keyboard-based. We have not yet completed a full pass
+						with NVDA, JAWS and VoiceOver.
 					</li>
 				</ul>
+				<p>
+					Target date for both: <strong>30 September 2026</strong>.
+				</p>
 			</LegalSection>
 
 			<LegalSection title="How we assess">

@@ -88,7 +88,7 @@ export function NoteMockup() {
 												className="bg-transparent text-xs text-gray-300 outline-none w-full font-light"
 												placeholder="Search anything..."
 											/>
-											<span className="text-[10px] text-gray-400">⌘K</span>
+											<span className="text-xs text-gray-400">⌘K</span>
 										</div>
 
 										{/* Menu items */}
@@ -201,7 +201,7 @@ export function NoteMockup() {
 										{/* Content */}
 										<div className="space-y-3 text-gray-300">
 											<div className="flex gap-2.5">
-												<span className="text-gray-500 text-[13px] mt-0.5">
+												<span className="text-gray-400 text-[13px] mt-0.5">
 													•
 												</span>
 												<div>
@@ -216,7 +216,7 @@ export function NoteMockup() {
 											</div>
 
 											<div className="flex gap-2.5">
-												<span className="text-gray-500 text-[13px] mt-0.5">
+												<span className="text-gray-400 text-[13px] mt-0.5">
 													•
 												</span>
 												<div className="text-[13px] font-light leading-relaxed">
@@ -231,19 +231,15 @@ export function NoteMockup() {
 											</div>
 
 											<div className="flex gap-2">
-												<span className="text-gray-500 text-[10px] mt-0.5">
-													•
-												</span>
-												<div className="text-[10px] font-light leading-relaxed">
+												<span className="text-gray-400 text-xs mt-0.5">•</span>
+												<div className="text-xs font-light leading-relaxed">
 													From concept to deployment, Drox Dev delivers
 													exceptional results that drive growth and innovation.
 												</div>
 											</div>
 
 											<div className="flex gap-2">
-												<span className="text-gray-500 text-[10px] mt-0.5">
-													•
-												</span>
+												<span className="text-gray-400 text-xs mt-0.5">•</span>
 												<div>
 													<div className="font-normal text-[14px] mb-1.5 text-gray-200">
 														What services does Drox Dev offer?
@@ -275,7 +271,7 @@ export function NoteMockup() {
 											</div>
 
 											<div className="flex gap-2.5">
-												<span className="text-gray-500 text-[13px] mt-0.5">
+												<span className="text-gray-400 text-[13px] mt-0.5">
 													•
 												</span>
 												<div className="text-[13px] font-light leading-relaxed">
@@ -292,7 +288,7 @@ export function NoteMockup() {
 											</div>
 
 											<div className="flex gap-2.5">
-												<span className="text-gray-500 text-[13px] mt-0.5">
+												<span className="text-gray-400 text-[13px] mt-0.5">
 													•
 												</span>
 												<div className="text-[13px] font-light leading-relaxed">
@@ -315,7 +311,7 @@ export function NoteMockup() {
 											{["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"].map((day) => (
 												<div
 													key={day}
-													className="text-gray-500 text-[13px] mb-2 font-light"
+													className="text-gray-400 text-[13px] mb-2 font-light"
 												>
 													{day}
 												</div>
@@ -325,7 +321,7 @@ export function NoteMockup() {
 											{prevMonthDays.map((day) => (
 												<div
 													key={`prev-${day}`}
-													className="text-gray-500 text-[14px] font-light aspect-square flex items-center justify-center"
+													className="text-gray-400 text-[14px] font-light aspect-square flex items-center justify-center"
 												>
 													{day}
 												</div>

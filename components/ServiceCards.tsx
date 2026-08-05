@@ -159,7 +159,7 @@ const ServiceCards = ({ hideHeader = false }: ServiceCardsProps) => {
 									</p>
 									{/* The profile's own sub-capability list — what a buyer
 									    scans for to check you do their specific thing. */}
-									<p className="mt-4 pt-4 border-t border-white/5 text-xs leading-relaxed text-gray-500 relative z-20">
+									<p className="mt-4 pt-4 border-t border-white/5 text-xs leading-relaxed text-gray-400 relative z-20">
 										{service.sub}
 									</p>
 								</div>

@@ -38,7 +38,7 @@ const Footer = () => {
 							Custom software, AI and business automation for growing companies.
 						</p>
 						{/* Enterprise buyers look for a real address. It was absent. */}
-						<address className="not-italic text-gray-500 text-sm leading-relaxed space-y-1">
+						<address className="not-italic text-gray-400 text-sm leading-relaxed space-y-1">
 							<span className="block">Hilite Business Park</span>
 							<span className="block">Kozhikode, Kerala, India</span>
 							<a
@@ -65,7 +65,7 @@ const Footer = () => {
 							<li>
 								<Link
 									href="/"
-									className="text-gray-500 hover:text-white transition-colors text-sm"
+									className="text-gray-400 hover:text-white transition-colors text-sm"
 								>
 									Home
 								</Link>
@@ -73,7 +73,7 @@ const Footer = () => {
 							<li>
 								<Link
 									href="/about"
-									className="text-gray-500 hover:text-white transition-colors text-sm"
+									className="text-gray-400 hover:text-white transition-colors text-sm"
 								>
 									About
 								</Link>
@@ -81,7 +81,7 @@ const Footer = () => {
 							<li>
 								<Link
 									href="/services"
-									className="text-gray-500 hover:text-white transition-colors text-sm"
+									className="text-gray-400 hover:text-white transition-colors text-sm"
 								>
 									Services
 								</Link>
@@ -89,7 +89,7 @@ const Footer = () => {
 							<li>
 								<Link
 									href="/work"
-									className="text-gray-500 hover:text-white transition-colors text-sm"
+									className="text-gray-400 hover:text-white transition-colors text-sm"
 								>
 									Our Work
 								</Link>
@@ -97,7 +97,7 @@ const Footer = () => {
 							<li>
 								<Link
 									href="/contact"
-									className="text-gray-500 hover:text-white transition-colors text-sm"
+									className="text-gray-400 hover:text-white transition-colors text-sm"
 								>
 									Contact
 								</Link>
@@ -123,7 +123,7 @@ const Footer = () => {
 								<li key={service}>
 									<Link
 										href="/services"
-										className="text-gray-500 hover:text-white transition-colors text-sm"
+										className="text-gray-400 hover:text-white transition-colors text-sm"
 									>
 										{service}
 									</Link>
@@ -142,7 +142,7 @@ const Footer = () => {
 								<Link
 									isExternal
 									href="https://www.facebook.com/drox.dev"
-									className="text-gray-500 hover:text-white transition-colors text-sm"
+									className="text-gray-400 hover:text-white transition-colors text-sm"
 								>
 									Facebook
 								</Link>
@@ -151,7 +151,7 @@ const Footer = () => {
 								<Link
 									isExternal
 									href="https://wa.me/919946642643"
-									className="text-gray-500 hover:text-white transition-colors text-sm"
+									className="text-gray-400 hover:text-white transition-colors text-sm"
 								>
 									WhatsApp
 								</Link>
@@ -160,7 +160,7 @@ const Footer = () => {
 								<Link
 									isExternal
 									href="https://www.linkedin.com/company/drox-dev/?viewAsMember=true"
-									className="text-gray-500 hover:text-white transition-colors text-sm"
+									className="text-gray-400 hover:text-white transition-colors text-sm"
 								>
 									LinkedIn
 								</Link>
@@ -169,7 +169,7 @@ const Footer = () => {
 								<Link
 									isExternal
 									href="https://www.instagram.com/drox.dev"
-									className="text-gray-500 hover:text-white transition-colors text-sm"
+									className="text-gray-400 hover:text-white transition-colors text-sm"
 								>
 									Instagram
 								</Link>
@@ -180,10 +180,10 @@ const Footer = () => {
 
 				{/* Bottom Bar */}
 				<div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
-					<p className="text-[11px] md:text-xs text-gray-500 order-2 md:order-1">
+					<p className="text-xs text-gray-400 order-2 md:order-1">
 						© {currentYear} {siteConfig.name}. All Rights Reserved.
 					</p>
-					<div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 md:gap-x-8 text-[11px] md:text-xs text-gray-400 order-1 md:order-2">
+					<div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 md:gap-x-8 text-xs text-gray-400 order-1 md:order-2">
 						<Link href="/terms" className="hover:text-white transition-colors">
 							Terms of Service
 						</Link>

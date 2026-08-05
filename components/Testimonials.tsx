@@ -46,7 +46,7 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
 					<h4 className="font-semibold text-sm md:text-base text-default-900 dark:text-white truncate">
 						{testimonial.name}
 					</h4>
-					<p className="text-[10px] md:text-xs text-default-500 dark:text-default-400 truncate">
+					<p className="text-xs text-default-500 dark:text-default-400 truncate">
 						{testimonial.handle}
 					</p>
 				</div>

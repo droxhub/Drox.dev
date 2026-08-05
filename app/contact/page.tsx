@@ -180,7 +180,7 @@ export default function ContactPage() {
 				<motion.p
 					animate={{ opacity: 1 }}
 					className={subtitle({
-						class: "max-w-3xl text-center text-gray-500 py-2",
+						class: "max-w-3xl text-center text-gray-400 py-2",
 					})}
 					initial={{ opacity: 0 }}
 					transition={{ duration: 0.5, delay: 0.2 }}
@@ -516,6 +516,9 @@ export default function ContactPage() {
 					{socialLinks.map((social, index) => (
 						<motion.a
 							key={index}
+							/* Icon-only link: without this a screen reader announces it as
+							   just "link", with the URL as its only clue. */
+							aria-label={`${social.name} (opens in a new tab)`}
 							className="group"
 							href={social.link}
 							initial={{ opacity: 0, scale: 0.8 }}

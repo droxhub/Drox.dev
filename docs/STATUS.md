@@ -427,7 +427,51 @@ the section screenshotted at all three.
 
 ## Still outstanding — Priority 4 onward
 
-### Priority 4 — Accessibility & performance
+### Accessibility — WCAG 2.1 AA clean, 5 August
+
+Measured with **axe-core 4.12** across all 10 routes at 1440px and 390px:
+**0 Level A/AA violations**, down from 327 nodes.
+
+| Was | Fix |
+| --- | --- |
+| 314 nodes, `color-contrast` | One colour. `text-gray-500` = `#6a7282` failed at 4.06–4.30:1 against the site's dark backgrounds; needs 4.5. Replaced with `text-gray-400` (`#99a1af`), already used widely here, which clears 7.56:1 worst case. 23 declaration sites — descendants like the footer address inherited it. |
+| 8 nodes, `link-name` | The social icon links on /contact render an icon and no text, so a screen reader announced "link" and the URL. Given `aria-label` from the name already in their data. |
+| 5 nodes, `aria-hidden-focus` | LogoLoop repeats its logos and marks every copy after the first `aria-hidden`, but their links stayed in the tab order — keyboard users tabbed through the same logos three times, into content screen readers were told to ignore. Copies now get `tabIndex={-1}`. |
+
+Two further fixes not caught by axe:
+
+- **Forced colours.** Windows High Contrast Mode cannot replace a gradient
+  painted *through* glyphs — `-webkit-text-fill-color: transparent` survives, so
+  all 11 `.gradient-line` headings rendered as blank space. A
+  `@media (forced-colors: active)` block hands the text back to `currentColor`.
+  Verified with Playwright's `forcedColors: "active"`: 0 of 11 invisible, and
+  all 11 still gradient-filled in normal mode.
+- **Minimum text size.** Footer legal line and testimonial roles were 11px and
+  10px on mobile; the hero mockup had 10px body copy. All now ≥12px, verified
+  live at both viewports.
+
+**How this was measured matters.** The first attempt was a hand-written pixel
+sampler and it was wrong — it reported 386 failures including obviously-fine
+white-on-black text, because `getComputedStyle().color` returns `lab()` here
+(Tailwind v4) and the parser read lightness/chroma/hue as RGB. Convert colours
+via a canvas readback, or use axe. Don't hand-roll this.
+
+**Still open, and disclosed as such on /accessibility:**
+
+- `color-contrast: 692 incomplete` — axe cannot measure text over video or
+  gradient backgrounds. Needs a manual pass.
+- No screen-reader pass yet (NVDA / JAWS / VoiceOver). Everything so far is
+  automated plus keyboard.
+- `video-caption: 6` — decorative muted videos with no `<track>`.
+- `aria-prohibited-attr: 18` — worth a look, not yet triaged.
+
+`/accessibility` was rewritten to match: the four old items are gone (two were
+already fixed and the page was understating the site — the skip link is in the
+root layout and present on 9/9 routes, and the Services process steps are real
+buttons that respond to focus), and the two genuinely open items above carry the
+30 September date.
+
+### Priority 4 — performance
 - ~~**`prefers-reduced-motion`**~~ ✅ **done 5 August.** Was honoured in 8 of the
   24 files importing `motion/react`, with Lenis ignoring it entirely.
 
