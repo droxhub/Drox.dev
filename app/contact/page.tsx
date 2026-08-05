@@ -233,7 +233,11 @@ export default function ContactPage() {
 										{info.title}
 									</span>
 								</div>
-								<p className="text-sm text-gray-400 max-w-xs relative z-10 px-10 break-all">
+								{/* `break-words`, not `break-all`. Both keep the email address
+								    inside its column, but `break-all` breaks at any character —
+								    it was splitting the office address as "Kozhikod / e". This
+								    breaks inside a word only when the word alone cannot fit. */}
+								<p className="text-sm text-gray-400 max-w-xs relative z-10 px-10 break-words">
 									{info.content}
 								</p>
 							</motion.a>
