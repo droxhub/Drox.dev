@@ -34,14 +34,21 @@ npx tsc --noEmit
 npm run build
 ```
 
-**Work is committed, on a branch.** Sixteen commits on **`site-rebuild`**;
-`main` is still at `f99124e`. To land it:
+**The rebuild is on `main`.** Sixteen commits, fast-forwarded from
+`site-rebuild` on 5 August — the two branches point at the same commit, so
+`site-rebuild` can be deleted whenever you like.
+
+**Nothing is pushed.** `origin/main` is still at `f99124e`, sixteen behind. That
+is the whole rebuild sitting on one machine: everything in this file and in
+STATUS, ten routes, the design system, four founder portraits. Pushing it is a
+publishing decision — droxdev.com deploys from this repo — so it was left to
+the client rather than done on their behalf.
 
 ```
-git checkout main && git merge --ff-only site-rebuild
+git push origin main    # when the client is ready for it to go live
 ```
 
-Nothing is pushed. The working tree is clean.
+The working tree is clean.
 
 ---
 
