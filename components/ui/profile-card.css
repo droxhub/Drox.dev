@@ -656,13 +656,22 @@
 	font-size: clamp(1.05rem, 1.1vw + 0.6rem, 1.4rem);
 	line-height: 1.15;
 	background-size: 1em 1.35em;
+	/* Names are one line at every width except a ~75px band starting at the
+	   `lg` breakpoint, where four columns are at their narrowest and the longest
+	   name ("Muhammed Ajnas TK") wraps. Without this it breaks as
+	   "Muhammed Ajnas / TK", orphaning the initials; balanced it reads
+	   "Muhammed / Ajnas TK". Ignored by browsers that don't support it, which
+	   get the orphan rather than an error. */
+	text-wrap: balance;
 }
 
 .founder-profile-card .pc-details p {
 	top: 0.35rem;
 	font-size: 0.8125rem;
-	/* Upstream sets `nowrap` with `width: min-content`; formal titles like
-	   "Chief Technology Officer" need to wrap in a narrow card. */
+	/* Upstream sets `nowrap` with `width: min-content`. The cards now carry a
+	   single word ("Direction", "Architecture"), which fits inside 14ch and so
+	   never wraps — but `nowrap` would push a longer one out of the card
+	   silently rather than wrapping it, so the guard stays. */
 	white-space: normal;
 	width: 100%;
 	max-width: 14ch;

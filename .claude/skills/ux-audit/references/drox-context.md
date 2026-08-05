@@ -21,7 +21,7 @@ this section is drawn from it and is far more reliable than anything in the code
 | Delivered | **2 platforms** (see the metric warning below) |
 | HQ | Kozhikode Hilite Business Park, Kerala, India |
 | Contact | hello@droxdev.com · +91 9946 642 643 |
-| Founders | Muhammad Ziyad M (CEO, direction/partnerships/strategy) · Abdul Rahib KP (COO, requirements/delivery/coordination) · Sinan Thadathil (CTO, architecture/tech selection/standards) · Ajnas TK (Head of Engineering, feature delivery/module ownership/build quality) |
+| Founders | Muhammad Ziyad M (CEO, direction/partnerships/strategy) · Abdul Rahib KP (COO, requirements/delivery/coordination) · Sinan Thadathil (CTO, architecture/tech selection/standards) · Muhammed Ajnas TK (Head of Engineering, feature delivery/module ownership/build quality) |
 
 **Nine service lines** (p.14) — the site currently shows six, and **omits AI Solutions
 and Business Automation, which are the differentiators**:

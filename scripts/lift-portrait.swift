@@ -17,6 +17,72 @@ let FACE_W_FRACTION: CGFloat = 0.25 // face width as a fraction of canvas width
 let FACE_Y_FRACTION: CGFloat = 0.47 // face centre, as a fraction down from top
 let FADE_FRACTION: CGFloat = 0.13 // bottom of the SOURCE frame faded to clear
 
+// How far horizontal placement moves from the face towards the subject's own
+// centre. 0 centres the face, 1 centres the body, 0.5 splits the difference.
+//
+// It has to be a blend because neither end works alone on a 3/4-turned subject,
+// where the face sits well off the body's centre. Measured on the three
+// portraits on file, in canvas px from centre:
+//
+//                     face offset      body offset
+//   0 (face)          0 / 0 / 0        +81 / −40 / +26   ← Rahib's shoulder
+//                                                          clipped flat at x=0
+//   1 (body)          −81 / +40 / −26  0 / 0 / 0         ← 121px face spread
+//   0.5              −41 / +20 / −13   +41 / −20 / +13   ← both bounded
+//
+// So each end fixes one alignment by breaking the other, and the worst case at
+// 0.5 is roughly half of either. Nothing clips at 0.5.
+let SUBJECT_WEIGHT: CGFloat = 0.5
+
+/// Horizontal centre of everything still opaque after the fade, in the image's
+/// own coordinate space. Vision gives a bounding box for the *face* but not for
+/// the lifted subject, so the alpha channel is measured directly.
+///
+/// Sampled at 256px wide rather than full resolution: this is only used to
+/// place the subject, where a 2-3px error is invisible, and it keeps a 1024x1536
+/// portrait from being rendered to a 6 MB buffer to answer one question.
+func alphaCentreX(_ image: CIImage, ctx: CIContext) -> CGFloat? {
+	let extent = image.extent
+	guard extent.width > 0, extent.height > 0, extent.width.isFinite else { return nil }
+
+	let sampleW = 256
+	let scale = CGFloat(sampleW) / extent.width
+	let sampleH = max(1, Int((extent.height * scale).rounded()))
+	let small = image.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
+
+	var bytes = [UInt8](repeating: 0, count: sampleW * sampleH * 4)
+	bytes.withUnsafeMutableBytes { raw in
+		ctx.render(
+			small,
+			toBitmap: raw.baseAddress!,
+			rowBytes: sampleW * 4,
+			bounds: CGRect(
+				x: small.extent.minX, y: small.extent.minY,
+				width: CGFloat(sampleW), height: CGFloat(sampleH)
+			),
+			format: .RGBA8,
+			colorSpace: CGColorSpace(name: CGColorSpace.sRGB)!
+		)
+	}
+
+	// 24/255. The subject lift leaves a faint halo of near-transparent pixels
+	// around hair; counting those would widen the box by whatever the halo
+	// happens to reach on that photograph.
+	var minX = sampleW
+	var maxX = -1
+	for y in 0..<sampleH {
+		for x in 0..<sampleW where bytes[(y * sampleW + x) * 4 + 3] > 24 {
+			if x < minX { minX = x }
+			if x > maxX { maxX = x }
+		}
+	}
+	guard maxX >= 0 else { return nil }
+
+	let lo = extent.minX + CGFloat(minX) / scale
+	let hi = extent.minX + CGFloat(maxX + 1) / scale
+	return (lo + hi) / 2
+}
+
 let args = CommandLine.arguments
 guard args.count == 3 else {
 	FileHandle.standardError.write("usage: lift <input> <output.png>\n".data(using: .utf8)!)
@@ -88,6 +154,8 @@ do {
 	}
 	let cutout = faded
 
+	let ctx = CIContext()
+
 	// Vision's normalised boundingBox and CIImage both use a bottom-left
 	// origin, so this needs no vertical flip.
 	let faceW = face.boundingBox.width * imageW
@@ -98,9 +166,20 @@ do {
 	let targetCX = CANVAS_W / 2
 	let targetCY = CANVAS_H - (FACE_Y_FRACTION * CANVAS_H)
 
+	// Scale and vertical placement are anchored on the face — that is what makes
+	// four photographs sit consistently in a row of identical cards.
+	//
+	// Horizontal placement is a blend of the face and the subject's own centre,
+	// because a person standing square is symmetric about their own face but a
+	// person at 3/4 is not — see SUBJECT_WEIGHT above for the measurements.
+	// Falls back to the face if the alpha scan finds nothing, which would mean
+	// the lift produced an empty image.
+	let subjectCX = alphaCentreX(cutout, ctx: ctx) ?? faceCX
+	let anchorCX = faceCX + (subjectCX - faceCX) * SUBJECT_WEIGHT
+
 	let transform = CGAffineTransform(scaleX: scale, y: scale)
 		.concatenating(CGAffineTransform(
-			translationX: targetCX - faceCX * scale,
+			translationX: targetCX - anchorCX * scale,
 			y: targetCY - faceCY * scale
 		))
 
@@ -113,15 +192,19 @@ do {
 	let placed = cutout.transformed(by: transform)
 	let composite = placed.composited(over: canvas).cropped(to: canvasRect)
 
-	let ctx = CIContext()
 	try ctx.writePNGRepresentation(
 		of: composite,
 		to: outURL,
 		format: .RGBA8,
 		colorSpace: CGColorSpace(name: CGColorSpace.sRGB)!
 	)
+	// `shift` is how far the subject's centre sits from the face, in canvas px —
+	// how much of a 3/4 turn this pose has. It is the number to look at if a
+	// portrait lands off-centre; SUBJECT_WEIGHT decides how much of it is
+	// applied.
 	print(
-		"OK: \(inURL.lastPathComponent) scale=\(String(format: "%.2f", scale)) faceW=\(Int(faceW))px"
+		"OK: \(inURL.lastPathComponent) scale=\(String(format: "%.2f", scale))"
+			+ " faceW=\(Int(faceW))px shift=\(Int(((subjectCX - faceCX) * scale).rounded()))px"
 	)
 } catch {
 	print("ERROR: \(error)")

@@ -266,19 +266,21 @@ export const founders = {
 	subtitle:
 		"Four equal founders who stay close to the work. Direction, delivery, architecture and engineering each have a named owner — so decisions sit with the person accountable for the outcome.",
 	/**
-	 * `shortRole` is what the card shows — one or two plain words naming the
-	 * area this founder owns. It replaced an `owns` field whose values were
-	 * abstractions ("Ownership", "Accountability", "Execution") that told a
-	 * visitor nothing about what the person actually does.
+	 * `shortRole` is what the card shows — one plain word naming the area this
+	 * founder owns, and the four of them are the four named in `subtitle` above.
+	 * A card that reads "Chief Executive Officer" tells a visitor the office;
+	 * one that reads "Direction" tells them what the person is accountable for,
+	 * which is what this section exists to answer.
 	 *
-	 * `role` is the formal title, kept for the image alt text and shown when a
-	 * card is expanded.
+	 * `role` is the formal title from Company Profile p.24. It is **not
+	 * rendered** — it is kept because it is a fact about the company that the
+	 * client supplied, and procurement asks for offices by name.
 	 */
 	people: [
 		{
 			name: "Muhammad Ziyad M",
 			role: "Chief Executive Officer",
-			shortRole: "CEO",
+			shortRole: "Direction",
 			photo: "/founders/ziyad-cutout.webp",
 			initials: "MZ",
 			responsibility:
@@ -297,21 +299,17 @@ export const founders = {
 			name: "Sinan Thadathil",
 			role: "Chief Technology Officer",
 			shortRole: "Architecture",
-			// TODO: no photo on file — add public/founders/sinan.webp, then run it
-			// through the subject-lift step described in docs/STATUS.md to produce
-			// sinan-cutout.webp and set it here.
-			// Renders as initials until then rather than a stock silhouette.
-			photo: null as string | null,
+			photo: "/founders/sinan-cutout.webp" as string | null,
 			initials: "ST",
 			responsibility:
 				"Architecture, technology selection and engineering standards, set deliberately rather than by default. Systems are designed for the demands they will carry later.",
 		},
 		{
-			name: "Ajnas TK",
+			name: "Muhammed Ajnas TK",
 			role: "Head of Engineering",
 			shortRole: "Engineering",
 			photo: "/founders/ajnas-cutout.webp",
-			initials: "AT",
+			initials: "MA",
 			responsibility:
 				"Feature delivery, module ownership and build quality. Approved plans become working software here — accountable for what ships, not only for what was specified.",
 		},

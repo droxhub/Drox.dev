@@ -34,7 +34,7 @@ npx tsc --noEmit
 npm run build
 ```
 
-**Work is committed, on a branch.** Fourteen commits on **`site-rebuild`**;
+**Work is committed, on a branch.** Sixteen commits on **`site-rebuild`**;
 `main` is still at `f99124e`. To land it:
 
 ```
@@ -232,10 +232,11 @@ Other rules:
    STATUS; India already requires IS 17802 of private establishments and draft
    2026 rules would add mandatory conformance reports.
 5. **Discovery Sprint fee** — ships without a number by decision.
-6. **Founder photographs** — Sinan has none, so one leadership card in four is
-   an initials block. New headshots should be **head to waist**, not head and
-   shoulders; the cut-out pipeline cannot invent torso that was never in frame.
-   `scripts/lift-portrait.swift` prepares them.
+6. ~~**Founder photographs**~~ — **done 5 August**, all four, one sitting, head
+   to waist. Nothing outstanding. If a founder is ever re-shot, run it through
+   `scripts/lift-portrait.swift` and read the *Preparing a founder portrait*
+   section of STATUS first: horizontal placement is a blend of the face and the
+   body, and centring either alone throws the other off on a 3/4-turned pose.
 
 ### Priority 5 — the remaining build work
 

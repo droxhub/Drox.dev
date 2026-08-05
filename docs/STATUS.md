@@ -305,18 +305,52 @@ deviations from upstream, all commented at the point of change:
   long as the document had focus, which is four permanent loops on this page
 - `handle` renders verbatim rather than prefixed with `@`, so it carries the
   area a founder owns ("Architecture") instead of a social username
-- `avatarFallback` renders initials, for the founder with no photo on file
+- `avatarFallback` renders initials. All four founders have photographs as of
+  5 August, so nothing uses it today — kept as the honest fallback for a founder
+  who joins before a portrait exists
 
 Site-specific styling lives in a marked block at the bottom of
 `profile-card.css`, under `.founder-profile-card`. It retunes the holographic
 sweep from upstream's rainbow to violet (the palette is violet only — delete
 that block to restore the spectrum), sizes the card from its column width
-instead of `svh`, and shrinks the pattern tile. The user-info bar is off:
+instead of `svh`, and shrinks the pattern tile (see below — there is now one
+tile per ownership area rather than one shared). The user-info bar is off:
 upstream fills it with a social handle, a status and a contact button, and none
 of those have a truthful equivalent for a founder here.
 
 Reduced motion is honoured — `enableTilt={!reduceMotion}` plus a
 `prefers-reduced-motion` block that stops the two infinite decorative loops.
+
+### One pattern per ownership area
+
+Added 5 August. `iconUrl` was one shared tile on all four cards; each founder
+now gets a tile carrying the glyph for the area they own — a navigation arrow
+for Direction, a checklist for Operations, a portal for Architecture, angle
+brackets for Engineering. They live in `public/founders/pattern-<area>.svg` and
+are mapped in `components/Founders.tsx`, keyed by `shortRole`, the same way
+`BusinessChallenges` keys its icons: the config stays copy the client can edit,
+and reordering it cannot silently mismatch the glyphs.
+
+Three things that decide whether a replacement tile works:
+
+- **These are luminance masks, not icons.** `.pc-shine` shows the holographic
+  sweep wherever the tile is white and hides it wherever it is black, so a tile
+  is a black-backed SVG of 8px blocks. A coloured icon dropped in here renders
+  as its own brightness, not its own colour, and a tile with no black at all
+  floods the whole card with sweep.
+- **White coverage is the brightness dial**, and it is held between 8.9% and
+  11.6% across the four against the 8.9% of the tile they replaced. The first
+  attempt let Architecture reach 18.7%, which made that one card visibly
+  brighter than its neighbours — on a section about four *equal* founders, that
+  reads as a ranking.
+- **A 5x5 grid only carries silhouettes.** A cog was tried for Operations and
+  reads as an ambiguous blob at `mask-size: 46%`; the checklist that replaced it
+  is legible because its outline is distinctive, not because it has more detail.
+  Test a new glyph on the card, not in a viewer.
+
+The map falls back to the original shared tile for an unrecognised area, which
+degrades to the old look rather than to no mask — see the first point for why
+that matters.
 
 ### Preparing a founder portrait
 
@@ -346,6 +380,10 @@ What the script does, and why each part is there:
   photographs shot in different settings at different crops sit consistently in
   a row of identical cards, and it is why the CSS has *no* avatar rules: the
   image is already composed to the card.
+- **Blended horizontal placement** (`alphaCentreX`, `SUBJECT_WEIGHT`) — the face
+  governs scale and height outright, but left-to-right position is half face and
+  half body, because a subject at 3/4 is not symmetric about their own face and
+  centring either one alone throws the other off. Measurements below.
 - **Per-image bottom fade** — each of these is a tight head-and-shoulders crop,
   so the torso is cut off by the original frame, and lifting the subject turns
   that into a hard slice floating on the card. The fade is applied over the
@@ -353,7 +391,7 @@ What the script does, and why each part is there:
   in CSS could not do this: once each subject is scaled to a common face size,
   they all end at different heights.
 
-The un-lifted originals live at `assets/founders/<name>.webp` — outside
+The un-lifted originals live at `assets/founders/<name>.{webp,png}` — outside
 `public/`, because they are build inputs and everything in `public/` is served
 to the world. Only the `-cutout` files ship.
 
@@ -411,17 +449,74 @@ the section screenshotted at all three.
    real commitment so it was not written on their behalf.
 8. **Two weeks** is the sprint duration taken from the audit's recommendation.
    Confirm it's the duration the team can actually hold to.
-9. **Founder photographs.** Sinan Thadathil has none, so one leadership card in
-   four is an initials block. The other three are handled: the subject is lifted
-   out of each and face-normalised (see *Preparing a founder portrait* below),
-   which neutralises the fact that they were shot in three unrelated settings at
-   three different crops. Two things that pipeline can't fix — it needs a
-   photograph to exist, and it can't add torso that was never in frame, so
-   tight crops fade out partway down the card instead of filling it.
-   Four headshots taken in one sitting — same framing, same neutral background,
-   **head to waist rather than head and shoulders** — would still do more for
-   this section than any further code change. Drop them at
-   `assets/founders/<name>.webp`, 512px or larger, and run the script.
+9. ~~**Founder photographs.**~~ ✅ **done 5 August. All four founders now have
+   one**, shot in a single sitting to the brief this file had been asking for
+   since the section was built: studio portrait, head to waist, black suit on a
+   dark background.
+
+   This closes the longest-standing item on the list. Sinan Thadathil's card was
+   an initials block from the day it shipped — `avatarFallback` and the
+   `photo: null` branch in `config/content.ts` exist because of it. **Both are
+   still in place**, deliberately: they are the honest fallback if a founder
+   joins or leaves before a new photograph exists, and they cost nothing.
+
+   Every card now fills to the bottom edge instead of fading out two-thirds
+   down, and the four read as one set rather than four unrelated photographs.
+   That was the thing no code change could fix — the pipeline can normalise
+   scale, height and position, but it cannot add torso that was never in frame.
+   The subject lift handles black-on-black cleanly, so a dark background is not
+   a problem for it.
+
+   Sources are `ziyad.png`, `rahib.png`, `sinan.png` and `ajnas.png`, ~1.8 MB
+   each; the old ~10-19 KB `.webp` originals they replaced are deleted, so there
+   is exactly one source per founder. Nothing in `assets/` is served — it is
+   outside `public/` — so the 7 MB is repo weight only, but converting them to
+   WebP would cost nothing and is worth doing next time this folder is touched.
+
+   ### Horizontal placement: a blend of the face and the body
+
+   Changed 5 August, in `scripts/lift-portrait.swift`. Scale and *vertical*
+   position are still anchored purely on the face — that is what puts every face
+   at the same size and height across a row of identical cards, and it is
+   untouched. Horizontal position is now `SUBJECT_WEIGHT = 0.5` of the way from
+   the face towards the lifted subject's own centre.
+
+   It has to be a blend because **neither end works alone on a 3/4-turned
+   subject**, where the face sits well off the body's centre. All three of these
+   poses are turned. In canvas px from centre:
+
+   | `SUBJECT_WEIGHT` | face offset | body offset | |
+   | --- | --- | --- | --- |
+   | 0 — centre the face | 0 / 0 / 0 | +81 / −40 / +26 | Rahib's shoulder clipped flat at `x = 0` |
+   | 1 — centre the body | −81 / +40 / −26 | 0 / 0 / 0 | 121px spread of face positions |
+   | **0.5** | **−41 / +21 / −13** | **+42 / −21 / +14** | nothing clipped |
+
+   (Ziyad / Rahib / Ajnas — the three measured before Sinan's arrived. Sinan
+   stands nearly square, `shift=-19px`, and lands at face +10 / body −10, so he
+   would have been fine under any weight. He is not evidence either way.)
+
+   Each end fixes one alignment by breaking the other; 0.5 bounds both at
+   roughly half of either. This was found the hard way — body-centring was
+   shipped first, and it produced a visibly better *row* while quietly pushing
+   Ziyad's face 81px off centre, which is worse on a card whose subject is a
+   face. **Measure the face position, not just the bounding box.**
+
+   Vision returns a bounding box for the *face* but not for the lifted subject,
+   so `alphaCentreX()` measures the alpha channel directly, sampled at 256px
+   wide (this only places the subject, where 2-3px is invisible, and it avoids
+   rendering a 1024x1536 portrait into a 6 MB buffer to answer one question).
+   The alpha threshold is 24/255 — the lift leaves a faint halo around hair, and
+   counting it would widen the box by however far that halo happens to reach.
+
+   The script prints `shift=` per image: how far the subject's centre sits from
+   the face, in canvas px, i.e. how much of a turn the pose has. It was
+   81 / −42 / −19 / 26 across the four. That is the number to look at if a
+   portrait lands off-centre.
+
+   **Verified across all four:** face width 153–156px and face top 328–330px, so
+   the face normalisation survived the change; no cut-out touches a canvas edge;
+   all four reach the bottom of the canvas; no broken images, page errors or
+   overflow at 1440 and 390px.
 
 ---
 
