@@ -489,7 +489,8 @@ transparent so what you measure is genuinely what is behind them.
 cannot be automated, and until it is done conformance should not be claimed.
 
 **The 30 September 2026 target date was removed from the page on 5 August, by
-decision.** The page now names the open item without committing to a date. The
+decision.** The page names the open item and commits to updating itself when
+the pass is done — a commitment without a date, rather than no commitment. The
 argument for keeping one was that a dated commitment reads as credible in
 procurement and is what made the rest of this work happen; the argument against
 is that a missed date on a public page is worse than no date. That was the

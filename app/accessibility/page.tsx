@@ -82,6 +82,7 @@ export default function AccessibilityPage() {
 						until we have we will not claim conformance.
 					</li>
 				</ul>
+				<p>We will update this page when that pass is complete.</p>
 			</LegalSection>
 
 			<LegalSection title="How we assess">
