@@ -102,7 +102,7 @@ const TechStack = () => {
 					scaleOnHover
 					ariaLabel="Technology stack"
 					direction="left"
-					fadeOutColor="#030014"
+					fadeOutColor="var(--color-canvas)"
 					gap={60}
 					hoverSpeed={20}
 					logoHeight={32}

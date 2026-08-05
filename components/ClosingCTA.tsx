@@ -159,7 +159,11 @@ export default function ClosingCTA() {
 							rel="noopener noreferrer"
 							target="_blank"
 						>
-							<SiWhatsapp className="text-purple-400" size={18} />
+							<SiWhatsapp
+								aria-hidden="true"
+								className="text-purple-400"
+								size={18}
+							/>
 							WhatsApp
 						</a>
 					</div>

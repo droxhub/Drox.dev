@@ -616,7 +616,48 @@ buttons that respond to focus), and the two genuinely open items above carry the
   Verified: build, types and lint clean; icons render on /, /services, /about
   and /contact with no zero-sized SVGs and no invalid-prop warnings; the nine
   service cards and six value cards screenshotted.
-- Make colour tokens authoritative; replace ~90 hardcoded hex occurrences
+- ~~Make colour tokens authoritative~~ ✅ **done 5 August.** 57 hex literals
+  across 16 files replaced by **13 tokens**, declared in a Tailwind v4 `@theme`
+  block at the top of `styles/globals.css`. They generate real utilities
+  (`bg-canvas`, `border-hairline`, `from-cta-top`, `ring-offset-canvas`) and are
+  also emitted as custom properties, so the same token works inside a gradient
+  string where a utility cannot reach.
+
+  Named by **role, not appearance**: `canvas`, `surface`, `surface-deep`,
+  `surface-nav`, `surface-muted`, `surface-inset`, `hairline`,
+  `hairline-strong`, the three `card-*` gradient stops and the two `cta-*` ones.
+
+  **No brand-violet token, deliberately.** The violet is already named by
+  Tailwind's own scale, which is what components use, and most remaining
+  occurrences are `rgba(124,58,237,…)` inside shadow strings where a hex token
+  cannot carry the alpha. A `--color-brand` would have been a second name for a
+  colour that already has one.
+
+  Three things worth knowing:
+
+  - **Tailwind v4 tree-shakes unused `@theme` tokens.** An unused one resolves
+    to nothing, not to its declared value — which is how the redundant brand
+    token was caught.
+  - **`components/ui/cal-booking.tsx` keeps a literal `#8b5cf6`.** It is handed
+    to Cal.com's embed and ends up inside a **cross-origin iframe**, where a
+    custom property from this document does not resolve. Tokenising it silently
+    breaks the embed's branding. Keep it in sync by hand.
+  - **react-icons renders `<svg role="img">`**, which axe requires to have a
+    title; lucide omits the role and is decorative by default. The four
+    `SiWhatsapp` instances needed `aria-hidden` — their links already carry the
+    accessible name. Swapping icon libraries can introduce accessibility
+    findings that have nothing to do with the icon.
+
+  **Verified as visually neutral**, which is the whole point of a refactor like
+  this: all 13 tokens confirmed to resolve to the exact original hex in a live
+  browser, and a full-page pixel diff of all 10 routes at two viewports —
+  possible only because the site now honours reduced motion, so two runs are
+  byte-comparable. 19 of 20 pages are pixel-identical. The 20th differs in one
+  744x112 band on the homepage where the *before* image had the fixed navbar
+  painted over the "What We Offer" heading; the live page renders that heading
+  correctly at opacity 1 in both motion modes. Two runs of the same build are
+  0.0000% apart, so the capture is deterministic — the before-image artifact is
+  not explained, only bounded.
 - One radius scale; standardise motion durations and easings
 - Three engineering blog posts (`/blog` was deleted — recreate when there's content)
 

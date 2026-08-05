@@ -83,7 +83,7 @@ function StageStrip({
 			    tabbing through walks the process in order. */}
 			<button
 				aria-expanded={isActive}
-				className="group relative h-full w-full overflow-hidden rounded-[1.75rem] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030014]"
+				className="group relative h-full w-full overflow-hidden rounded-[1.75rem] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
 				onClick={onActivate}
 				onFocus={onActivate}
 				onMouseEnter={onActivate}
@@ -96,7 +96,7 @@ function StageStrip({
 				<motion.span
 					animate={{ opacity: isActive ? 1 : 0.55 }}
 					aria-hidden="true"
-					className="absolute inset-0 bg-gradient-to-b from-[#1a0f3d] via-[#0f0827] to-[#080418]"
+					className="absolute inset-0 bg-gradient-to-b from-card-top via-card-mid to-card-bottom"
 					initial={false}
 					transition={surfaceTransition}
 				/>

@@ -109,6 +109,9 @@ export function CalInline({ className = "" }: { className?: string }) {
 			theme: "dark",
 			hideEventTypeDetails: false,
 			layout: "month_view",
+			// A literal, deliberately. This is handed to Cal.com's embed and ends up
+			// inside a cross-origin iframe, where a CSS custom property from this
+			// document does not resolve. Keep it in sync with violet-500 by hand.
 			styles: { branding: { brandColor: "#8b5cf6" } },
 		});
 	}, [calLink]);

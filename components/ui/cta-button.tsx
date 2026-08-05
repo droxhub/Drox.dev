@@ -33,7 +33,7 @@ interface CTAButtonProps {
  * design language came from — so there is no second, competing button style.
  */
 const buttonClass =
-	"group relative inline-flex items-center justify-center font-semibold text-white transition-all duration-300 bg-gradient-to-t from-[#1a0b2e] to-[#0a0525] border border-gray-800/80 rounded-full hover:border-purple-500/60 hover:shadow-2xl hover:shadow-purple-900/40 overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030014]";
+	"group relative inline-flex items-center justify-center font-semibold text-white transition-all duration-300 bg-gradient-to-t from-cta-top to-cta-bottom border border-gray-800/80 rounded-full hover:border-purple-500/60 hover:shadow-2xl hover:shadow-purple-900/40 overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas";
 
 const sizes = {
 	sm: "px-5 py-2.5 text-sm",

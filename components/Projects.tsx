@@ -77,7 +77,7 @@ const Projects = () => {
 							{/* The hover arrow used to imply a link on a plain div. The whole
 							    card is now genuinely clickable and keyboard-focusable. */}
 							<Link
-								className="block rounded-[1rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-4 focus-visible:ring-offset-[#030014]"
+								className="block rounded-[1rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
 								href={project.href}
 								onClick={() =>
 									track("project_click", {
@@ -86,7 +86,7 @@ const Projects = () => {
 									})
 								}
 							>
-								<div className="relative aspect-[16/11] w-full overflow-hidden rounded-[1rem] bg-[#0f0f1b] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] border border-white/5 transition-all duration-500">
+								<div className="relative aspect-[16/11] w-full overflow-hidden rounded-[1rem] bg-surface-inset shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] border border-white/5 transition-all duration-500">
 									<Image
 										src={project.src}
 										alt={project.alt}

@@ -78,7 +78,7 @@ export default function BusinessChallenges() {
 								aria-hidden="true"
 								className="absolute inset-0 overflow-hidden rounded-[1.75rem]"
 							>
-								<span className="absolute inset-0 bg-gradient-to-b from-[#1a0f3d] via-[#0f0827] to-[#080418]" />
+								<span className="absolute inset-0 bg-gradient-to-b from-card-top via-card-mid to-card-bottom" />
 								{/* Opacity only on hover, never `scale` — animating a 70px blur
 								    means recomputing it every frame, on three cards at once. */}
 								<span className="absolute -bottom-24 -left-20 h-64 w-64 rounded-full bg-violet-600/50 opacity-30 blur-[70px] transition-opacity duration-500 group-hover:opacity-70" />

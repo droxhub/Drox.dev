@@ -8,7 +8,7 @@ const Footer = () => {
 	const currentYear = new Date().getFullYear();
 
 	return (
-		<footer className="relative w-full bg-[#030014] mt-[100px] pt-16 md:pt-24 pb-8 md:pb-12 overflow-hidden border-t border-white/5">
+		<footer className="relative w-full bg-canvas mt-[100px] pt-16 md:pt-24 pb-8 md:pb-12 overflow-hidden border-t border-white/5">
 			{/* Large Background Branding */}
 			<div className="absolute bottom-[2%] md:bottom-[-5%] lg:bottom-[-10%] left-1/2 -translate-x-1/2 w-full text-center pointer-events-none select-none z-0">
 				{/* A <div>, not an <h2>: at 3% opacity this is a watermark, and as a

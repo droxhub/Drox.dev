@@ -96,7 +96,7 @@ export default async function CaseStudyPage({
 					</a>
 				</div>
 
-				<div className="relative mt-12 aspect-[16/11] w-full overflow-hidden rounded-[1.25rem] border border-white/5 bg-[#0f0f1b] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)]">
+				<div className="relative mt-12 aspect-[16/11] w-full overflow-hidden rounded-[1.25rem] border border-white/5 bg-surface-inset shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)]">
 					<Image
 						alt={study.imageAlt}
 						className="object-cover"
@@ -164,7 +164,7 @@ export default async function CaseStudyPage({
 								{study.stack.map((tech) => (
 									<span
 										key={tech}
-										className="rounded-full border border-[#1C1A31] bg-[#0E0C1E] px-3 py-1.5 text-xs text-gray-400"
+										className="rounded-full border border-hairline bg-surface-muted px-3 py-1.5 text-xs text-gray-400"
 									>
 										{tech}
 									</span>
@@ -181,7 +181,7 @@ export default async function CaseStudyPage({
 					{study.testimonials.map((testimonial) => (
 						<figure
 							key={testimonial.name}
-							className="rounded-[1.5rem] border border-[#1C1A31]/80 bg-gradient-to-b from-[#0E0C1E] to-[#08061D] p-7 md:p-8"
+							className="rounded-[1.5rem] border border-hairline/80 bg-gradient-to-b from-surface-muted to-surface p-7 md:p-8"
 						>
 							<blockquote className="text-base leading-relaxed text-gray-300 md:text-lg">
 								“{testimonial.quote}”

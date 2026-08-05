@@ -98,7 +98,7 @@ export default function AboutPage() {
 						<div className="absolute inset-x-0 -top-px h-px w-full bg-gradient-to-r from-transparent via-violet-500/50 to-transparent" />
 						<div className="absolute inset-y-0 -left-px w-px h-full bg-gradient-to-b from-transparent via-violet-500/50 to-transparent" />
 
-						<div className="relative bg-[#08061d]/60 backdrop-blur-md p-8 md:p-12 h-full rounded-[2.5rem] flex flex-col gap-8">
+						<div className="relative bg-surface/60 backdrop-blur-md p-8 md:p-12 h-full rounded-[2.5rem] flex flex-col gap-8">
 							<div className="flex items-center gap-6">
 								<div className="w-16 h-16 rounded-[1.25rem] bg-violet-600 flex items-center justify-center shadow-[0_0_30px_-10px_rgba(124,58,237,0.5)]">
 									<Rocket className="text-white" size={32} />
@@ -134,7 +134,7 @@ export default function AboutPage() {
 						<div className="absolute inset-x-0 -top-px h-px w-full bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
 						<div className="absolute inset-y-0 -right-px w-px h-full bg-gradient-to-b from-transparent via-purple-500/50 to-transparent" />
 
-						<div className="relative bg-[#08061d]/60 backdrop-blur-md p-8 md:p-12 h-full rounded-[2.5rem] flex flex-col gap-8">
+						<div className="relative bg-surface/60 backdrop-blur-md p-8 md:p-12 h-full rounded-[2.5rem] flex flex-col gap-8">
 							<div className="flex items-center gap-6">
 								<div className="w-16 h-16 rounded-[1.25rem] bg-purple-600 flex items-center justify-center shadow-[0_0_30px_-10px_rgba(168,85,247,0.5)]">
 									<Lightbulb className="text-white" size={32} />
@@ -183,9 +183,9 @@ export default function AboutPage() {
 								viewport={{ once: true, margin: "-100px" }}
 								transition={{ duration: 0.5, delay: index * 0.1 }}
 								className={cn(
-									"flex flex-col border-r py-10 relative group/feature border-[#1C1A31]",
-									(index === 0 || index === 3) && "border-l border-[#1C1A31]",
-									index < 3 && "border-b border-[#1C1A31]",
+									"flex flex-col border-r py-10 relative group/feature border-hairline",
+									(index === 0 || index === 3) && "border-l border-hairline",
+									index < 3 && "border-b border-hairline",
 								)}
 							>
 								{index < 3 && (
@@ -198,7 +198,7 @@ export default function AboutPage() {
 									{value.icon}
 								</div>
 								<div className="text-lg font-bold mb-2 relative z-10 px-10">
-									<div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-[#2C2A51] group-hover/feature:bg-purple-500 transition-all duration-200 origin-center" />
+									<div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-hairline-strong group-hover/feature:bg-purple-500 transition-all duration-200 origin-center" />
 									<span className="group-hover/feature:translate-x-2 transition duration-200 inline-block text-white">
 										{value.title}
 									</span>
@@ -263,7 +263,7 @@ export default function AboutPage() {
 									</div>
 								</div>
 
-								<div className="absolute left-4 md:left-1/2 w-12 h-12 rounded-full border-4 border-[#030014] bg-violet-600 shadow-[0_0_20px_rgba(124,58,237,0.5)] transform -translate-x-1/2 hidden sm:flex items-center justify-center z-10">
+								<div className="absolute left-4 md:left-1/2 w-12 h-12 rounded-full border-4 border-canvas bg-violet-600 shadow-[0_0_20px_rgba(124,58,237,0.5)] transform -translate-x-1/2 hidden sm:flex items-center justify-center z-10">
 									<div className="w-3 h-3 bg-white rounded-full animate-pulse" />
 								</div>
 

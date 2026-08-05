@@ -89,7 +89,7 @@ export default function StickyMobileCTA() {
 			{visible && !menuOpen && (
 				<motion.div
 					animate={{ y: 0, opacity: 1 }}
-					className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#050211]/95 backdrop-blur-md md:hidden"
+					className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-surface-deep/95 backdrop-blur-md md:hidden"
 					exit={reduceMotion ? { opacity: 0 } : { y: "100%", opacity: 0 }}
 					initial={reduceMotion ? { opacity: 0 } : { y: "100%", opacity: 0 }}
 					style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
@@ -100,7 +100,7 @@ export default function StickyMobileCTA() {
 				>
 					<div className="flex items-center gap-3 px-4 py-3">
 						<Link
-							className="flex flex-1 items-center justify-center rounded-full border border-gray-800/80 bg-gradient-to-t from-[#1a0b2e] to-[#0a0525] px-5 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:border-purple-500/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030014]"
+							className="flex flex-1 items-center justify-center rounded-full border border-gray-800/80 bg-gradient-to-t from-cta-top to-cta-bottom px-5 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:border-purple-500/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
 							href={bookingHref}
 							onClick={() =>
 								track("cta_click", {
@@ -115,7 +115,7 @@ export default function StickyMobileCTA() {
 
 						<a
 							aria-label="Message us on WhatsApp"
-							className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-gray-800/80 bg-gradient-to-t from-[#1a0b2e] to-[#0a0525] text-purple-300 transition-colors duration-300 hover:border-purple-500/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030014]"
+							className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-gray-800/80 bg-gradient-to-t from-cta-top to-cta-bottom text-purple-300 transition-colors duration-300 hover:border-purple-500/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
 							href={`https://wa.me/${phone.whatsapp}`}
 							onClick={() =>
 								track("contact_click", {
@@ -126,7 +126,7 @@ export default function StickyMobileCTA() {
 							rel="noopener noreferrer"
 							target="_blank"
 						>
-							<SiWhatsapp size={22} />
+							<SiWhatsapp aria-hidden="true" size={22} />
 						</a>
 					</div>
 				</motion.div>

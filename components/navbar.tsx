@@ -162,10 +162,10 @@ export default function Navigation() {
 				    in a bordered pill floating on an otherwise plain overlay. `border`
 				    stays applied and only its colour changes, so nothing shifts. */}
 				<div
-					className={`max-w-7xl mx-auto px-6 flex items-center justify-between border rounded-3xl h-20 overflow-hidden transition-colors duration-200 md:bg-[#000014] md:border-white/10 ${
+					className={`max-w-7xl mx-auto px-6 flex items-center justify-between border rounded-3xl h-20 overflow-hidden transition-colors duration-200 md:bg-surface-nav md:border-white/10 ${
 						isOpen
 							? "bg-transparent border-transparent"
-							: "bg-[#000014] border-white/10"
+							: "bg-surface-nav border-white/10"
 					}`}
 				>
 					{/* Logo */}
@@ -255,7 +255,7 @@ export default function Navigation() {
 				   Opaque, with no `backdrop-blur`: blurring a full-screen layer cost
 				   an extra 16ms on the worst frame, and the reference is flat colour
 				   anyway. */
-				className={`fixed inset-0 z-30 bg-[#050211] md:hidden ${
+				className={`fixed inset-0 z-30 bg-surface-deep md:hidden ${
 					reduceMotion ? "" : "transition-opacity duration-200 ease-out"
 				} ${isOpen ? "opacity-100" : "pointer-events-none opacity-0"}`}
 				id="mobile-nav"
@@ -282,7 +282,7 @@ export default function Navigation() {
 									    stack of buttons. */}
 									<Link
 										aria-current={isActive ? "page" : undefined}
-										className={`block py-2.5 text-[1.6rem] font-semibold leading-tight tracking-tight transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-4 focus-visible:ring-offset-[#050211] ${
+										className={`block py-2.5 text-[1.6rem] font-semibold leading-tight tracking-tight transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-4 focus-visible:ring-offset-surface-deep ${
 											isActive ? "text-violet-300" : "text-white"
 										}`}
 										href={item.href}

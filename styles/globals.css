@@ -1,6 +1,46 @@
 @import "tailwindcss";
 @plugin "tailwindcss-animate";
 
+/*
+ * The palette, named by the job each colour does rather than by what it looks
+ * like. Tailwind v4 turns each of these into real utilities — `--color-canvas`
+ * gives `bg-canvas`, `border-canvas`, `ring-offset-canvas` and so on — and also
+ * emits them as custom properties, so the same token works inside a gradient
+ * string or an inline style where a utility cannot reach.
+ *
+ * These were 60-odd hex literals repeated across 20 files. The violet is the
+ * one most likely to change; it should change in one place.
+ */
+@theme {
+	/* Surfaces, darkest to lightest */
+	--color-canvas: #030014; /* the page itself */
+	--color-surface-deep: #050211; /* overlays that must read as "above" the page */
+	--color-surface-nav: #000014; /* the navbar pill */
+	--color-surface: #08061d; /* standard raised card */
+	--color-surface-muted: #0e0c1e; /* secondary panels */
+	--color-surface-inset: #0f0f1b; /* wells and image backdrops */
+
+	/* Hairlines */
+	--color-hairline: #1c1a31;
+	--color-hairline-strong: #2c2a51;
+
+	/* The "stunning" card surface — HowWeWork panels, /about mission cards,
+	   BusinessChallenges. Three stops of one gradient, so they belong together. */
+	--color-card-top: #1a0f3d;
+	--color-card-mid: #0f0827;
+	--color-card-bottom: #080418;
+
+	/* The one button treatment on the site */
+	--color-cta-top: #1a0b2e;
+	--color-cta-bottom: #0a0525;
+
+	/* No brand-violet token on purpose. The violet is already named by
+	   Tailwind's own scale (violet-400/500/600), which is what the components
+	   use, and most remaining occurrences are `rgba(124,58,237,…)` inside shadow
+	   strings where a hex token cannot carry the alpha anyway. A --color-brand
+	   would be a second name for a colour that already has one. */
+}
+
 @layer base {
 	:root {
 		--background: 0 0% 100%;

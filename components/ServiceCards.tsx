@@ -142,7 +142,7 @@ const ServiceCards = ({ hideHeader = false }: ServiceCardsProps) => {
 								viewport={{ once: true, margin: "-100px" }}
 								whileInView={{ opacity: 1, y: 0 }}
 							>
-								<div className="relative bg-gradient-to-b flex flex-col justify-start from-[#0E0C1E] to-[#08061D] p-8 rounded-3xl overflow-hidden border border-[#1C1A31]/50 transition-all duration-300 h-full group hover:scale-[0.96] hover:shadow-2xl">
+								<div className="relative bg-gradient-to-b flex flex-col justify-start from-surface-muted to-surface p-8 rounded-3xl overflow-hidden border border-hairline/50 transition-all duration-300 h-full group hover:scale-[0.96] hover:shadow-2xl">
 									<Grid size={20} />
 									<div className="mb-6 relative z-20">
 										<service.icon
@@ -172,7 +172,7 @@ const ServiceCards = ({ hideHeader = false }: ServiceCardsProps) => {
 				{!showAll && (
 					<div className="md:hidden absolute bottom-0 left-0 right-0 pointer-events-none">
 						{/* Gradient blur overlay */}
-						<div className="h-40 bg-gradient-to-t from-[#030014] via-[#030014]/95 to-transparent" />
+						<div className="h-40 bg-gradient-to-t from-canvas via-canvas/95 to-transparent" />
 
 						{/* Button container. This button's styling WAS the site's de facto
 						    button language — it now lives in CTAButton, so the hero,

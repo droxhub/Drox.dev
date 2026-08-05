@@ -38,7 +38,11 @@ const fieldClass =
  * map is typed by the props actually used at the call site rather than by either
  * library's own type.
  */
-type SocialIcon = React.ComponentType<{ className?: string; size?: number }>;
+type SocialIcon = React.ComponentType<{
+	className?: string;
+	size?: number;
+	"aria-hidden"?: boolean | "true" | "false";
+}>;
 
 const socialIconMap: Record<string, SocialIcon> = {
 	GitHub: Github,
@@ -243,9 +247,9 @@ export default function ContactPage() {
 								viewport={{ once: true, margin: "-100px" }}
 								whileInView={{ opacity: 1, y: 0 }}
 								className={cn(
-									"flex flex-col border-r py-10 relative group/feature border-[#1C1A31] cursor-pointer",
-									index === 0 && "border-l border-[#1C1A31]",
-									"border-b border-[#1C1A31] lg:last:border-r-0",
+									"flex flex-col border-r py-10 relative group/feature border-hairline cursor-pointer",
+									index === 0 && "border-l border-hairline",
+									"border-b border-hairline lg:last:border-r-0",
 								)}
 							>
 								<div className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t from-purple-900/10 to-transparent pointer-events-none" />
@@ -253,7 +257,7 @@ export default function ContactPage() {
 									<info.icon className="w-6 h-6" />
 								</div>
 								<div className="text-lg font-bold mb-2 relative z-10 px-10">
-									<div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-[#2C2A51] group-hover/feature:bg-purple-500 transition-all duration-200 origin-center" />
+									<div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-hairline-strong group-hover/feature:bg-purple-500 transition-all duration-200 origin-center" />
 									<span className="group-hover/feature:translate-x-2 transition duration-200 inline-block text-white">
 										{info.title}
 									</span>
@@ -427,7 +431,7 @@ export default function ContactPage() {
 
 							<div className="flex justify-center">
 								<button
-									className="w-full md:w-[68%] flex justify-center items-center group bg-gradient-to-br from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white font-medium py-3 px-4 rounded-xl cursor-pointer transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030014]"
+									className="w-full md:w-[68%] flex justify-center items-center group bg-gradient-to-br from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white font-medium py-3 px-4 rounded-xl cursor-pointer transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
 									disabled={isSubmitting}
 									type="submit"
 								>
@@ -435,7 +439,11 @@ export default function ContactPage() {
 										<span>{contactPage.form.submitButton.loadingText}</span>
 									) : (
 										<>
-											<SiWhatsapp className="mr-2" size={20} />
+											<SiWhatsapp
+												aria-hidden="true"
+												className="mr-2"
+												size={20}
+											/>
 											{contactPage.form.submitButton.text}
 										</>
 									)}
@@ -540,6 +548,7 @@ export default function ContactPage() {
 							<Card className="bg-default-100/50 border border-default-200/50 hover:border-primary/50 transition-all duration-300 w-20 h-20 flex items-center justify-center group-hover:scale-110 rounded-2xl">
 								<CardBody className="p-0 flex items-center justify-center">
 									<social.icon
+										aria-hidden="true"
 										className="text-purple-600 dark:text-purple-400"
 										size={32}
 									/>

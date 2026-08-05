@@ -33,7 +33,7 @@ const testimonials: Testimonial[] = [
 
 const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
 	const content = (
-		<div className="bg-gradient-to-t from-[#0E0C1E] to-[#08061D] backdrop-blur-sm border border-[#1C1A31]/80 rounded-2xl p-3 md:p-5 h-full flex flex-col transition-colors">
+		<div className="bg-gradient-to-t from-surface-muted to-surface backdrop-blur-sm border border-hairline/80 rounded-2xl p-3 md:p-5 h-full flex flex-col transition-colors">
 			<div className="flex items-center gap-3 mb-3">
 				<Image
 					alt={`${testimonial.name}, ${testimonial.handle}`}
