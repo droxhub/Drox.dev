@@ -1,11 +1,11 @@
 "use client";
 
-import { Envelope, Phone, WhatsappLogo } from "@phosphor-icons/react";
 import { track } from "@vercel/analytics";
-import { CalendarCheck } from "lucide-react";
+import { CalendarCheck, Mail, Phone } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 import { useState } from "react";
+import { SiWhatsapp } from "react-icons/si";
 import { title } from "@/components/primitives";
 import { CalInline, isBookingEnabled } from "@/components/ui/cal-booking";
 import CTAButton from "@/components/ui/cta-button";
@@ -131,7 +131,7 @@ export default function ClosingCTA() {
 								})
 							}
 						>
-							<Envelope className="text-purple-400" size={18} />
+							<Mail className="text-purple-400" size={18} />
 							{email.address}
 						</a>
 						<a
@@ -159,7 +159,7 @@ export default function ClosingCTA() {
 							rel="noopener noreferrer"
 							target="_blank"
 						>
-							<WhatsappLogo className="text-purple-400" size={18} />
+							<SiWhatsapp className="text-purple-400" size={18} />
 							WhatsApp
 						</a>
 					</div>

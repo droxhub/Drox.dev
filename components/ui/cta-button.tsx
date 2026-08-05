@@ -1,7 +1,7 @@
 "use client";
 
-import { ArrowRight } from "@phosphor-icons/react";
 import { track } from "@vercel/analytics";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
@@ -87,7 +87,7 @@ export default function CTAButton({
 							: "group-hover:translate-x-1",
 					)}
 				>
-					{icon ?? <ArrowRight size={18} weight="bold" />}
+					{icon ?? <ArrowRight size={18} />}
 				</span>
 			)}
 		</>

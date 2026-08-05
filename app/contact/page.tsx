@@ -1,21 +1,22 @@
 "use client";
 
 import { Card, CardBody, Divider } from "@heroui/react";
-import {
-	ChatCircle,
-	Envelope,
-	GithubLogo,
-	InstagramLogo,
-	LinkedinLogo,
-	MapPin,
-	Phone,
-	WhatsappLogo,
-} from "@phosphor-icons/react";
 import { track } from "@vercel/analytics";
+import {
+	Github,
+	Instagram,
+	Linkedin,
+	Mail,
+	MapPin,
+	MessageCircle,
+	Phone,
+} from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import React, { useState } from "react";
+import { SiWhatsapp } from "react-icons/si";
 import Badge from "@/components/chip";
+
 import { subtitle, title } from "@/components/primitives";
 import { CalInline, isBookingEnabled } from "@/components/ui/cal-booking";
 import { contactPage } from "@/config/content";
@@ -30,17 +31,25 @@ const labelClass =
 const fieldClass =
 	"w-full px-4 py-3 rounded-2xl border-2 border-default-200 bg-default-50 text-default-900 placeholder-default-400 transition-colors duration-200 dark:border-white/10 dark:bg-[#200045] dark:text-white dark:placeholder-default-400 hover:border-default-300 dark:hover:bg-[#2a0055] focus-visible:outline-none focus-visible:border-violet-500 focus-visible:ring-2 focus-visible:ring-violet-400/40";
 
-// Map icons to social links
-const socialIconMap: Record<string, typeof GithubLogo> = {
-	GitHub: GithubLogo,
-	Whatsapp: WhatsappLogo,
-	LinkedIn: LinkedinLogo,
-	Instagram: InstagramLogo,
+/**
+ * Both icon sets are represented here: lucide carries the general UI set and the
+ * social marks it still ships, and react-icons/si covers the ones it doesn't —
+ * WhatsApp has no lucide equivalent. They are different component types, so the
+ * map is typed by the props actually used at the call site rather than by either
+ * library's own type.
+ */
+type SocialIcon = React.ComponentType<{ className?: string; size?: number }>;
+
+const socialIconMap: Record<string, SocialIcon> = {
+	GitHub: Github,
+	Whatsapp: SiWhatsapp,
+	LinkedIn: Linkedin,
+	Instagram: Instagram,
 };
 
 const contactInfo = [
 	{
-		icon: Envelope,
+		icon: Mail,
 		title: "Email",
 		content: contactPage.contactInfo.email.address,
 		link: contactPage.contactInfo.email.link,
@@ -54,7 +63,7 @@ const contactInfo = [
 		gradient: "from-blue-400 to-cyan-600",
 	},
 	{
-		icon: ChatCircle,
+		icon: MessageCircle,
 		title: "WhatsApp",
 		content: contactPage.contactInfo.phone.display,
 		link: `https://wa.me/${contactPage.contactInfo.phone.whatsapp}`,
@@ -70,7 +79,7 @@ const contactInfo = [
 ];
 
 const socialLinks = contactPage.social.links.map((link) => ({
-	icon: socialIconMap[link.name] || GithubLogo,
+	icon: socialIconMap[link.name] || Github,
 	name: link.name,
 	link: link.url,
 	gradient: link.gradient,
@@ -426,7 +435,7 @@ export default function ContactPage() {
 										<span>{contactPage.form.submitButton.loadingText}</span>
 									) : (
 										<>
-											<WhatsappLogo className="mr-2" size={20} weight="fill" />
+											<SiWhatsapp className="mr-2" size={20} />
 											{contactPage.form.submitButton.text}
 										</>
 									)}
@@ -533,7 +542,6 @@ export default function ContactPage() {
 									<social.icon
 										className="text-purple-600 dark:text-purple-400"
 										size={32}
-										weight="regular"
 									/>
 								</CardBody>
 							</Card>

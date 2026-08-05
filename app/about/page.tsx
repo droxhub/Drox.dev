@@ -2,16 +2,16 @@
 
 import { Divider } from "@heroui/react";
 import {
-	IconBulb,
-	IconCode,
-	IconHeart,
-	IconPalette,
-	IconRocket,
-	IconSparkles,
-	IconTarget,
-	IconUsers,
-} from "@tabler/icons-react";
-import { Trophy, Users } from "lucide-react";
+	Code,
+	Heart,
+	Lightbulb,
+	Palette,
+	Rocket,
+	Sparkles,
+	Target,
+	Trophy,
+	Users,
+} from "lucide-react";
 import { motion } from "motion/react";
 import Founders from "@/components/Founders";
 import { title } from "@/components/primitives";
@@ -22,32 +22,32 @@ import { cn } from "@/lib/utils";
 
 const values = [
 	{
-		icon: <IconSparkles />,
+		icon: <Sparkles />,
 		title: "Innovation First",
 		description: "Cutting-edge tech that sets you apart.",
 	},
 	{
-		icon: <IconHeart />,
+		icon: <Heart />,
 		title: "Client-Centric",
 		description: "Your success drives everything we do.",
 	},
 	{
-		icon: <IconCode />,
+		icon: <Code />,
 		title: "Technical Excellence",
 		description: "Clean, scalable code built to last.",
 	},
 	{
-		icon: <IconPalette />,
+		icon: <Palette />,
 		title: "Design-Driven",
 		description: "Beautiful interfaces that convert.",
 	},
 	{
-		icon: <IconTarget />,
+		icon: <Target />,
 		title: "Results-Oriented",
 		description: "Clear objectives, measurable outcomes.",
 	},
 	{
-		icon: <IconUsers />,
+		icon: <Users />,
 		title: "Collaborative Spirit",
 		description: "Your extended team, fully invested.",
 	},
@@ -101,7 +101,7 @@ export default function AboutPage() {
 						<div className="relative bg-[#08061d]/60 backdrop-blur-md p-8 md:p-12 h-full rounded-[2.5rem] flex flex-col gap-8">
 							<div className="flex items-center gap-6">
 								<div className="w-16 h-16 rounded-[1.25rem] bg-violet-600 flex items-center justify-center shadow-[0_0_30px_-10px_rgba(124,58,237,0.5)]">
-									<IconRocket className="text-white" size={32} />
+									<Rocket className="text-white" size={32} />
 								</div>
 								<h2 className="text-3xl md:text-4xl font-medium text-white tracking-tight">
 									Our Mission
@@ -137,7 +137,7 @@ export default function AboutPage() {
 						<div className="relative bg-[#08061d]/60 backdrop-blur-md p-8 md:p-12 h-full rounded-[2.5rem] flex flex-col gap-8">
 							<div className="flex items-center gap-6">
 								<div className="w-16 h-16 rounded-[1.25rem] bg-purple-600 flex items-center justify-center shadow-[0_0_30px_-10px_rgba(168,85,247,0.5)]">
-									<IconBulb className="text-white" size={32} />
+									<Lightbulb className="text-white" size={32} />
 								</div>
 								<h2 className="text-3xl md:text-4xl font-medium text-white tracking-tight">
 									Our Vision

@@ -588,7 +588,34 @@ buttons that respond to focus), and the two genuinely open items above carry the
   Verified after: all 10 routes 200, zero broken images, zero console errors.
 
 ### Priority 5 — Design system
-- Consolidate 4 icon libraries (Phosphor, Tabler, Lucide, react-icons) to one
+- ~~Consolidate 4 icon libraries~~ ✅ **done 5 August — 4 down to 2, and 2 is the
+  floor.** `@tabler/icons-react` (9 icons) and `@phosphor-icons/react` (21) are
+  uninstalled. **Client JS: 447 KB → 416 KB gzipped, −31.6 KB (−7.1%).**
+
+  The rule now is **lucide-react for UI, react-icons/si for brand marks**, and
+  the split is forced rather than chosen: lucide dropped most brand logos, so
+  the tech-stack row (React, Next.js, MongoDB, Python, TypeScript, Tailwind,
+  Figma, Node) has nowhere else to go. Lucide *does* still ship Github,
+  Instagram and Linkedin, so those moved to it — but it has **no WhatsApp**, so
+  `SiWhatsapp` stays. Check lucide first; only reach for react-icons when it has
+  no mark.
+
+  Three things that bite when doing this:
+
+  - **Phosphor's `weight` prop does not exist in lucide.** Left in place it
+    reaches the DOM as an invalid attribute. All `weight="bold|fill|regular"`
+    were stripped; verified zero `[weight]` attributes render.
+  - **Injected imports must go *after* `"use client"`**, which has to be the
+    first statement in the file. A script that prepends imports silently breaks
+    six files.
+  - **Mixed icon types don't unify.** `socialIconMap` was typed
+    `Record<string, typeof Github>`; a react-icons `IconType` is not assignable
+    to a lucide `ForwardRefExoticComponent`. It is now typed by the props the
+    call site actually uses.
+
+  Verified: build, types and lint clean; icons render on /, /services, /about
+  and /contact with no zero-sized SVGs and no invalid-prop warnings; the nine
+  service cards and six value cards screenshotted.
 - Make colour tokens authoritative; replace ~90 hardcoded hex occurrences
 - One radius scale; standardise motion durations and easings
 - Three engineering blog posts (`/blog` was deleted — recreate when there's content)

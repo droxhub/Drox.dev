@@ -1,8 +1,7 @@
 "use client";
 
 import { Accordion, AccordionItem } from "@heroui/react";
-import { IconPlus } from "@tabler/icons-react";
-import { CircleHelp } from "lucide-react";
+import { CircleHelp, Plus } from "lucide-react";
 import { motion } from "motion/react";
 import { title } from "@/components/primitives";
 import SectionHeader from "@/components/ui/section-header";
@@ -59,7 +58,7 @@ export default function FAQ() {
 								   as the trigger's own text, which is the accessible name
 								   that actually works. */
 								title={item.question}
-								indicator={<IconPlus />}
+								indicator={<Plus />}
 							>
 								{item.answer}
 							</AccordionItem>

@@ -1,11 +1,11 @@
 "use client";
 
-import { WhatsappLogo } from "@phosphor-icons/react";
 import { track } from "@vercel/analytics";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { SiWhatsapp } from "react-icons/si";
 import { bookingHref } from "@/components/ui/cal-booking";
 import { contactPage } from "@/config/content";
 import { siteConfig } from "@/config/site";
@@ -126,7 +126,7 @@ export default function StickyMobileCTA() {
 							rel="noopener noreferrer"
 							target="_blank"
 						>
-							<WhatsappLogo size={22} weight="fill" />
+							<SiWhatsapp size={22} />
 						</a>
 					</div>
 				</motion.div>

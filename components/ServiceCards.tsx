@@ -1,17 +1,18 @@
 "use client";
 
 import {
+	Box,
 	Brain,
-	CaretDown,
-	ChartLineUp,
-	Cube,
-	DeviceMobile,
-	Gear,
+	ChevronDown,
 	Globe,
-	Lightning,
 	Palette,
+	Settings,
 	ShoppingCart,
-} from "@phosphor-icons/react";
+	Smartphone,
+	TrendingUp,
+	Zap,
+} from "lucide-react";
+
 import { motion } from "motion/react";
 import { useState } from "react";
 
@@ -30,7 +31,7 @@ import SectionHeader from "@/components/ui/section-header";
  */
 const services = [
 	{
-		icon: Cube,
+		icon: Box,
 		title: "Software Engineering",
 		description:
 			"Custom software designed around each business's unique processes, not around a template.",
@@ -44,7 +45,7 @@ const services = [
 		sub: "AI assistants & chatbots · Document processing · Business intelligence · LLM integration · AI-powered internal tools",
 	},
 	{
-		icon: Lightning,
+		icon: Zap,
 		title: "Business Automation",
 		description:
 			"Automating repetitive work so your team can spend its time on the things that actually need a person.",
@@ -58,7 +59,7 @@ const services = [
 		sub: "Corporate websites · Customer portals · Web applications · CMS solutions · Progressive web apps",
 	},
 	{
-		icon: DeviceMobile,
+		icon: Smartphone,
 		title: "Mobile Applications",
 		description:
 			"Applications built for performance, usability and long-term maintainability.",
@@ -79,14 +80,14 @@ const services = [
 		sub: "Custom e-commerce · Shopify & WooCommerce · Inventory & payment integration · Order management · Marketplaces",
 	},
 	{
-		icon: Gear,
+		icon: Settings,
 		title: "Support & Continuous Improvement",
 		description:
 			"Keeping systems reliable and evolving after launch — the part most vendors treat as an afterthought.",
 		sub: "Performance monitoring · Bug resolution · Security updates · Infrastructure maintenance · Feature enhancements",
 	},
 	{
-		icon: ChartLineUp,
+		icon: TrendingUp,
 		title: "Digital Marketing",
 		description:
 			"Measurable strategies that support growth, usually alongside a platform we've already built for you.",
@@ -148,7 +149,6 @@ const ServiceCards = ({ hideHeader = false }: ServiceCardsProps) => {
 											className="text-purple-600 dark:text-purple-400 block transition-all duration-300 group-hover:scale-[1.2] group-hover:ml-[-10px] group-hover:drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]"
 											size={32}
 											style={{ transformOrigin: "center" }}
-											weight="regular"
 										/>
 									</div>
 									<h3 className="text-lg font-semibold mb-3 text-white relative z-20">
@@ -179,7 +179,7 @@ const ServiceCards = ({ hideHeader = false }: ServiceCardsProps) => {
 						    projects and closing CTA all share it. */}
 						<div className="absolute bottom-4 left-0 right-0 flex justify-center pointer-events-auto mb-[-55px]">
 							<CTAButton
-								icon={<CaretDown size={18} weight="bold" />}
+								icon={<ChevronDown size={18} />}
 								iconMotion="down"
 								location="services_show_all"
 								onClick={() => setShowAll(true)}

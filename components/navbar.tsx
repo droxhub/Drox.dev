@@ -1,6 +1,7 @@
 "use client";
 
-import { List, X } from "@phosphor-icons/react";
+import { Menu, X } from "lucide-react";
+
 import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -231,7 +232,7 @@ export default function Navigation() {
 							ref={toggleRef}
 							type="button"
 						>
-							{isOpen ? <X size={24} /> : <List size={24} />}
+							{isOpen ? <X size={24} /> : <Menu size={24} />}
 						</button>
 					</div>
 				</div>
