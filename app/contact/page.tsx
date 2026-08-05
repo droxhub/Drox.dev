@@ -578,7 +578,7 @@ export default function ContactPage() {
 													contactPage.responseTime.time,
 												)[0]
 											}
-											<span className="font-semibold text-violet-500">
+											<span className="font-semibold text-violet-400">
 												{contactPage.responseTime.time}
 											</span>
 											{contactPage.responseTime.description.split(

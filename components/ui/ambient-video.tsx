@@ -70,6 +70,12 @@ export default function AmbientVideo({ src, className }: AmbientVideoProps) {
 	return (
 		<video
 			ref={ref}
+			/* Silent, uncontrolled, purely atmospheric — it carries no information
+			   a caption could convey. Marking it decorative is the honest answer to
+			   axe's video-caption check; adding an empty <track> would only be
+			   dressing it up. It has no controls, so nothing focusable is being
+			   hidden. */
+			aria-hidden="true"
 			className={className}
 			loop
 			muted

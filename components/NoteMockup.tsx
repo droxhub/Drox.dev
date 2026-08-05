@@ -63,7 +63,11 @@ export function NoteMockup() {
 			<div className="origin-top scale-[1.3] sm:scale-[0.65] md:scale-[0.65] lg:scale-[0.85] xl:scale-[1.0]">
 				{/* Fixed base size - acts as the "image" dimensions */}
 				<div className="w-[320px] sm:w-[900px] md:w-[1300px] h-[500px] sm:h-[720px]">
-					<div className="w-full h-full backdrop-blur-xl p-2 border border-white/10 rounded-3xl backdrop-blur-sm bg-transparent">
+					{/* Not `bg-transparent`: the violet glow behind this mockup reached
+					    rgb(173,120,234) under some of its text, where even white only
+					    manages 3.16:1. A dark translucent surface keeps the glass effect
+					    and gives every label inside it a predictable background. */}
+					<div className="w-full h-full backdrop-blur-xl p-2 border border-white/10 rounded-3xl backdrop-blur-sm bg-[#0b0620]/75">
 						<div className="border border-white/10 rounded-2xl w-full h-full">
 							<div className="w-full h-full rounded-2xl overflow-hidden relative">
 								{/* Main container */}

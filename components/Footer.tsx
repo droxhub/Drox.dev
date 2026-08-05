@@ -11,9 +11,17 @@ const Footer = () => {
 		<footer className="relative w-full bg-[#030014] mt-[100px] pt-16 md:pt-24 pb-8 md:pb-12 overflow-hidden border-t border-white/5">
 			{/* Large Background Branding */}
 			<div className="absolute bottom-[2%] md:bottom-[-5%] lg:bottom-[-10%] left-1/2 -translate-x-1/2 w-full text-center pointer-events-none select-none z-0">
-				<h2 className="no-gradient text-[28vw] md:text-[18vw] lg:text-[20vw] font-bold text-white/3 leading-none tracking-tighter uppercase whitespace-nowrap">
+				{/* A <div>, not an <h2>: at 3% opacity this is a watermark, and as a
+				    heading it sat in the document outline and was announced by screen
+				    readers as though it were a section title. `aria-hidden` because
+				    the wordmark is already in the logo above it — decorative text is
+				    exempt from contrast, but only if it is genuinely decorative. */}
+				<div
+					aria-hidden="true"
+					className="no-gradient text-[28vw] md:text-[18vw] lg:text-[20vw] font-bold text-white/3 leading-none tracking-tighter uppercase whitespace-nowrap"
+				>
 					DROX
-				</h2>
+				</div>
 			</div>
 
 			{/* Lighting/Beam Effects - Scaled proportionately */}

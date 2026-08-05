@@ -52,7 +52,12 @@ export default function FAQ() {
 						{faqContent.map((item, index) => (
 							<AccordionItem
 								key={index}
-								aria-label={item.question}
+								/* No `aria-label` here. HeroUI puts it on the base <div>,
+								   which has no role, and `aria-label` on a roleless div is
+								   ignored by most screen readers — axe flags it as
+								   aria-prohibited-attr. `title` already renders the question
+								   as the trigger's own text, which is the accessible name
+								   that actually works. */
 								title={item.question}
 								indicator={<IconPlus />}
 							>

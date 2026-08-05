@@ -456,14 +456,37 @@ white-on-black text, because `getComputedStyle().color` returns `lab()` here
 (Tailwind v4) and the parser read lightness/chroma/hue as RGB. Convert colours
 via a canvas readback, or use axe. Don't hand-roll this.
 
-**Still open, and disclosed as such on /accessibility:**
+### The manual pass axe cannot do — also 5 August
 
-- `color-contrast: 692 incomplete` — axe cannot measure text over video or
-  gradient backgrounds. Needs a manual pass.
-- No screen-reader pass yet (NVDA / JAWS / VoiceOver). Everything so far is
-  automated plus keyboard.
-- `video-caption: 6` — decorative muted videos with no `<track>`.
-- `aria-prohibited-attr: 18` — worth a look, not yet triaged.
+axe reports 692 `color-contrast` nodes as **incomplete**, not passing: it cannot
+measure text over video or gradients. Those were measured directly, sampling
+rendered pixels under each glyph. **648 text runs across 7 routes, 0 below
+threshold** after four fixes:
+
+- **The mockup panels were `bg-transparent`** over the hero's violet glow, so
+  their text sat on whatever colour happened to be behind — up to
+  rgb(173,120,234), where even pure white manages only 3.16:1. Given a dark
+  translucent surface, which keeps the glass look.
+- **`text-violet-500` on /contact** was 4.42:1 against that card. Now
+  `violet-400`, 6.83:1.
+- **The giant footer "DROX" watermark** at 3% opacity was an `<h2>` — in the
+  heading outline and announced as a section title. Now a decorative `<div>`
+  with `aria-hidden`.
+- **FAQ accordion** passed `aria-label` to HeroUI, which puts it on a roleless
+  `<div>` where screen readers ignore it. Removed; `title` already supplies the
+  accessible name.
+- **Decorative videos** (hero black-hole, /about silk) marked `aria-hidden` —
+  silent and uncontrolled, so a caption has nothing to convey.
+
+**How to redo this pass** (`contrast2.mjs` pattern): convert colours with a
+canvas readback, never a regex — Chromium returns `lab()` here. Sample
+`Range.getClientRects()` for the text node, not the element box, or padding over
+a different surface pollutes the reading. Screenshot with glyphs made
+transparent so what you measure is genuinely what is behind them.
+
+**Still open, disclosed on /accessibility:** no screen-reader pass yet
+(NVDA / JAWS / VoiceOver). That one needs a human with a screen reader — it
+cannot be automated, and until it is done conformance should not be claimed.
 
 `/accessibility` was rewritten to match: the four old items are gone (two were
 already fixed and the page was understating the site — the skip link is in the

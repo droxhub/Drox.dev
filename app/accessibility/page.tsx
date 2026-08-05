@@ -51,7 +51,9 @@ export default function AccessibilityPage() {
 					</li>
 					<li>
 						A minimum text size of 12px, and body text at 4.5:1 contrast or
-						better against its background.
+						better against its background — including where text sits over video
+						or gradients, which we measure from rendered pixels because
+						automated tools cannot.
 					</li>
 					<li>
 						Headings that remain legible in Windows High Contrast Mode and other
@@ -71,24 +73,17 @@ export default function AccessibilityPage() {
 					last audit no automated Level A or AA failures remained across any
 					page.
 				</p>
-				<p>
-					Two things we have not been able to verify automatically, and are
-					checking by hand:
-				</p>
+				<p>One thing remains open:</p>
 				<ul>
 					<li>
-						<strong>Text over video and gradients.</strong> Automated tools
-						cannot measure contrast where text sits over moving or
-						gradient-filled backgrounds. We are reviewing these manually.
-					</li>
-					<li>
 						<strong>Screen reader testing.</strong> Our checks so far are
-						automated and keyboard-based. We have not yet completed a full pass
-						with NVDA, JAWS and VoiceOver.
+						automated, keyboard-based and measured from rendered pixels. We have
+						not yet completed a full pass with NVDA, JAWS and VoiceOver, and
+						until we have we will not claim conformance.
 					</li>
 				</ul>
 				<p>
-					Target date for both: <strong>30 September 2026</strong>.
+					Target date: <strong>30 September 2026</strong>.
 				</p>
 			</LegalSection>
 

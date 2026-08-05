@@ -159,6 +159,8 @@ function PrototypeImg() {
 						    Withheld, the element still paints its first frame, which is a
 						    static violet halo. */}
 						<video
+							/* Decorative: silent, uncontrolled, no information to caption. */
+							aria-hidden="true"
 							loop
 							muted
 							playsInline
