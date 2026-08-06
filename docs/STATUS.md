@@ -682,6 +682,58 @@ Every other step increases with the viewport, so `sm:scale-[0.5]` looks like a
 typo, but changing it resizes the hero at those widths and that was not asked
 for. The masked edges mean it no longer produces a visible seam either way.
 
+### HowWeWork — why stepping through the stages felt laggy, 6 August
+
+Reported as "1 and 2 are smooth, after 2 it lags". Two separate things.
+
+**Stage 01 is active by default** (`useState(0)`), so tapping it does nothing at
+all — measured, no size change. That is half of "smooth". Stage 02 is the first
+real transition.
+
+**There is no worsening with position.** Dropped frames per tap, iPhone 13
+profile at 6x CPU throttle:
+
+| | 02 | 03 | 04 | 05 | 06 | 07 |
+| --- | --- | --- | --- | --- | --- | --- |
+| tapping at a natural pace (250ms apart) | 35% | 44% | 33% | 30% | 47% | 45% |
+| letting each settle first (1.2s apart) | 13% | 11% | 12% | 24% | 14% | 14% |
+
+Every transition costs the same. What changes is whether the previous one has
+finished — tapping before it settles roughly doubles the cost, and by stage 3 a
+reader never gets a clean one again. Controls: idle 0%, scrolling the page 4%.
+So the section really was five times ordinary page work.
+
+**The cost is the stacked layers.** Each strip has six full-bleed absolutely
+positioned layers, and a transition cross-fades all six in the outgoing strip
+and the incoming one while both boxes resize — twelve full-size layers
+repainting per frame. Isolated by hiding them at runtime:
+
+| | dropped |
+| --- | --- |
+| `flexGrow` alone | 11% |
+| \+ the two text layers | 20% |
+| \+ the four decorative layers | 29% |
+
+**Ruled out, so nobody repeats them:** the spring (a bounded tween measured
+identically — 26% vs 24% median over three runs), the rounded clip (no change),
+`will-change: opacity` (42% vs 45%, inside the noise), `contain: paint` (*worse*,
+72%), and layout itself — 102ms against 798ms of style recalc, and that recalc
+turned out to track frame count rather than drive anything.
+
+**Fixed by dropping the two blurred glows below `md`** — 288px and 256px boxes
+under 70px and 80px blurs, the expensive pair. Paired within-session A/B,
+alternating conditions to cancel drift: **50% → 42% dropped, all four pairs
+favouring the change.** Real but modest; measure this way, because run-to-run
+variance across page loads (20–31% for one identical build) is wider than the
+effect and a naive before/after will show nothing.
+
+**The glows were also carrying most of the violet.** Without them the open stage
+fell back to the bare gradient and read as near-black, barely distinguishable
+from a closed row — a bigger loss than the bloom. The surface layer's first stop
+is `violet-950` below `md` to put the colour back into a layer that is already
+being painted, so it costs no extra layer. Desktop keeps the original stops and
+both glows.
+
 ### Priority 4 — performance
 - ~~**`prefers-reduced-motion`**~~ ✅ **done 5 August.** Was honoured in 8 of the
   24 files importing `motion/react`, with Lenis ignoring it entirely.

@@ -105,25 +105,47 @@ function StageStrip({
 				<motion.span
 					animate={{ opacity: isActive ? 1 : 0.55 }}
 					aria-hidden="true"
-					className="absolute inset-0 bg-gradient-to-b from-card-top via-card-mid to-card-bottom"
+					/* A brighter top stop on mobile. The two glows below are desktop
+					   only now, and they were carrying most of the violet — without
+					   them the open stage fell back to the bare gradient and read as
+					   near-black, barely distinguishable from a closed row. Lifting
+					   the first stop puts the colour back into the layer that is
+					   already being painted, so it costs no extra layer. Desktop keeps
+					   the original stops, where the glows still supply the bloom. */
+					className="absolute inset-0 bg-gradient-to-b from-violet-950 via-card-top to-card-bottom md:from-card-top md:via-card-mid"
 					initial={false}
 					transition={surfaceTransition}
 				/>
-				{/* Opacity only. Animating `scale` on a 70px blur forces the browser
-				    to recompute the blur every frame, on all seven panels, while the
-				    row is already re-laying out — it was the most expensive thing on
-				    screen and the first place a dropped frame showed. */}
+				{/* The two glows are desktop only (`hidden md:block`).
+				 *
+				 * A transition cross-fades six full-bleed layers in the outgoing strip
+				 * and six in the incoming one, while both boxes are resizing — twelve
+				 * full-size layers repainting per frame. Measured on a throttled phone
+				 * profile, tapping through the stages: `flexGrow` alone drops 11% of
+				 * frames, the two text layers take it to 20%, and these four
+				 * decorative layers to 29%. Idle is 0% and scrolling the page is 4%,
+				 * so the section was five times the cost of ordinary page work.
+				 *
+				 * These two are the expensive pair — 288px and 256px boxes under 70px
+				 * and 80px blurs. Dropping them below `md` keeps the surface gradient
+				 * and the top hairline, so the card treatment survives; what is lost
+				 * on a phone is the bloom as a stage opens. Desktop is untouched,
+				 * where the strips are larger and the devices faster.
+				 *
+				 * Opacity only, never `scale`: animating a 70px blur's size forces the
+				 * browser to recompute the blur every frame.
+				 */}
 				<motion.span
 					animate={{ opacity: isActive ? 0.9 : 0.22 }}
 					aria-hidden="true"
-					className="pointer-events-none absolute -bottom-24 -left-20 h-72 w-72 rounded-full bg-violet-600/50 blur-[70px]"
+					className="pointer-events-none absolute -bottom-24 -left-20 hidden h-72 w-72 rounded-full bg-violet-600/50 blur-[70px] md:block"
 					initial={false}
 					transition={surfaceTransition}
 				/>
 				<motion.span
 					animate={{ opacity: isActive ? 0.7 : 0.15 }}
 					aria-hidden="true"
-					className="pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full bg-fuchsia-500/40 blur-[80px]"
+					className="pointer-events-none absolute -right-16 -top-20 hidden h-64 w-64 rounded-full bg-fuchsia-500/40 blur-[80px] md:block"
 					initial={false}
 					transition={surfaceTransition}
 				/>
