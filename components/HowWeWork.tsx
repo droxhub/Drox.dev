@@ -84,7 +84,15 @@ function StageStrip({
 			    tabbing through walks the process in order. */}
 			<button
 				aria-expanded={isActive}
-				className="group relative h-full w-full overflow-hidden rounded-panel text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+				/* `rounded-tile` on mobile, not `rounded-panel`. A closed row is 52px
+				   tall there, and a browser clamps a radius to half the shorter side
+				   — so 32px rendered as 26px and the rows came out as pills rather
+				   than cards. Worse, the clamp lifts as the row grows to 312px, so
+				   the corners visibly unrolled from pill to card during the open,
+				   which reads as a flicker. 16px never clamps at either size, so the
+				   shape is constant throughout. Desktop strips are ~105px wide when
+				   closed, where 32px is well clear of the clamp. */
+				className="group relative h-full w-full overflow-hidden rounded-tile text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas md:rounded-panel"
 				onClick={onActivate}
 				onFocus={onActivate}
 				onMouseEnter={onActivate}

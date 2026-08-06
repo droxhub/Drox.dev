@@ -857,6 +857,15 @@ for. The masked edges mean it no longer produces a visible seam either way.
   | `rounded-card` | 24px | cards, the nav pill, project imagery | 20, 24px |
   | `rounded-panel` | 32px | large feature surfaces | 28, 30, 32, 40px |
 
+  **A radius is only what it says if the box is big enough.** A browser clamps
+  `border-radius` to half the shorter side, so a 32px radius on a 52px-tall row
+  renders as 26px — a pill, not a card. The `HowWeWork` strips hit this on
+  mobile, where a closed row is 52px: they came out pill-shaped, and because the
+  clamp lifts as the row grows to 312px, the corners visibly *unrolled* from pill
+  to card during the open, which reads as a flicker. They are `rounded-tile` on
+  mobile and `rounded-panel` from `md` up, where a closed strip is ~105px wide
+  and well clear of the clamp. Check the shorter side before picking a step.
+
   These deliberately **do not overwrite Tailwind's own `--radius-sm … -4xl`**.
   HeroUI's components use those internally, and redefining them would move
   corners inside a dependency.
