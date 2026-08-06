@@ -17,13 +17,21 @@ interface AmbientVideoProps {
  *
  * This component:
  *   - ships nothing until the element scrolls near the viewport
- *   - skips loading entirely below `md`, where the cost is highest and the
- *     effect is least visible
  *   - honours `prefers-reduced-motion`
  *
  * The source has since been re-encoded to 407 KB (VP9, 1280x720, 30fps). It
  * was 1920x1080 at 60fps and 18.5 Mbps — and, despite the `.webm` extension,
  * H.264, which is not a valid WebM codec, so Firefox refused to play it at all.
+ *
+ * **It used to skip mobile entirely** (`max-width: 767px`), which was right
+ * when the file was 22 MB: every phone paid for it before the page settled. At
+ * 407 KB, lazily fetched only if the card actually scrolls into view, that
+ * argument no longer holds, and it left the /about mission cards flat on a
+ * phone while desktop got the silk sheen. Re-enabled 6 August.
+ *
+ * iOS Safari only gained WebM playback in 17.4, so older iPhones still get
+ * nothing — harmless, because the card's own gradient is the fallback and the
+ * `play()` rejection below is already swallowed.
  */
 export default function AmbientVideo({ src, className }: AmbientVideoProps) {
 	const ref = useRef<HTMLVideoElement>(null);
@@ -37,9 +45,8 @@ export default function AmbientVideo({ src, className }: AmbientVideoProps) {
 		const reducedMotion = window.matchMedia(
 			"(prefers-reduced-motion: reduce)",
 		).matches;
-		const isSmallScreen = window.matchMedia("(max-width: 767px)").matches;
 
-		if (reducedMotion || isSmallScreen) return;
+		if (reducedMotion) return;
 
 		const observer = new IntersectionObserver(
 			(entries) => {

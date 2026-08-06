@@ -47,7 +47,7 @@ seeded particle fields below.
 | Four 404 footer links resolved; address added | `components/Footer.tsx` |
 | `/blog`, `/docs`, `/pricing` stubs deleted | (`/pricing` later rebuilt properly) |
 | Images: `alfa1.png` 33 MB → 67 KB WebP, `drox1.png` 7.9 MB → 30 KB | `public/projects/` |
-| 22 MB `/about` video → lazy, desktop-only, reduced-motion aware | `components/ui/ambient-video.tsx` |
+| 22 MB `/about` video → lazy, reduced-motion aware (was also desktop-only; see below) | `components/ui/ambient-video.tsx` |
 | Vercel Analytics + `cta_click` / `project_click` / `contact_form_submit` | `app/layout.tsx`, `components/ui/cta-button.tsx` |
 | Per-route metadata, Organization JSON-LD, `sitemap.ts`, `robots.ts` | `app/` |
 | Brand name `"DRO X"` → `"Drox Dev"` | `config/site.ts` |
@@ -853,6 +853,28 @@ claiming to be an icon resource. 59 KB → 4.5 KB.
   mockup is decorative, so its text should either read like a real note or stop
   being marketing copy about Drox. `aria-hidden` would not help — Google indexes
   it regardless.
+
+### The /about silk video now plays on mobile — 6 August
+
+`AmbientVideo` used to return early below 768px, so the `src` was never attached
+and the mission cards were flat on a phone while desktop got the silk sheen. It
+looked broken; it was deliberate.
+
+That guard was right when the file was **22 MB** — every phone paid for it before
+the page settled, for an effect behind `opacity-60` and a `backdrop-blur-md`. The
+re-encode to **407 KB** made the argument 54x weaker, so the guard is gone.
+Reduced motion and the IntersectionObserver are untouched.
+
+**Know what "lazy" buys you here: on mobile, nothing.** The mission card's video
+sits at y=638 in a 664px viewport on an iPhone 13 — it is *on the first screen*,
+so the observer fires at load and the 407 KB is fetched immediately. The lazy
+path only defers it for someone who leaves /about without scrolling, which is
+nobody. Treat this as 407 KB added to the /about mobile page weight.
+
+**iOS Safari only gained WebM playback in 17.4.** Older iPhones get no video —
+harmless, because the card's gradient is the fallback and the `play()` rejection
+is already swallowed. If that ever matters, the fix is an MP4/H.264 sibling
+`<source>`, not a different guard.
 
 ### Priority 4 — performance
 - ~~**`prefers-reduced-motion`**~~ ✅ **done 5 August.** Was honoured in 8 of the
