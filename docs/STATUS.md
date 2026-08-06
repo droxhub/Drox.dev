@@ -734,9 +734,39 @@ is `violet-950` below `md` to put the colour back into a layer that is already
 being painted, so it costs no extra layer. Desktop keeps the original stops and
 both glows.
 
-### The white flash on every page load — fixed 6 August
+### The site rendering white — fixed 6 August
 
-Reported as "the site looks white". It was, briefly, on every single page load.
+Reported as "the site looks white". **Two independent causes**, and the first
+fix found only one of them. The second is the one that was actually being looked
+at, and it was not a flash — it was permanent.
+
+#### 2. A stored theme preference, which is permanent
+
+`next-themes` honoured a stored `theme` of `"light"`, or `"system"` on a machine
+whose OS is in light mode, and applied `class="light"`. Measured against a local
+production build:
+
+| stored `theme` | `<html>` class | body background |
+| --- | --- | --- |
+| *(none)* | `dark` | `rgb(0,0,20)` |
+| `light` | `light` | **`rgb(255,255,255)`** |
+| `system`, OS light | `light` | **`rgb(255,255,255)`** |
+| `dark` | `dark` | `rgb(0,0,20)` |
+
+**There is no light design to fall back to.** Every surface here is built dark —
+white text on violet and near-black — so a light background is not an
+alternative theme, it is a broken page. And it was permanent: the theme switcher
+was deleted in the P4 unused-component sweep, so a visitor in that state had no
+way back. This predates the palette change below; when the light values lived on
+`:root`, `class="light"` produced exactly the same white page.
+
+`forcedTheme: "dark"` in `app/layout.tsx` now makes next-themes ignore both the
+stored value and the OS. Verified: all four rows of that table render
+`rgb(0,0,20)`. **Remove it the day a real light palette exists, and not before.**
+
+#### 1. A white flash before the theme script ran
+
+Also real, on every single page load, and fixed in the same session.
 
 next-themes adds `class="dark"` from an inline script, and the server sends
 plain `<html lang="en">`. The **light** palette was on `:root`, so between first

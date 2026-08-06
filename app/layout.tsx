@@ -112,7 +112,26 @@ export default function RootLayout({
 					}}
 				/>
 				<SmoothScroll>
-					<Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+					{/* `forcedTheme`, because there is no light design to fall back to.
+					    Every surface on this site is built dark — white text on violet
+					    and near-black — so a light background is never correct, it is
+					    just broken.
+
+					    Without this, next-themes honours a stored `theme` of "light" or
+					    "system", and a visitor whose OS is in light mode, or who ever
+					    clicked the theme switch that used to exist, gets a white page
+					    permanently: the switcher was deleted in the P4 unused-component
+					    sweep, so there is no way back. This was reported from a browser
+					    that still had that value in localStorage.
+
+					    Remove this the day a real light palette exists, and not before. */}
+					<Providers
+						themeProps={{
+							attribute: "class",
+							defaultTheme: "dark",
+							forcedTheme: "dark",
+						}}
+					>
 						{/* The bottom padding reserves room for the sticky mobile CTA bar
 						    so it can never cover the last row of the footer. */}
 						<div className="relative flex flex-col min-h-screen pb-20 md:pb-0">
