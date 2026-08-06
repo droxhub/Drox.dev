@@ -85,13 +85,14 @@ export default function AboutPage() {
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 max-w-7xl w-full">
 					{/* Mission Card */}
 					<motion.div
-						className="relative group p-[1px] rounded-panel bg-gradient-to-br from-violet-500/20 to-transparent overflow-hidden shadow-2xl min-h-[400px]"
+						className="relative group transform-gpu p-[1px] rounded-panel bg-gradient-to-br from-violet-500/20 to-transparent overflow-hidden shadow-2xl min-h-[400px]"
 						initial={{ opacity: 0, scale: 0.95 }}
 						transition={{ duration: DURATION.slow }}
 						viewport={{ once: true, margin: "-100px" }}
 						whileInView={{ opacity: 1, scale: 1 }}
 					>
-						{/* Video Background — lazy, desktop-only, reduced-motion aware */}
+						{/* Video Background — lazy and reduced-motion aware. No longer
+						    desktop-only: see the note in ambient-video.tsx. */}
 						<AmbientVideo
 							className="absolute inset-0 w-full h-full object-cover opacity-60 transition-opacity duration-slow group-hover:opacity-80"
 							src="/video/silk.webm"
@@ -122,13 +123,14 @@ export default function AboutPage() {
 
 					{/* Vision Card */}
 					<motion.div
-						className="relative group p-[1px] rounded-panel bg-gradient-to-br from-purple-500/20 to-transparent overflow-hidden shadow-2xl min-h-[400px]"
+						className="relative group transform-gpu p-[1px] rounded-panel bg-gradient-to-br from-purple-500/20 to-transparent overflow-hidden shadow-2xl min-h-[400px]"
 						initial={{ opacity: 0, scale: 0.95 }}
 						transition={{ duration: DURATION.slow, delay: 0.2 }}
 						viewport={{ once: true, margin: "-100px" }}
 						whileInView={{ opacity: 1, scale: 1 }}
 					>
-						{/* Video Background — lazy, desktop-only, reduced-motion aware */}
+						{/* Video Background — lazy and reduced-motion aware. No longer
+						    desktop-only: see the note in ambient-video.tsx. */}
 						<AmbientVideo
 							className="absolute inset-0 w-full h-full object-cover opacity-60 transition-opacity duration-slow group-hover:opacity-80"
 							src="/video/silk.webm"

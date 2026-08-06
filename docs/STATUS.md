@@ -854,6 +854,33 @@ claiming to be an icon resource. 59 KB → 4.5 KB.
   being marketing copy about Drox. `aria-hidden` would not help — Google indexes
   it regardless.
 
+### Square corners on iOS where a blurred glow sits — 6 August
+
+Reported from an iPhone 14 Pro Max: a BusinessChallenges card rendered with
+three rounded corners and a **square bottom-left**. That is exactly where its
+violet glow is anchored (`-bottom-24 -left-20`, `blur-[70px]`).
+
+**WebKit does not reliably apply a rounded `overflow: hidden` clip to a
+composited child, and anything carrying a `filter` is composited.** The glow's
+square bounding box punches straight through the corner. `transform-gpu`
+(`translateZ(0)`) on the *clipping* element promotes it to its own layer, so the
+rounded clip is applied on the compositor where the child already lives.
+
+Applied to all three places with the same shape — a rounded `overflow-hidden`
+box containing a blurred child:
+
+| | clipping element | glow corner |
+| --- | --- | --- |
+| `BusinessChallenges` | the inner surface `<span>` | bottom-left |
+| `HowWeWork` | the stage `<button>` | bottom-left (desktop only — the glows are `hidden md:block`) |
+| `/about` mission + vision | the `p-[1px]` gradient-border wrapper | bottom-right |
+
+**It could not be reproduced in headless Chromium or headless WebKit** — neither
+uses iOS's compositing path, and both rendered the corner correctly before the
+fix. The only proof is a real device. If a rounded card ever shows one square
+corner again, look for a blurred child anchored to that corner before looking at
+the radius.
+
 ### Vision and Mission are the Company Profile's, verbatim — 6 August
 
 **Decided by the client. Do not reword either without them.**

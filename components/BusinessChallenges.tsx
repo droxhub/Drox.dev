@@ -82,9 +82,27 @@ export default function BusinessChallenges() {
 							    the top edge that gives the card its shape without a border.
 							    Clipped here rather than on the article so the specular canvas
 							    outside it survives. */}
+							{/*
+							 * `transform-gpu` is a Safari workaround, not decoration.
+							 *
+							 * WebKit does not reliably apply a rounded `overflow: hidden` clip
+							 * to a *composited* child, and anything carrying a filter is
+							 * composited — both glows below are `blur-[70px]`. The glow's square
+							 * bounding box then punches through the corner it sits in. On an
+							 * iPhone this card rendered with three rounded corners and a square
+							 * bottom-left, which is exactly where the violet glow is anchored
+							 * (`-bottom-24 -left-20`).
+							 *
+							 * Promoting the clipping element to its own layer makes WebKit apply
+							 * the rounded clip on the compositor, where the child already lives.
+							 * One layer per card, and the glows force a layer regardless.
+							 *
+							 * Not reproducible in headless Chromium or headless WebKit — neither
+							 * uses iOS's compositing path. Check this on a real device.
+							 */}
 							<span
 								aria-hidden="true"
-								className="absolute inset-0 overflow-hidden rounded-panel"
+								className="absolute inset-0 overflow-hidden rounded-panel transform-gpu"
 							>
 								<span className="absolute inset-0 bg-gradient-to-b from-card-top via-card-mid to-card-bottom" />
 								{/* Opacity only on hover, never `scale` — animating a 70px blur
