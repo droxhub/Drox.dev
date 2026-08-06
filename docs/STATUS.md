@@ -734,6 +734,35 @@ is `violet-950` below `md` to put the colour back into a layer that is already
 being painted, so it costs no extra layer. Desktop keeps the original stops and
 both glows.
 
+### The white flash on every page load — fixed 6 August
+
+Reported as "the site looks white". It was, briefly, on every single page load.
+
+next-themes adds `class="dark"` from an inline script, and the server sends
+plain `<html lang="en">`. The **light** palette was on `:root`, so between first
+paint and that script running, every page was **white with black text**. On a
+desktop that is a blink; on a phone on mobile data it is the first thing a
+visitor sees. Confirmed by loading with JavaScript disabled, which is exactly
+the pre-script state: `body` computed to `rgb(255,255,255)`.
+
+The real palette now lives on `:root` itself, with `.dark` kept alongside so the
+class next-themes adds still resolves, and light moved to `.light` — the class
+it would add if the theme switcher is ever restored. `color-scheme: dark` comes
+with it so form controls, scrollbars and the overscroll area are right before
+the script runs too. With JavaScript disabled the body is now `rgb(0,0,20)` on
+every route.
+
+**Test this by disabling JavaScript, not by watching the page load.** The flash
+is too short to catch by eye on a fast connection, and it does not show up in
+any screenshot taken after load — which is why it survived every check in this
+file until someone looked at the site on a phone.
+
+**Still true, and a separate problem:** with JavaScript disabled the page renders
+the navbar and nothing else, because the content animates in from `opacity: 0`
+under `motion`. So the sequence a slow connection sees is now dark-but-empty
+rather than white-then-content. Fixing that means not starting hero content at
+zero opacity, which is a larger change than this one.
+
 ### Priority 4 — performance
 - ~~**`prefers-reduced-motion`**~~ ✅ **done 5 August.** Was honoured in 8 of the
   24 files importing `motion/react`, with Lenis ignoring it entirely.

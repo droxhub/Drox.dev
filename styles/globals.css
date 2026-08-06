@@ -99,42 +99,28 @@
 }
 
 @layer base {
-	:root {
-		--background: 0 0% 100%;
-		--foreground: 0 0% 3.9%;
-		--card: 0 0% 100%;
-		--card-foreground: 0 0% 3.9%;
-		--popover: 0 0% 100%;
-		--popover-foreground: 0 0% 3.9%;
-		--primary: 0 0% 9%;
-		--primary-foreground: 0 0% 98%;
-		--secondary: 0 0% 96.1%;
-		--secondary-foreground: 0 0% 9%;
-		--muted: 0 0% 96.1%;
-		--muted-foreground: 0 0% 45.1%;
-		--accent: 0 0% 96.1%;
-		--accent-foreground: 0 0% 9%;
-		--destructive: 0 84.2% 60.2%;
-		--destructive-foreground: 0 0% 98%;
-		--border: 0 0% 89.8%;
-		--input: 0 0% 89.8%;
-		--ring: 0 0% 3.9%;
-		--chart-1: 12 76% 61%;
-		--chart-2: 173 58% 39%;
-		--chart-3: 197 37% 24%;
-		--chart-4: 43 74% 66%;
-		--chart-5: 27 87% 67%;
-		--radius: 0.5rem;
-
-		/* The `subtitle` primitive in components/primitives.ts uses this
-		   unconditionally, but it was only ever defined inside `.dark` below — so
-		   in light mode the declaration was invalid and subtitle text fell back to
-		   whatever colour it inherited. Mirrors --muted-foreground (0 0% 45.1%) at
-		   the same 0.7 alpha the dark value uses. */
-		--reflect-sub: rgba(115, 115, 115, 0.7);
-	}
-
+	/*
+	 * Dark is the default, on `:root` itself — not only under `.dark`.
+	 *
+	 * next-themes adds `class="dark"` from an inline script; the server sends
+	 * plain `<html lang="en">`. While the light palette lived on `:root`, every
+	 * page load painted a **white page with black text** until that script ran.
+	 * On a fast desktop that is a blink; on a phone on mobile data it is the
+	 * first thing a visitor sees, and it was reported as "the site looks white".
+	 *
+	 * Putting the real palette on `:root` means there is nothing to flash from —
+	 * the correct colours apply from the first paint, with or without
+	 * JavaScript. `color-scheme: dark` comes with it so form controls, scrollbars
+	 * and the overscroll area match before the script runs too.
+	 *
+	 * `.dark` is kept alongside so the class next-themes adds still resolves,
+	 * and light moves to `.light`, which is the class it would add if the theme
+	 * switcher is ever restored. Light mode is currently unreachable from the UI
+	 * — see the P4 note on `--reflect-sub` — so nothing renders it today.
+	 */
+	:root,
 	.dark {
+		color-scheme: dark;
 		--background: 240 100% 4%;
 		--foreground: 0 0% 98%;
 		--card: 240 100% 4%;
@@ -159,7 +145,43 @@
 		--chart-3: 30 80% 55%;
 		--chart-4: 280 65% 60%;
 		--chart-5: 340 75% 55%;
+		--radius: 0.5rem;
 		--reflect-sub: rgba(239, 237, 253, 0.7);
+	}
+
+	.light {
+		color-scheme: light;
+		--background: 0 0% 100%;
+		--foreground: 0 0% 3.9%;
+		--card: 0 0% 100%;
+		--card-foreground: 0 0% 3.9%;
+		--popover: 0 0% 100%;
+		--popover-foreground: 0 0% 3.9%;
+		--primary: 0 0% 9%;
+		--primary-foreground: 0 0% 98%;
+		--secondary: 0 0% 96.1%;
+		--secondary-foreground: 0 0% 9%;
+		--muted: 0 0% 96.1%;
+		--muted-foreground: 0 0% 45.1%;
+		--accent: 0 0% 96.1%;
+		--accent-foreground: 0 0% 9%;
+		--destructive: 0 84.2% 60.2%;
+		--destructive-foreground: 0 0% 98%;
+		--border: 0 0% 89.8%;
+		--input: 0 0% 89.8%;
+		--ring: 0 0% 3.9%;
+		--chart-1: 12 76% 61%;
+		--chart-2: 173 58% 39%;
+		--chart-3: 197 37% 24%;
+		--chart-4: 43 74% 66%;
+		--chart-5: 27 87% 67%;
+
+		/* The `subtitle` primitive in components/primitives.ts uses this
+		   unconditionally, but it was only ever defined for dark — so in light
+		   mode the declaration was invalid and subtitle text fell back to whatever
+		   colour it inherited. Mirrors --muted-foreground (0 0% 45.1%) at the same
+		   0.7 alpha the dark value uses. */
+		--reflect-sub: rgba(115, 115, 115, 0.7);
 	}
 }
 
