@@ -108,19 +108,24 @@ export const aboutPage = {
 		subtitle:
 			"We are passionate creators and strategic thinkers dedicated to turning ambitious visions into extraordinary digital realities.",
 	},
+	/**
+	 * Company Profile p.11, both verbatim, and this is now the only copy of
+	 * them — `app/about/page.tsx` renders these rather than holding its own.
+	 *
+	 * It used to hold its own, while these keys sat here with completely
+	 * different placeholder text that nothing rendered. Editing them changed
+	 * nothing on the page, which is exactly the trap a config file is supposed
+	 * to avoid.
+	 */
 	mission: {
 		title: "Our Mission",
-		paragraphs: [
-			"Our mission is crystal clear: to empower smart brands with exceptional digital solutions that drive growth and create meaningful connections. We believe technology should serve people, not the other way around.",
-			"Every line of code we write, every design we craft, and every strategy we develop is centered around one goal—your success. We're not just service providers; we're your partners in building a digital future that matters.",
-		],
+		description:
+			"We help businesses solve real-world challenges through custom software, AI, automation, and digital solutions — combining business understanding with engineering excellence to deliver measurable, scalable, and long-term value.",
 	},
 	vision: {
 		title: "Our Vision",
-		paragraphs: [
-			"To be the catalyst that transforms ideas into digital masterpieces. We envision a world where every brand has the tools, insights, and support needed to create unforgettable online experiences that resonate deeply with their audience.",
-			"Through innovation, creativity, and unwavering dedication, we strive to set new standards in digital excellence and help our clients achieve remarkable success in their digital journey.",
-		],
+		description:
+			"To become the world's most trusted technology partner, empowering businesses through intelligent software, AI, automation, and digital innovation that transforms the way organizations operate, compete, and grow.",
 	},
 	values: {
 		title: "What Sets Us Apart",

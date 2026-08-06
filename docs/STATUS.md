@@ -70,7 +70,7 @@ seeded particle fields below.
 | 7-stage engineering process on `/services` | pp.15, 26 |
 | FAQ rewritten to 8 deal-blocking questions + FAQPage JSON-LD | — |
 | BreadcrumbList JSON-LD on `/work` and case studies | — |
-| TechStack, About vision, Projects heading rewritten | — |
+| TechStack, About vision, Projects heading rewritten | — (the vision rewrite was reverted 6 August — see below) |
 
 **Verified on a production server:** 10/10 routes 200 · exactly one `<h1>` per
 page · sitemap lists all 10 URLs · build, Biome and TypeScript clean.
@@ -853,6 +853,25 @@ claiming to be an icon resource. 59 KB → 4.5 KB.
   mockup is decorative, so its text should either read like a real note or stop
   being marketing copy about Drox. `aria-hidden` would not help — Google indexes
   it regardless.
+
+### Vision and Mission are the Company Profile's, verbatim — 6 August
+
+**Decided by the client. Do not reword either without them.**
+
+The P2 pass had rewritten the vision to *"To be the team businesses call first
+when software has to actually work — and to still be maintaining it five years
+later"*, on the grounds that "the world's most trusted technology partner" is
+unearned for a firm founded this year and makes a buyer discount the specific
+claims sitting beside it. That reasoning is still on the record and was put to
+the client on 6 August; they chose the profile wording, because a website
+saying something different from the Company Profile PDF a buyer is holding is
+the worse problem. Both now read exactly as p.11.
+
+**The trap that caused this to be missed:** the two statements were hardcoded in
+`app/about/page.tsx`, while `aboutPage.mission` and `aboutPage.vision` sat in
+`config/content.ts` holding *completely different* placeholder copy that nothing
+rendered. Editing the config changed nothing on the page. The page now reads
+from the config, and the config holds the profile text — one copy of each.
 
 ### The /about silk video now plays on mobile — 6 August
 

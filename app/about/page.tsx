@@ -18,6 +18,7 @@ import { title } from "@/components/primitives";
 import AmbientVideo from "@/components/ui/ambient-video";
 import CTAButton from "@/components/ui/cta-button";
 import SectionHeader from "@/components/ui/section-header";
+import { aboutPage } from "@/config/content";
 import { DURATION, STAGGER } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
@@ -105,14 +106,15 @@ export default function AboutPage() {
 									<Rocket className="text-white" size={32} />
 								</div>
 								<h2 className="text-3xl md:text-4xl font-medium text-white tracking-tight">
-									Our Mission
+									{aboutPage.mission.title}
 								</h2>
 							</div>
+							{/* Company Profile p.11, verbatim, and read from config so there
+							    is one copy of it — this page used to hold its own while
+							    `aboutPage.mission` sat in the config with different text that
+							    nothing rendered. */}
 							<p className="text-lg md:text-xl text-gray-200 font-normal leading-relaxed">
-								We help businesses solve real-world challenges through custom
-								software, AI, automation, and digital solutions — combining
-								business understanding with engineering excellence to deliver
-								measurable, scalable, and long-term value.
+								{aboutPage.mission.description}
 							</p>
 							<div className="absolute bottom-[-20%] right-[-10%] w-64 h-64 bg-violet-600/10 blur-[80px] rounded-full group-hover:bg-violet-600/20 transition-colors" />
 						</div>
@@ -141,15 +143,18 @@ export default function AboutPage() {
 									<Lightbulb className="text-white" size={32} />
 								</div>
 								<h2 className="text-3xl md:text-4xl font-medium text-white tracking-tight">
-									Our Vision
+									{aboutPage.vision.title}
 								</h2>
 							</div>
-							{/* Was "to become the world's most trusted technology partner" —
-							    unearned for a firm founded this year, and it made a buyer
-							    discount the claims that were true. */}
+							{/* Company Profile p.11, verbatim. A previous pass rewrote this to
+							    something more modest on the grounds that "the world's most
+							    trusted technology partner" is unearned for a firm founded this
+							    year — restored by the client's decision on 6 August, because
+							    the site saying something different from the Company Profile a
+							    buyer is holding is the worse problem. Do not reword it again
+							    without them. */}
 							<p className="text-lg md:text-xl text-gray-200 font-normal leading-relaxed">
-								To be the team businesses call first when software has to
-								actually work — and to still be maintaining it five years later.
+								{aboutPage.vision.description}
 							</p>
 							<div className="absolute bottom-[-20%] right-[-10%] w-64 h-64 bg-purple-600/10 blur-[80px] rounded-full group-hover:bg-purple-600/20 transition-colors" />
 						</div>
