@@ -70,9 +70,25 @@
 	transition: opacity 200ms ease;
 }
 
-.pc-card-wrapper:hover,
-.pc-card-wrapper.active {
-	--card-opacity: 1;
+/*
+ * Every `:hover` rule for the card is gated on a hover-capable pointer.
+ *
+ * A tap leaves `:hover` stuck on a touch screen, so on a phone tapping a card
+ * switched the behind-glow on permanently, froze the holographic sweep and
+ * killed the settle transition — all with the pointer position stuck at the
+ * centre, because the JS tilt no longer runs there. Upstream assumes hover
+ * exists.
+ *
+ * `.active` is included in the gate deliberately: it is added only by
+ * `handlePointerEnter`, which profile-card.tsx no longer attaches without a
+ * hover pointer, so on a touch device neither half can match and nothing is
+ * lost by scoping both.
+ */
+@media (hover: hover) and (pointer: fine) {
+	.pc-card-wrapper:hover,
+	.pc-card-wrapper.active {
+		--card-opacity: 1;
+	}
 }
 
 .pc-card {
@@ -93,10 +109,13 @@
 	overflow: hidden;
 }
 
-.pc-card:hover,
-.pc-card.active {
-	transition: none;
-	transform: translateZ(0) rotateX(var(--rotate-y)) rotateY(var(--rotate-x));
+/* Gated on a hover pointer — see the note above `.pc-card-wrapper:hover`. */
+@media (hover: hover) and (pointer: fine) {
+	.pc-card:hover,
+	.pc-card.active {
+		transition: none;
+		transform: translateZ(0) rotateX(var(--rotate-y)) rotateY(var(--rotate-x));
+	}
 }
 
 .pc-card-shell.entering .pc-card {
@@ -195,17 +214,22 @@
 	transition: opacity 0.8s ease;
 }
 
-.pc-card:hover .pc-shine,
-.pc-card.active .pc-shine {
-	filter: brightness(0.85) contrast(1.5) saturate(0.5);
-	animation-play-state: paused;
-}
+/* Gated on a hover pointer — see the note above `.pc-card-wrapper:hover`. This
+   is the group that froze the holographic sweep on a phone: a stuck `:hover`
+   left `animation-play-state: paused` on for good. */
+@media (hover: hover) and (pointer: fine) {
+	.pc-card:hover .pc-shine,
+	.pc-card.active .pc-shine {
+		filter: brightness(0.85) contrast(1.5) saturate(0.5);
+		animation-play-state: paused;
+	}
 
-.pc-card:hover .pc-shine::before,
-.pc-card.active .pc-shine::before,
-.pc-card:hover .pc-shine::after,
-.pc-card.active .pc-shine::after {
-	opacity: 1;
+	.pc-card:hover .pc-shine::before,
+	.pc-card.active .pc-shine::before,
+	.pc-card:hover .pc-shine::after,
+	.pc-card.active .pc-shine::after {
+		opacity: 1;
+	}
 }
 
 .pc-shine::before {

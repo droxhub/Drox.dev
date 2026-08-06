@@ -314,9 +314,29 @@ function ProfileCardComponent({
 		const pointerLeaveHandler = handlePointerLeave;
 		const deviceOrientationHandler = handleDeviceOrientation;
 
-		shell.addEventListener("pointerenter", pointerEnterHandler);
-		shell.addEventListener("pointermove", pointerMoveHandler);
-		shell.addEventListener("pointerleave", pointerLeaveHandler);
+		/*
+		 * The pointer tilt is desktop only.
+		 *
+		 * `pointerenter` and `pointermove` fire from a tap or a drag on a touch
+		 * screen, so the card tilted while someone was trying to scroll past it —
+		 * motion aimed by a pointer, on a device that has no pointer to aim it
+		 * with. Upstream leaves these attached everywhere.
+		 *
+		 * Same guard as `components/ui/specular-edge.tsx` uses, and read in the
+		 * effect rather than during render so the server and the first client
+		 * render still agree. The intro sweep below is left alone: it is a
+		 * one-time mount animation, not an interaction, and it is already withheld
+		 * under reduced motion by `enableTilt`.
+		 */
+		const canHover = window.matchMedia(
+			"(hover: hover) and (pointer: fine)",
+		).matches;
+
+		if (canHover) {
+			shell.addEventListener("pointerenter", pointerEnterHandler);
+			shell.addEventListener("pointermove", pointerMoveHandler);
+			shell.addEventListener("pointerleave", pointerLeaveHandler);
+		}
 
 		const handleClick = () => {
 			if (!enableMobileTilt || window.location.protocol !== "https:") return;

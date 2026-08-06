@@ -324,7 +324,7 @@ one row of six with the overlay `display: none`.
 ## Leadership section — ProfileCard
 
 The `/about` leadership grid uses React Bits' **ProfileCard**, ported to
-TypeScript at `components/ui/profile-card.tsx` with its CSS beside it. Four
+TypeScript at `components/ui/profile-card.tsx` with its CSS beside it. Five
 deviations from upstream, all commented at the point of change:
 
 - upstream's `:root` custom properties are scoped to `.pc-card-wrapper` —
@@ -337,6 +337,25 @@ deviations from upstream, all commented at the point of change:
 - `avatarFallback` renders initials. All four founders have photographs as of
   5 August, so nothing uses it today — kept as the honest fallback for a founder
   who joins before a portrait exists
+- **the whole hover treatment is desktop only**, added 6 August. Upstream assumes
+  a hover pointer exists. It does not on a phone, where `pointerenter` and
+  `pointermove` fire from a tap or a drag, so the card tilted while a reader was
+  trying to scroll past it, and `:hover` then *stuck* — leaving the behind-glow
+  on for good, the holographic sweep frozen on `animation-play-state: paused`,
+  and the settle transition disabled, all with the pointer stuck at the centre.
+
+  Two halves, and both are needed. `profile-card.tsx` attaches the three pointer
+  listeners only under `(hover: hover) and (pointer: fine)`, read inside the
+  effect so the server and first client render still agree. `profile-card.css`
+  gates all three `:hover` rule groups on the same query — including their
+  `.active` halves, which is safe because `.active` is added only by
+  `handlePointerEnter`, so on a touch device neither half can match.
+
+  The one-time intro sweep is deliberately left on: it is a mount animation
+  rather than an interaction, and `enableTilt` already withholds it under
+  reduced motion. Verified by tapping a card on an iPhone 13 profile — rotation
+  unchanged, `--card-opacity` still 0, sweep still `running` — while a desktop
+  hover still tilts (5.9deg / −4.9deg) and lights the glow.
 
 Site-specific styling lives in a marked block at the bottom of
 `profile-card.css`, under `.founder-profile-card`. It retunes the holographic
