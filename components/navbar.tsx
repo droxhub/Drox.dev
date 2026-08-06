@@ -179,9 +179,16 @@ export default function Navigation() {
 							className="select-none cursor-pointer hover:opacity-80 transition-opacity"
 							href="/"
 						>
+							{/* "Drox Dev", not "DROX Logo". Alt text describes what the
+							    image *is to the reader* — this one is the company name, and
+							    it is the only content of a link to the homepage, so it is
+							    also that link's accessible name. Google was rendering the
+							    search result headline as "DROX Logo", which is exactly this
+							    string; the old alt named the file's job rather than the
+							    brand. */}
 							<Image
 								priority
-								alt="DROX Logo"
+								alt="Drox Dev"
 								className="h-auto"
 								height={37}
 								src="/logo.png"

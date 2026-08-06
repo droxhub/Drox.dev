@@ -812,6 +812,48 @@ under `motion`. So the sequence a slow connection sees is now dark-but-empty
 rather than white-then-content. Fixing that means not starting hero content at
 zero opacity, which is a larger change than this one.
 
+### Favicon, and how the site looks in Google — 6 August
+
+**The favicon was invisible in search results.** The source mark is transparent
+RGBA and its arms fade to near-white; Google draws favicons on a **white** chip,
+so the white simply disappeared and the mark rendered as four unconnected violet
+dots. It read as a site with no favicon at all.
+
+`scripts/make-favicons.mjs` now builds all three from
+`assets/brand/mark.png` — run it and commit the output if the mark changes,
+don't hand-edit `public/`:
+
+| file | | |
+| --- | --- | --- |
+| `public/icon.png` | 512px | also serves as a PWA icon |
+| `public/apple-touch-icon.png` | 180px | iOS home screen, link-preview services |
+| `public/favicon.ico` | 16/32/48 | what Google fetches from `/favicon.ico` |
+
+Three things it fixes. The mark is composited onto **`#030014`**, which is
+`--color-canvas` — the chip reads as a piece of the site rather than a generic
+black square; keep it in step with that token. It gets **10% padding**, because
+Google, iOS and browser tabs all round or crop the corners and an edge-to-edge
+mark loses its tips. And `favicon.ico` is now a **real ICO**: it used to be
+`icon.png` under an `.ico` extension, byte-identical, PNG data in a file
+claiming to be an icon resource. 59 KB → 4.5 KB.
+
+**Two other things that search result exposed**, both still live in the DOM:
+
+- The headline read **"DROX Logo"**, which was the navbar logo's `alt` text
+  verbatim. Now `alt="Drox Dev"` — that image is the only content of a link to
+  the homepage, so it is that link's accessible name too. The `<title>` itself
+  has been correct since P1; Google's index is simply older than the rebuild,
+  which only went live on 5 August.
+- **The description was the hero mockup's placeholder copy** — "What is Drox
+  Dev? They specialize in modern web technologies and create stunning,
+  high-performance applications…", which is real indexable text inside
+  `components/NoteMockup.tsx`. Google preferred it to the meta description.
+  That is the generic agency language the copy work removed everywhere else,
+  and it is the second-largest block of prose on the homepage. **Open:** the
+  mockup is decorative, so its text should either read like a real note or stop
+  being marketing copy about Drox. `aria-hidden` would not help — Google indexes
+  it regardless.
+
 ### Priority 4 — performance
 - ~~**`prefers-reduced-motion`**~~ ✅ **done 5 August.** Was honoured in 8 of the
   24 files importing `motion/react`, with Lenis ignoring it entirely.

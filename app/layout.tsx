@@ -40,8 +40,19 @@ export const metadata: Metadata = {
 		description: siteConfig.description,
 		images: ["/og-image.jpg"],
 	},
+	/*
+	 * All three are built from `assets/brand/mark.png` by
+	 * `scripts/make-favicons.mjs` — run it and commit the output if the mark
+	 * changes; do not hand-edit the files in `public/`.
+	 *
+	 * `shortcut` is the `.ico`, which is what Google and older crawlers fetch
+	 * from `/favicon.ico` regardless of what is declared here. It is now a real
+	 * ICO holding 16/32/48; it used to be `icon.png` under an `.ico` extension.
+	 */
 	icons: {
 		icon: "/icon.png",
+		shortcut: "/favicon.ico",
+		apple: "/apple-touch-icon.png",
 	},
 };
 
