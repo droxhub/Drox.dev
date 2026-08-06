@@ -93,12 +93,15 @@ function StageStrip({
 				   shape is constant throughout. Desktop strips are ~105px wide when
 				   closed, where 32px is well clear of the clamp.
 
-				   `transform-gpu` is a separate Safari fix: WebKit does not reliably
-				   apply a rounded overflow clip to a composited child, and the two
-				   glows below carry `blur-[70px]`/`blur-[80px]`, so their square
-				   bounding boxes punch through the corner they sit in. Same fix and
-				   same reason as BusinessChallenges. */
-				className="group relative h-full w-full transform-gpu overflow-hidden rounded-tile text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas md:rounded-panel"
+				   The `clip-path` is a separate Safari fix, and has to match the radius
+				   above at both breakpoints. WebKit does not reliably apply a rounded
+				   *overflow* clip to a composited child, and the two glows below carry
+				   `blur-[70px]`/`blur-[80px]`, so their square bounding boxes punch
+				   through the corner they sit in — BusinessChallenges rendered with a
+				   square bottom-left on an iPhone for exactly this reason. Promoting
+				   this element with `transform-gpu` did not fix it there; a clip-path
+				   is applied to the layer itself, so it survives compositing. */
+				className="group relative h-full w-full overflow-hidden rounded-tile text-left [clip-path:inset(0_round_var(--radius-tile))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas md:rounded-panel md:[clip-path:inset(0_round_var(--radius-panel))]"
 				onClick={onActivate}
 				onFocus={onActivate}
 				onMouseEnter={onActivate}

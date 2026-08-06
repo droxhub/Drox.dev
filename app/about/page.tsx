@@ -85,7 +85,11 @@ export default function AboutPage() {
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 max-w-7xl w-full">
 					{/* Mission Card */}
 					<motion.div
-						className="relative group transform-gpu p-[1px] rounded-panel bg-gradient-to-br from-violet-500/20 to-transparent overflow-hidden shadow-2xl min-h-[400px]"
+						/* `clip-path` next to the `overflow-hidden`: this box holds a video
+						   and a blurred glow, both composited, and WebKit does not reliably
+						   apply a rounded *overflow* clip to a composited child — see the
+						   note on the HowWeWork stage button. */
+						className="relative group p-[1px] rounded-panel bg-gradient-to-br from-violet-500/20 to-transparent overflow-hidden [clip-path:inset(0_round_var(--radius-panel))] shadow-2xl min-h-[400px]"
 						initial={{ opacity: 0, scale: 0.95 }}
 						transition={{ duration: DURATION.slow }}
 						viewport={{ once: true, margin: "-100px" }}
@@ -123,7 +127,8 @@ export default function AboutPage() {
 
 					{/* Vision Card */}
 					<motion.div
-						className="relative group transform-gpu p-[1px] rounded-panel bg-gradient-to-br from-purple-500/20 to-transparent overflow-hidden shadow-2xl min-h-[400px]"
+						/* Same Safari clip fix as the Mission card above. */
+						className="relative group p-[1px] rounded-panel bg-gradient-to-br from-purple-500/20 to-transparent overflow-hidden [clip-path:inset(0_round_var(--radius-panel))] shadow-2xl min-h-[400px]"
 						initial={{ opacity: 0, scale: 0.95 }}
 						transition={{ duration: DURATION.slow, delay: 0.2 }}
 						viewport={{ once: true, margin: "-100px" }}

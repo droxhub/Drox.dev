@@ -20,6 +20,36 @@ const GROUP_ICONS: Record<string, LucideIcon> = {
 };
 
 /**
+ * The two card glows, painted as background gradients rather than blurred boxes.
+ *
+ * They used to be `rounded-full` spans anchored outside the card under
+ * `blur-[70px]`, pulled back inside by the parent's rounded `overflow-hidden`.
+ * On iOS that clip does not hold. Anything carrying a `filter` is composited,
+ * and WebKit does not reliably apply a rounded overflow clip to a composited
+ * child — so the glow's *square* bounding box painted straight through the
+ * corner it sits in, and the card rendered with three rounded corners and a
+ * square bottom-left, exactly where the violet glow is anchored. Promoting the
+ * clipping element with `transform-gpu` did not fix it on a real device.
+ *
+ * A radial gradient is the same shape with no filter. Nothing inside the card
+ * is composited, so there is nothing left to escape the clip — the corner is
+ * correct by construction rather than by compositor behaviour. It also drops
+ * two 70px blurs per card, on three cards, out of every paint.
+ *
+ * The geometry carries over exactly. A 256px disc at `-bottom-24 -left-20` puts
+ * its centre 48px in from the left and 32px up from the bottom; a 70px blur is
+ * a 35px sigma, so the falloff dies ~3 sigma past the disc edge, at 233px. The
+ * stops trace that Gaussian — flat through the core, half alpha at the disc
+ * edge (128px, 55% of the extent), tail to nothing.
+ */
+const GLOW_BOTTOM_LEFT =
+	"radial-gradient(circle 233px at 48px calc(100% - 32px), rgb(124 58 237 / 0.5) 0%, rgb(124 58 237 / 0.49) 25%, rgb(124 58 237 / 0.42) 40%, rgb(124 58 237 / 0.25) 55%, rgb(124 58 237 / 0.08) 70%, rgb(124 58 237 / 0) 100%)";
+
+/** Twin of the above: a 224px purple disc at `-right-16 -top-20`, same 70px blur. */
+const GLOW_TOP_RIGHT =
+	"radial-gradient(circle 217px at calc(100% - 48px) 32px, rgb(147 51 234 / 0.4) 0%, rgb(147 51 234 / 0.39) 19%, rgb(147 51 234 / 0.34) 35%, rgb(147 51 234 / 0.2) 52%, rgb(147 51 234 / 0.06) 68%, rgb(147 51 234 / 0) 100%)";
+
+/**
  * Company Profile p.12, near-verbatim.
  *
  * This sits directly under the hero because it is the section that makes a
@@ -82,33 +112,27 @@ export default function BusinessChallenges() {
 							    the top edge that gives the card its shape without a border.
 							    Clipped here rather than on the article so the specular canvas
 							    outside it survives. */}
-							{/*
-							 * `transform-gpu` is a Safari workaround, not decoration.
-							 *
-							 * WebKit does not reliably apply a rounded `overflow: hidden` clip
-							 * to a *composited* child, and anything carrying a filter is
-							 * composited — both glows below are `blur-[70px]`. The glow's square
-							 * bounding box then punches through the corner it sits in. On an
-							 * iPhone this card rendered with three rounded corners and a square
-							 * bottom-left, which is exactly where the violet glow is anchored
-							 * (`-bottom-24 -left-20`).
-							 *
-							 * Promoting the clipping element to its own layer makes WebKit apply
-							 * the rounded clip on the compositor, where the child already lives.
-							 * One layer per card, and the glows force a layer regardless.
-							 *
-							 * Not reproducible in headless Chromium or headless WebKit — neither
-							 * uses iOS's compositing path. Check this on a real device.
-							 */}
+							{/* `clip-path` alongside the `overflow-hidden`, because on iOS the
+							    overflow clip alone let the old blurred glows paint their square
+							    bounding boxes through the corners (see GLOW_BOTTOM_LEFT). The
+							    glows are gradients now and nothing here is composited, but a
+							    hover opacity transition can still promote a layer mid-flight,
+							    and clip-path is applied to the layer rather than in software. */}
 							<span
 								aria-hidden="true"
-								className="absolute inset-0 overflow-hidden rounded-panel transform-gpu"
+								className="absolute inset-0 overflow-hidden rounded-panel [clip-path:inset(0_round_var(--radius-panel))]"
 							>
 								<span className="absolute inset-0 bg-gradient-to-b from-card-top via-card-mid to-card-bottom" />
-								{/* Opacity only on hover, never `scale` — animating a 70px blur
-								    means recomputing it every frame, on three cards at once. */}
-								<span className="absolute -bottom-24 -left-20 h-64 w-64 rounded-full bg-violet-600/50 opacity-30 blur-[70px] transition-opacity duration-slow group-hover:opacity-70" />
-								<span className="absolute -right-16 -top-20 h-56 w-56 rounded-full bg-purple-600/40 opacity-20 blur-[70px] transition-opacity duration-slow group-hover:opacity-50" />
+								{/* Opacity only on hover, never `scale` — animating a gradient's
+								    geometry means repainting it every frame, on three cards. */}
+								<span
+									className="absolute inset-0 opacity-30 transition-opacity duration-slow group-hover:opacity-70"
+									style={{ backgroundImage: GLOW_BOTTOM_LEFT }}
+								/>
+								<span
+									className="absolute inset-0 opacity-20 transition-opacity duration-slow group-hover:opacity-50"
+									style={{ backgroundImage: GLOW_TOP_RIGHT }}
+								/>
 								<span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-400/50 to-transparent transition-opacity duration-slow group-hover:via-violet-400/80" />
 							</span>
 

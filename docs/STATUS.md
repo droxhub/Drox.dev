@@ -862,24 +862,46 @@ violet glow is anchored (`-bottom-24 -left-20`, `blur-[70px]`).
 
 **WebKit does not reliably apply a rounded `overflow: hidden` clip to a
 composited child, and anything carrying a `filter` is composited.** The glow's
-square bounding box punches straight through the corner. `transform-gpu`
-(`translateZ(0)`) on the *clipping* element promotes it to its own layer, so the
-rounded clip is applied on the compositor where the child already lives.
+square bounding box punches straight through the corner.
 
-Applied to all three places with the same shape — a rounded `overflow-hidden`
-box containing a blurred child:
+**First attempt — `transform-gpu` on the clipping element. It did not work.**
+The theory was that promoting the clipper to its own layer would make WebKit
+apply the rounded clip on the compositor, where the child already lives. A
+second device screenshot showed the square corner unchanged. Do not reach for
+`translateZ(0)` for this again.
 
-| | clipping element | glow corner |
+**The fix that holds: take the filter away.** In `BusinessChallenges` the two
+glows are now `radial-gradient` backgrounds instead of `rounded-full` spans
+under `blur-[70px]`. A gradient is the same shape with no filter, so nothing in
+the card is composited and there is nothing left to escape the clip — the corner
+is correct by construction rather than by compositor behaviour. It also drops
+two 70px blurs per card, on three cards, out of every paint.
+
+The geometry maps over directly, and the constants at the top of the component
+show the working: a 256px disc at `-bottom-24 -left-20` centres 48px in from the
+left and 32px up from the bottom, and a 70px blur is a 35px sigma, so the
+falloff ends ~3 sigma past the disc edge. The stops trace that Gaussian — flat
+through the core, **half** alpha at the disc edge, tail to nothing. Rendered
+side by side in headless WebKit the two versions differ by a mean of 1.3/255 per
+channel and never by more than 10.
+
+Where the blur cannot be removed — a `<video>`, a `backdrop-blur` — the clip
+itself is hardened with `clip-path: inset(0 round <radius>)` next to the
+`overflow-hidden`. A clip-path applies to the layer rather than in software, so
+it survives compositing. It has to be kept in step with the radius by hand,
+including at every breakpoint where the radius changes:
+
+| | clipping element | why it is still composited |
 | --- | --- | --- |
-| `BusinessChallenges` | the inner surface `<span>` | bottom-left |
-| `HowWeWork` | the stage `<button>` | bottom-left (desktop only — the glows are `hidden md:block`) |
-| `/about` mission + vision | the `p-[1px]` gradient-border wrapper | bottom-right |
+| `BusinessChallenges` | the inner surface `<span>` | nothing, now — belt and braces for the hover opacity transition |
+| `HowWeWork` | the stage `<button>` | two `blur-[70px]`/`[80px]` glows, `hidden md:block`; radius changes at `md` |
+| `/about` mission + vision | the `p-[1px]` gradient-border wrapper | an `AmbientVideo` and a `blur-[80px]` glow |
 
-**It could not be reproduced in headless Chromium or headless WebKit** — neither
-uses iOS's compositing path, and both rendered the corner correctly before the
-fix. The only proof is a real device. If a rounded card ever shows one square
-corner again, look for a blurred child anchored to that corner before looking at
-the radius.
+**None of this reproduces in headless Chromium or headless WebKit** — neither
+uses iOS's compositing path, and both rendered the corner correctly even before
+the first fix. The only proof is a real device. If a rounded card ever shows one
+square corner again, look for a filtered, videoed or transformed child anchored
+to that corner before looking at the radius.
 
 ### Vision and Mission are the Company Profile's, verbatim — 6 August
 
