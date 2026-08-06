@@ -629,25 +629,51 @@ buttons that respond to focus), and the two genuinely open items above carry the
 ### The hero artwork's edges — fixed 5 August
 
 Reported from a phone: the black-hole video read as a lighter rectangle with
-visible left and right margins.
+visible margins down the left and right. **Two separate causes**, and the first
+fix addressed the wrong one — worth reading before touching this again.
 
-The artwork is a fixed 1200x800 composition scaled per breakpoint
-(`components/prototype-img.tsx`), so **at almost every viewport it is narrower
-than the screen** — measured side gaps of 20px at 640, 60px at 900, 120px at
-1440. Its own black is `rgb(4,0,20)`; the page behind it is `rgb(0,0,20)`. Four
-levels of red across a hard vertical edge: invisible on most monitors, obvious
-on an OLED phone in a dark room.
+**1. The visible one: the hero section's `px-5` was clipping the artwork.**
+`components/Hero.tsx` puts 20px of horizontal padding on the section, and the
+artwork's clipping container inherited it — 374px wide inside a 414px phone,
+leaving 20px of bare page background on each side. That is what the report was
+pointing at.
+
+The container now carries `-left-5 -right-5` to cancel that padding, and the
+wrapper above it is `overflow-x-visible overflow-y-clip` so the artwork can
+escape horizontally while still being clipped vertically, where it is 560px tall
+in a container sized by the mockup. `clip` on one axis with `visible` on the
+other is a legal pair; `hidden` is not — it forces the other axis to `auto` and
+would add a scroll container.
+
+**Negative margins rather than `w-screen`.** 100vw includes the scrollbar, so on
+a desktop with classic scrollbars it is wider than the page and would put back
+the horizontal overflow removed from the homepage the same day. The section's
+padding is `px-5` at every breakpoint, so cancelling it exactly needs no
+viewport units. **If that padding changes, this has to change with it.**
+
+**2. The subtle one: the video's black is not the page's black.** The artwork is
+a fixed 1200x800 composition scaled per breakpoint, so at most viewports it is
+narrower than the screen anyway — side gaps of 20px at 640, 60px at 900, 120px
+at 1440. Its own black is `rgb(4,0,20)`; the page is `rgb(0,0,20)`. Four levels
+of red across a hard edge: invisible on a monitor, visible on an OLED phone in a
+dark room.
 
 `.black-hole-video` in `styles/globals.css` fades the outer few percent of each
-edge, which removes the boundary without touching the composition. A narrow
-linear fade per axis composited with `mask-composite: intersect`, deliberately
-not one radial — a radial wide enough to reach the corners also dims the halo,
-which is the point of the artwork.
+edge. A narrow linear fade per axis composited with `mask-composite: intersect`,
+deliberately not one radial — a radial wide enough to reach the corners also
+dims the halo, which is the point of the artwork.
 
-**Verified by sampling pixels either side of the edge**, since this is a
-4/255 difference that eyeballing will not settle: the step is now ≤1 level at
-640, 900 and 1440, down from 4. The halo is unchanged, reduced motion still
-withholds playback (paused, 0 particles), and the mask applies in both modes.
+**Verified:** the artwork band is now exactly the viewport width at 390, 414,
+430, 640, 768, 1024 and 1440 with 0px gutters and no horizontal overflow; the
+colour step either side of the edge is ≤1 level, down from 4, sampled rather
+than eyeballed because 4/255 is not something looking at it will settle. Halo
+unchanged, reduced motion still withholds playback (paused, 0 particles).
+
+**The lesson: the first fix was measured against the wrong boundary.** Sampling
+was done either side of the *video element*, which is 840px wide and overflows
+the phone, so it found only the colour difference. The thing actually on screen
+was the *clipping container* two levels up, at 374px. Walk to the element that
+clips before deciding what a user is seeing.
 
 **Still open, and a design decision rather than a bug:** the scale sequence is
 `0.7 → sm:0.5 → md:0.65 → lg:0.85 → xl:1.0`. It is **not monotonic** — the

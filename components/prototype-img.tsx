@@ -147,9 +147,30 @@ function PrototypeImg() {
 	}, [reduceMotion]);
 
 	return (
-		<div className="flex flex-col justify-center items-center mx-auto relative w-full mb-[-200px] sm:mb-[-300px] md:mb-[-400px] lg:mb-[-500px] overflow-hidden">
-			{/* Black hole effect container */}
-			<div className="absolute top-0 w-full flex justify-center pointer-events-none overflow-hidden">
+		/* `overflow-x-visible overflow-y-clip` rather than `overflow-hidden`: the
+		   artwork below has to escape this box horizontally to reach the screen
+		   edges, but still needs clipping vertically, where it is 560px tall
+		   inside a container sized by the mockup. `clip` on one axis and
+		   `visible` on the other is a legal pair — `hidden` is not, it forces the
+		   other axis to `auto` and would add a scroll container. */
+		<div className="flex flex-col justify-center items-center mx-auto relative w-full mb-[-200px] sm:mb-[-300px] md:mb-[-400px] lg:mb-[-500px] overflow-x-visible overflow-y-clip">
+			{/*
+			 * Black hole effect container.
+			 *
+			 * `-left-5 -right-5` cancels the hero section's `px-5` so the artwork
+			 * runs to the screen edges. Without it this box is 374px wide inside a
+			 * 414px phone and the artwork is clipped 20px short on each side —
+			 * which reads as a lighter rectangle floating in a margin, because the
+			 * video's black is not quite the page's black.
+			 *
+			 * Negative margins rather than `w-screen`: 100vw includes the
+			 * scrollbar, so on a desktop with classic scrollbars it is wider than
+			 * the page and would put back the horizontal overflow that was just
+			 * removed from the homepage. The section's padding is `px-5` at every
+			 * breakpoint, so cancelling it exactly needs no viewport units at all.
+			 * If that padding ever changes, this has to change with it.
+			 */}
+			<div className="absolute top-0 -left-5 -right-5 flex justify-center pointer-events-none overflow-hidden">
 				<div className="origin-top scale-[0.7] sm:scale-[0.5] md:scale-[0.65] lg:scale-[0.85] xl:scale-[1.0]">
 					<div className="relative w-[1200px] h-[800px] flex items-center justify-center">
 						{/* Center video. No `autoPlay` attribute: playback is started from
