@@ -312,14 +312,375 @@ so every toggle rebuilt GooeyNav's large inline `<style>` block. It is
 `React.memo`'d now, and the array props it takes are hoisted to module scope so
 the memo can actually hit. Close was smooth throughout (0 dropped frames).
 
-`GooeyNav` is desktop-only again — it is no longer rendered below `md`, so the
-wrap workaround added earlier was reverted.
+`GooeyNav` is desktop-only again — it is no longer rendered below `lg` (see the
+next section; it was `md` until 31 August), so the wrap workaround added earlier
+was reverted.
 
 Verified at 390 and 320px: six links present, no horizontal overflow, no
 hydration errors; overlay inert when closed (0 tabbable links, `aria-hidden`)
 and live when open (6); scroll locked at 4520px while open and restored after;
 Escape returns focus to the toggle; sticky CTA hidden while open. Desktop still
 one row of six with the overlay `display: none`.
+
+### The hero is a lamp now — 31 August 2026
+
+**Decided by the client.** The black-hole video and the scrolling note mockup
+are both gone, replaced by Aceternity's Lamp effect, inverted so the beam shines
+*upward* from under the CTA row. `components/ui/lamp.tsx`.
+
+Deleted with them: `prototype-img.tsx`, `HeroScrollDemo.tsx`, `NoteMockup.tsx`,
+`ui/container-scroll-animation.tsx`, `public/video/black-hole.webm` (265 KB),
+`fromCentre()` in `lib/utils.ts`, and ~255 lines of CSS — eight `@keyframes`
+(spin, twinkle, drift, toCenter, orbit, spiral, gravity, pulse) and every
+`.black-hole-*` / `.space-dot-*` rule.
+
+**Two things that fixes for free.** The homepage lost the `md:mt-[350px]` that
+existed only to clear artwork bleeding out of the hero's box — desktop page
+height went 11,730px → 9,876px, and a landscape phone no longer scrolls through
+three and a half blank screens to reach the first section. And the SEO problem
+in the favicon note below is gone at the source: the meta description Google
+preferred was `NoteMockup`'s placeholder prose, which no longer exists.
+
+**`@keyframes pulse` went with them, and that is a behaviour change.** It was
+defined at the top level, so it overrode Tailwind's own `pulse` — the
+`animate-pulse` dot on `/about` was running this file's opacity+scale version,
+not Tailwind's. It now gets Tailwind's. Nothing else used it.
+
+#### Porting the lamp: three things that cost a rebuild each
+
+The component carries the full reasoning; the short version, because each of
+these looked right in code and wrong on screen:
+
+1. **Upstream positions every layer from the container's vertical centre**
+   (`inset-auto` + `-translate-y-[Nrem]`), with the filament landing at
+   `centre − 7rem`. Ported naively, the cone's apex ended up 14rem from the
+   filament and the lamp rendered as a shapeless bloom. Every layer now declares
+   its `top` as an offset from one `--bar` line, with the conversion table in
+   the file.
+2. **The bar has to be a fixed offset, not a percentage.** The cone is a fixed
+   14rem; against a percentage bar its far end lands at 70% of the 32rem desktop
+   box but 99% of the 19rem mobile one, where the box edge cut it flat.
+3. **`scale-x-*` cannot be the responsive dial.** `mask-image` on the group
+   brings `mask-clip: border-box`, which clips the group's paint to its own box;
+   the scale then shrinks *that*, and the whole lamp rendered as a hard-edged
+   242px rectangle. Widths are responsive classes and the intro animates
+   `scaleX` instead of `width` — which also stops four elements doing layout on
+   every frame.
+
+#### `bg-background` is a dead class in this project — and it is on `<body>`
+
+The end cap has to be *exactly* the page colour or the lamp reads as a panel on
+the page. Two wrong answers shipped here in turn before the right one:
+
+- **`bg-canvas`** is `#030014` = `rgb(3,0,20)`, against a page of `rgb(0,0,20)`.
+  Three levels of red: invisible on a monitor, plain on an OLED phone in a dark
+  room. **`--color-canvas` is not the page colour** — worth knowing generally.
+- **`bg-background`** resolves to **`rgba(0,0,0,0)`**. `background` is defined in
+  `theme.extend.colors` in `tailwind.config.js`, which is a **Tailwind v3** file;
+  this project is v4, driven by the `@theme` block in `styles/globals.css`, and
+  there is no `@config` directive loading the JS config. So the utility produces
+  nothing. It is also on `<body>` in `app/layout.tsx:111` and does nothing there
+  — the body is painted by a raw `background-color: hsl(var(--background))` rule
+  in globals.css, which is why nobody noticed.
+
+The lamp holds the real value in `--lamp-page: hsl(var(--background))`. **Anything
+else in `tailwind.config.js`'s `colors` block is equally dead** and should be
+assumed so until checked.
+
+A transparent cap is not a subtle failure, either: it is what let the cone's own
+outer edge show as a hard line, and what let the bloom spill out of the *back* of
+the lamp — light on the far side of its own reflector.
+
+#### What the beam is made of, after the port
+
+Upstream covers the cone's hard edges with opaque page-coloured rectangles and
+masks *those*. That leaves the edge underneath, covered rather than removed —
+measured at 1280px, a one-pixel step from `rgb(0,0,20)` to `rgb(4,2,26)` at
+x=160, exactly 30rem out from centre. The mask is on the cone itself now, so the
+edge is deleted rather than hidden, and four colour-matched layers went with it,
+along with upstream's base softener and `backdrop-blur` strip, which the
+group-wide fade already made redundant.
+
+Beam width is responsive (`BEAM_W`) and the outer fade is a percentage, because
+the cone is *two* halves side by side: at upstream's flat 30rem the pair is 960px
+and a 390px phone sees only its bright middle, edge to edge.
+
+**Verified** at 1440×900, 844×390 and 390×844: no horizontal overflow on any
+route, no page or console errors, and a vertical pixel scan down five columns of
+the lamp box finds **no step other than the filament itself** — 166,132,255 →
+0,0,20, the deliberate 2px line — with every other edge at ≤4/255, which is
+gradient banding. Build, Biome, ESLint and TypeScript clean.
+
+**Open:** the hero has no product imagery at all now. The mockup was the only
+thing on the homepage showing software, and the audit's case for it still
+stands — the lamp is atmosphere, not proof. `/work` carries that load alone.
+
+### The lamp gained a floor, and the Problem cards a panel — 31 August 2026
+
+Both from client reference images.
+
+#### The lamp reads as a light standing on something
+
+Three layers, and the middle one reverses a decision made earlier the same day:
+
+1. **The filament is white** (`--lamp-hot`), not violet. A real source blows out
+   to white and only the spill carries the hue; a violet filament reads as a
+   violet line rather than as something emitting.
+2. **A white blow-out hugs the bar** — wide, short, `rounded-[100%]` so it stays
+   an ellipse at any width instead of reading as a third round blob.
+3. **A floor reflection below the bar.** The end cap was added to stop the beam
+   spilling symmetrically out of the *back* of the lamp, which is the one thing
+   a lamp cannot do, and that is still right — but a reflection off the surface
+   *under* it is exactly what a lamp does, and it is what the reference has that
+   a bare cap-and-cone does not. So it sits **above** the cap at `z-[45]`, where
+   the bloom sits below it at `z-20`: dimmer, much shorter, and an ellipse
+   anchored at the bar's centre so it falls off sideways as well as down.
+
+Verified: the only vertical pixel step in the whole lamp is still the filament
+itself, now `255,255,255 → 50,41,88` — white line onto the reflection rather
+than onto bare page, which is the reflection proving it renders.
+
+#### BusinessChallenges — streaming pills, fourth and current
+
+**The editorial version below was also rejected: "it still look like document".**
+Correct, and it took three rejections to see why: **fifteen short phrases stacked
+vertically are list-shaped whatever chrome is on them.** Dashed boxes → violet
+cards with an inset panel → statements on hairlines; every pass restyled the
+list instead of changing it. Removing the boxes did not help because the boxes
+were never the problem.
+
+**So the form changed.** Each group is now a horizontal marquee of pills moving
+at its own speed, alternating direction — a reader scans across rather than
+reading down, and it reads as a run of real complaints going past. Driven by
+`LogoLoop`, the same marquee `TechStack` uses, with `renderItem` making the
+items pills instead of logos. Content still untouched: all 15, verbatim.
+
+**~1630px of vertical list became 815px.**
+
+Three things that decide whether this keeps working:
+
+- **Do not turn it back into rows of text.** The levers are pill size, row gap
+  and the three speeds.
+- **It must be full-bleed, and it is the one homepage block NOT wrapped in
+  `app/page.tsx`'s gutter `<div>`.** Boxed to `max-w-7xl` the rows began and
+  ended 80px in from each side on a 1440 screen and read as three cropped
+  strips — a stream that visibly starts and stops is not a stream. The component
+  applies the same `px-4 sm:px-6` to its own header so the text still lines up
+  with every other section, and carries `overflow-x-clip` so the rows cannot
+  push the page sideways. **This is a deliberate exception to "the page owns the
+  gutter"** — the only other one is the hero's lamp.
+- **Three different speeds, not one.** Three rows moving together at the same
+  rate read as a single block sliding.
+- **The group label sits beside the stream from `md` up, not above it.** Stacked,
+  each group was two elements and the section was six of them in a column — the
+  eye had to work out which caption owned which row, and on a phone the labels
+  were most of what you saw. Beside it, the row reads as one statement:
+  "Operational → these problems", and the section came down from 815px to 707px.
+  Below `md` it stays above, because pinning a 9rem label to the left of a 390px
+  screen would leave 240px of stream. **`min-w-0` on the stream wrapper is load
+  bearing** — a flex child defaults to `min-width: auto`, which here is the
+  marquee's full content width, so without it the row refuses to shrink and
+  pushes the page sideways.
+
+`fadeOutColor` is `hsl(var(--background))` — **not** `var(--color-canvas)`,
+which is `rgb(3,0,20)` against the page's `rgb(0,0,20)`. `TechStack` passes
+`--color-canvas` and has the same latent three-level seam; it was left alone
+rather than changed unasked.
+
+Motion is covered: `LogoLoop` freezes its own track under
+`prefers-reduced-motion` (it reads the media query directly — see the effect at
+the top of the file), and `pauseOnHover` stops the row under the pointer.
+
+##### The editorial version it replaced (superseded, kept for the reasoning)
+
+**The card version below was rejected: "still looks like AI slop and like a
+document".** That is the right read. A card containing a panel containing a
+ruled list *is* a document — box-in-box is the shape of a form, the centred
+violet rounded-square icon tile is the most template-looking element on the
+internet, and five identically weighted rows read as an inventory. None of that
+is recognition, which is this section's entire job.
+
+**The chrome is gone.** Per group: a ghosted numeral, the group name at display
+size, and the pains as full-width statements on hairlines, in a
+`[16rem_1fr]` / `[20rem_1fr]` two-column row that stacks on mobile. Editorial
+rather than dashboard. Content still untouched — all 15, verbatim.
+
+The only decoration is a rule that grows from 0 to 24px as the pointer crosses a
+row, in a fixed-width slot so the statement beside it never moves, plus the text
+going gray-400 → white. Verified live: `dashW 0 → 24`, colour → `rgb(255,255,255)`.
+
+Three things worth keeping:
+
+- **Do not put it back in a card.** If it needs more presence the levers are
+  type scale, the numeral's weight and the row rhythm — not a surface behind it.
+- **The list is top-aligned, not `self-center`.** Centred, it floated against a
+  column of dead space under the group name. `-mt-2 md:-mt-3` puts the first
+  statement on the numeral's line.
+- **It is taller than the cards were** — 1634px vs 978px at 1440. That is the
+  cost of the format and it was accepted; the first pass was 1862px before the
+  padding was trimmed. The page overall is still ~1850px shorter than it was
+  before the black hole came out.
+
+`max-w-6xl`, not the `7xl` the cards used: a single column of statements needs a
+reading measure, and 1280px of it runs the eye off the end of every line.
+
+**Two things are now dead and awaiting a decision.** `SpecularEdge` has no
+callers, and `ogl` — which only that component imports — is an unused dependency
+again, reversing the note further down that said it had become a used one. Both
+are still in the tree. The section also dropped `overflow-x-clip`, which existed
+solely because the specular canvas was inset -20px past each card's edge.
+
+##### The card version it replaced (superseded, kept for the reasoning)
+
+**Styling only. Every one of the 15 pain points from Company Profile p.12 is
+still there, unchanged — decided with the client**, along with leaving the
+"trim to 3 per group" question open (see the note further down; the reference's
+decorative mockup widgets were declined because their labels would have to be
+invented and most of the profile copy would be lost).
+
+- The icon tile moved from beside the group name to **above** it, both centred.
+  The name is now the card's own title rather than a label on a list, which is
+  what gives the row of three its symmetry.
+- The pains sit in their **own inset panel** — a flat white wash at 3% over the
+  card's gradient, so it lifts without introducing a second colour. Two surfaces
+  reading as one object is what makes the card look built rather than filled.
+
+##### The colour came back off again, by decision
+
+The first pass kept the deep violet surface and both permanent glows under the
+new layout, and three of those side by side were the most saturated thing on the
+site — the gradients muddied into each other rather than lighting anything.
+**The client asked for simpler**, so:
+
+| | was | now |
+| --- | --- | --- |
+| surface | `from-card-top via-card-mid to-card-bottom` (deep violet) | `from-surface-muted to-surface` (near-black) |
+| glows | two, permanent, `opacity-30`/`opacity-20` | **one**, top-centre, `opacity-0` until hover |
+| top hairline | `via-violet-400/50` | `via-white/15`, violet only on hover |
+| specular rim | `#2a1a52` | `#1a1830` |
+| hover shadow | `shadow-violet-950/50` | `shadow-black/40` |
+
+Violet is now held back for the icon tile and the row dots, which is where it
+does work. The cards also sit properly beside the `ServiceCards` and `FAQ`
+surfaces directly below them, which were already near-black.
+
+**This is a deliberate divergence from the shared "stunning" surface**, which
+the note further down describes as one language across `BusinessChallenges`,
+the `HowWeWork` panels and the `/about` mission cards. Those two keep the deep
+violet and **should**: in `HowWeWork` the violet is what separates the one open
+stage from the six closed rows — the note below records that dropping its glows
+made the open stage "read as near-black, barely distinguishable from a closed
+row". There the colour carries state. On three equal Problem cards it carried
+nothing, so removing it costs no meaning and keeps violet meaningful elsewhere.
+**If the mission cards are ever simplified too, `HowWeWork` is not the one to
+follow them.**
+
+**The glow must stay a `radial-gradient`, never a blurred span** — unchanged and
+not negotiable. See the iOS square-corner note below: anything with a `filter`
+is composited, and WebKit will not hold a rounded overflow clip on a composited
+child.
+- `min-h-[2lh]` on the title. "Customer Experience" wraps where the others do
+  not, and without it that card's panel starts a line lower than its neighbours'
+  — the one thing that breaks a row of three identical cards. `lh` degrades to
+  natural height where unsupported, which is the behaviour it replaces.
+
+**The grid is `lg:grid-cols-3`, not `md:`.** At `md` the columns were 185px on a
+768 tablet and 244px on an 844 landscape phone, wrapping every row to two, three
+or four lines and hyphenating "self-service". Same correction as the navbar's,
+for the same reason: 768px is a tablet width, not a desktop one, and a landscape
+phone lands in it. Measured after: 405px columns at 1440, 304px at 1024, one
+full-width card below that, panels aligned top and bottom at both desktop sizes.
+
+Nothing in the iOS corner work was touched — the glows are still radial
+gradients, the surface still carries `clip-path` beside its `overflow-hidden`,
+the article still has no `overflow-hidden` of its own, and the section still has
+`overflow-x-clip`. Re-swept all 130 route/viewport combinations after: 0
+overflow, 0 clipped text, 0 errors.
+
+### Responsive sweep — 31 August 2026
+
+**130 route/viewport combinations** — all 10 routes across 13 widths from 320px
+to 1920px, portrait and landscape, each scrolled top to bottom so in-view
+content mounts before measuring.
+
+**Clean:** 0 horizontal overflow, 0 text clipped inside its own box, 0 JS or
+console errors, 0 text under 12px. The nav switches at exactly the right place
+(hamburger to 1023px, the six-item row from 1024px) and the logo is 130×37 at
+every single width.
+
+Two defects found and fixed:
+
+| | |
+| --- | --- |
+| **Logo squeezed below ~354px** — 96px at 320, 116px at 340 | The same failure as the `md` one below, at the other end of the scale. The 320px bar has to hold a 130px logo, a 114px CTA and a 40px toggle — 288px with the gap — and `px-6` plus the nav's own `px-2` left only 256px. Now `px-3 sm:px-6` on the bar, `px-1 sm:px-2` on the nav and `gap-0.5 sm:gap-1` in the right slot. **The gutter gives way, not the logo.** |
+| **The hero headline broke mid-word** — "op / erations" at 320px, "o / perations" at 568px | `ColourfulText` returns a bare array of one `inline-block` span per character, so the browser treats every letter as its own item and may break the line inside the word. Wrapped in `inline-block whitespace-nowrap`. |
+
+**Three findings dismissed, with the measurement:**
+
+- **19 touch targets under 24px** on every route (footer links, 20–23px tall).
+  SC 2.5.8's spacing exception applies and was checked properly rather than
+  assumed — a 24px circle centred on each target's box against every other
+  target: **0 intersections** at 320, 390 and 844px. It passes.
+- **The footer's `grid-cols-2 sm:grid-cols-1`** looks like inverted responsive
+  behaviour but is deliberate: two short columns of link labels on a phone, one
+  per section from `sm`. 144px columns holding "Home" and "About" are not
+  cramped.
+- **FAQ questions wrap to 4–6 lines at 320/360px.** That is what a 288px column
+  does to a 60-character question; nothing is clipped or overflowing.
+
+The sweep script pattern is worth repeating: measure `scrollWidth - innerWidth`
+for overflow, then only attribute it to elements whose ancestors do **not** clip
+overflow-x — without that filter every decorative blob inside an
+`overflow-x-clip` section reports as an offender and the real signal is buried.
+
+### The nav split is `lg`, not `md` — 31 August 2026
+
+Reported from a phone held in landscape: **the logo was gone from the navbar.**
+
+The desktop row appeared at `md` (768px), and a landscape phone is 844–932px
+wide — so it got the desktop nav in a 390px-tall window. The bar's three slots
+are all `flex-1`, i.e. `flex: 1 1 0%`. The six-item row is 691px and cannot
+shrink (nowrap items), the CTA is ~122px, and the bar's own padding is 48px, so
+below ~1002px the only slot with anywhere to give is the logo's. Measured, at
+the widths that matter:
+
+| viewport | logo image |
+| --- | --- |
+| 768 · 800 · 844 | **0px — clipped away entirely by the bar's `overflow-hidden`** |
+| 900 | 37px |
+| 932 | 69px |
+| 960 | 97px |
+| 1000 | 129px |
+| 1024+ | 130px |
+
+**Fixed by moving the whole split to `lg`** (1024px — the first Tailwind step at
+or above the measured 1002px), not by shrinking anything: below `lg` a landscape
+phone now gets the hamburger and the full-screen overlay, with the logo at its
+full 130px. Seven classes in `components/navbar.tsx` moved together — the pill's
+padding, background and border, the logo and CTA fade, the centred row, the
+hamburger, and the overlay. **They are one switch; changing one without the
+others splits the navbar in half.** The logo slot also carries `shrink-0` now,
+so the row can never squeeze it again even at `lg`.
+
+**The overlay had to be made to fit a short viewport.** It is 112px of top
+padding (clearing the nav pill) plus six 52px rows plus 40px below — 464px in a
+390px-tall screen, so the last rows sat off-screen behind its `overflow-y-auto`.
+Under `[@media(max-height:520px)]` the list is a **two-column grid**: three rows
+per column, 308px, no scrolling. Keyed on height rather than the `landscape`
+variant, which a desktop monitor also matches. Row order across the grid is DOM
+order, so the tab order and what a screen reader announces are unchanged.
+
+**Verified** at 667×375, 844×390, 932×430, 390×844 and 1024×768: logo 130×37 at
+every one, hamburger present below `lg` and absent at `lg`, the open menu fits
+with no scrolling and all six rows ≥52px (over the 44px SC 2.5.8 minimum), 6
+tabbable links, no horizontal overflow on any of the 7 routes, no page errors.
+Build, Biome, ESLint and TypeScript clean.
+
+**The sticky mobile CTA stays `md:hidden`, deliberately** — it was not moved to
+`lg` with the rest. An 80px bar would take 20% of a 390px landscape screen, and
+the navbar's own "Book a call" is visible at every width, so nothing is lost.
+`app/layout.tsx`'s `pb-20 md:pb-0` is the reservation for that bar and matches it
+exactly; the two have to stay on the same breakpoint as each other.
 
 ## Leadership section — ProfileCard
 
