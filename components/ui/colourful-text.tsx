@@ -31,26 +31,38 @@ export default function ColourfulText({ text }: { text: string }) {
 		return () => clearInterval(interval);
 	}, []);
 
-	return text.split("").map((char, index) => (
-		<motion.span
-			key={`${char}-${count}-${index}`}
-			animate={{
-				color: currentColors[index % currentColors.length],
-				y: [0, -3, 0],
-				scale: [1, 1.01, 1],
-				filter: ["blur(0px)", `blur(5px)`, "blur(0px)"],
-				opacity: [1, 0.8, 1],
-			}}
-			className="inline-block whitespace-pre font-sans tracking-tight"
-			initial={{
-				y: 0,
-			}}
-			transition={{
-				duration: DURATION.slow,
-				delay: index * 0.05,
-			}}
-		>
-			{char}
-		</motion.span>
-	));
+	/**
+	 * The wrapper is load bearing. Each character is its own `inline-block`, so
+	 * without it the browser treats every letter as a separate item and may break
+	 * the line *inside* the word — the hero headline read "op / erations" at
+	 * 320px and "o / perations" at 568px. `whitespace-nowrap` keeps the word
+	 * whole; `inline-block` makes it one item that wraps to the next line
+	 * together, rather than one that is allowed to hang past the edge.
+	 */
+	return (
+		<span className="inline-block whitespace-nowrap">
+			{text.split("").map((char, index) => (
+				<motion.span
+					key={`${char}-${count}-${index}`}
+					animate={{
+						color: currentColors[index % currentColors.length],
+						y: [0, -3, 0],
+						scale: [1, 1.01, 1],
+						filter: ["blur(0px)", `blur(5px)`, "blur(0px)"],
+						opacity: [1, 0.8, 1],
+					}}
+					className="inline-block whitespace-pre font-sans tracking-tight"
+					initial={{
+						y: 0,
+					}}
+					transition={{
+						duration: DURATION.slow,
+						delay: index * 0.05,
+					}}
+				>
+					{char}
+				</motion.span>
+			))}
+		</span>
+	);
 }
