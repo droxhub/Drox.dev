@@ -154,7 +154,7 @@ export default function Navigation() {
 		<>
 			<motion.nav
 				animate={{ y: scrollDir === "down" ? -100 : 0 }} // move out when scrolling down
-				className="fixed top-0 left-0 right-0 z-40 transition-all duration-base mt-5 px-2 md:px-0"
+				className="fixed top-0 left-0 right-0 z-40 transition-all duration-base mt-5 px-1 sm:px-2 lg:px-0"
 				initial={{ y: 0 }}
 				transition={{ duration: DURATION.base, ease: EASE.standard }}
 			>
@@ -163,15 +163,23 @@ export default function Navigation() {
 				    in a bordered pill floating on an otherwise plain overlay. `border`
 				    stays applied and only its colour changes, so nothing shifts. */}
 				<div
-					className={`max-w-7xl mx-auto px-6 flex items-center justify-between border rounded-card h-20 overflow-hidden transition-colors duration-fast md:bg-surface-nav md:border-white/10 ${
+					/* `px-3` below `sm`, `px-6` from there. At 320px the bar has to hold
+					   the 130px logo, the 114px CTA and the 40px toggle — 288px with the
+					   4px gap — and `px-6` plus the nav's own `px-2` left only 256px, so
+					   the logo was squeezed to 96px. Same failure as the `md` one below,
+					   at the other end of the scale. The gutter gives way, not the logo. */
+					className={`max-w-7xl mx-auto px-3 sm:px-6 flex items-center justify-between border rounded-card h-20 overflow-hidden transition-colors duration-fast lg:bg-surface-nav lg:border-white/10 ${
 						isOpen
 							? "bg-transparent border-transparent"
 							: "bg-surface-nav border-white/10"
 					}`}
 				>
-					{/* Logo */}
+					{/* Logo. `shrink-0` so the six-item row can never squeeze it: the
+					    three slots are `flex-1`, and a `flex: 1 1 0%` box whose content is
+					    an image will happily go to zero width. Below `lg` the row is not
+					    rendered at all, so this only ever has to hold at `lg`+. */}
 					<div
-						className={`flex-1 flex items-center transition-opacity duration-fast md:opacity-100 md:pointer-events-auto ${
+						className={`flex-1 shrink-0 flex items-center transition-opacity duration-fast lg:opacity-100 lg:pointer-events-auto ${
 							isOpen ? "opacity-0 pointer-events-none" : ""
 						}`}
 					>
@@ -197,8 +205,15 @@ export default function Navigation() {
 						</Link>
 					</div>
 
-					{/* Centered Menu */}
-					<div className="flex-1 hidden md:flex justify-center">
+					{/* Centered Menu.
+
+					    `lg`, not `md`. The six-item row is 691px wide and cannot shrink;
+					    with the logo (130px) and the CTA beside it the bar needs ~1002px
+					    before the logo stops being squeezed. At `md` (768px) the logo was
+					    crushed to 0px and disappeared entirely — which is exactly what a
+					    landscape phone gets (844 / 915 / 932px wide). Below `lg` this is
+					    the hamburger and the full-screen overlay instead. */}
+					<div className="flex-1 hidden lg:flex justify-center">
 						<div className="relative flex items-center justify-center h-12">
 							<GooeyNav
 								animationTime={600}
@@ -216,12 +231,14 @@ export default function Navigation() {
 					{/* Primary CTA — visible at every breakpoint. It was previously
 					    `hidden md:inline-flex`, which left mobile visitors with no way to
 					    contact the company from the first screen. */}
-					<div className="flex-1 flex justify-end items-center gap-1">
+					{/* `gap-0.5` below `sm` buys back the last 2px the 320px bar needs to
+					    hold the logo at its full 130px. */}
+					<div className="flex-1 flex justify-end items-center gap-0.5 sm:gap-1">
 						{/* Was styled by `neumorphic-button`, a class defined nowhere in the
 						    repo — so this rendered as unstyled text. Same component as every
 						    other button on the site now, at the compact size. */}
 						<CTAButton
-							className={`whitespace-nowrap transition-opacity duration-fast md:ml-2 md:opacity-100 md:pointer-events-auto ${
+							className={`whitespace-nowrap transition-opacity duration-fast lg:ml-2 lg:opacity-100 lg:pointer-events-auto ${
 								isOpen ? "opacity-0 pointer-events-none" : ""
 							}`}
 							href={navigation.contactButton.href}
@@ -235,7 +252,7 @@ export default function Navigation() {
 							aria-controls="mobile-nav"
 							aria-expanded={isOpen}
 							aria-label={isOpen ? "Close menu" : "Open menu"}
-							className="md:hidden text-white p-2 rounded-control focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+							className="lg:hidden text-white p-2 rounded-control focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
 							onClick={() => setIsOpen(!isOpen)}
 							ref={toggleRef}
 							type="button"
@@ -263,7 +280,7 @@ export default function Navigation() {
 				   Opaque, with no `backdrop-blur`: blurring a full-screen layer cost
 				   an extra 16ms on the worst frame, and the reference is flat colour
 				   anyway. */
-				className={`fixed inset-0 z-30 bg-surface-deep md:hidden ${
+				className={`fixed inset-0 z-30 bg-surface-deep lg:hidden ${
 					reduceMotion ? "" : "transition-opacity duration-fast"
 				} ${isOpen ? "opacity-100" : "pointer-events-none opacity-0"}`}
 				id="mobile-nav"
@@ -271,7 +288,13 @@ export default function Navigation() {
 			>
 				{/* pt clears the nav pill: 1.25rem top margin + 5rem height. */}
 				<div className="flex h-full flex-col overflow-y-auto px-7 pb-10 pt-28">
-					<ul className="flex list-none flex-col gap-1 p-0">
+					{/* Two columns in a short viewport. A landscape phone is ~390px tall
+					    and this list is 112px of top padding (clearing the nav pill) plus
+					    six 52px rows plus 40px below — 464px, so the last rows sat off
+					    screen behind an `overflow-y-auto` scroll. Three rows per column
+					    is 308px and needs no scrolling. Keyed on height, not
+					    `landscape`, which a desktop also matches. */}
+					<ul className="flex list-none flex-col gap-1 p-0 [@media(max-height:520px)]:grid [@media(max-height:520px)]:grid-cols-2 [@media(max-height:520px)]:gap-x-8">
 						{items.map((item, index) => {
 							const isActive = index === activeIndex;
 
