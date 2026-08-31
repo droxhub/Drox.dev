@@ -6,20 +6,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
- * Builds a `calc(50% ± Npx)` offset with the sign in the operator.
- *
- * The browser rewrites `calc(50% + -361px)` as `calc(50% - 361px)` when it
- * parses an inline style. On a server-rendered element that rewrite makes the
- * value React holds differ from the one it reads back, and hydration fails on
- * every element using it — so the sign has to be emitted the way the browser
- * will store it. Pair with whole-pixel values: the CSS parser also rounds long
- * floats when it re-serialises them.
- */
-export function fromCentre(px: number) {
-	return px < 0 ? `calc(50% - ${Math.abs(px)}px)` : `calc(50% + ${px}px)`;
-}
-
-/**
  * Fired on `window` when the mobile menu opens or closes, with
  * `detail: { open: boolean }`.
  *

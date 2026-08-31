@@ -31,8 +31,8 @@ export function Providers({ children, themeProps }: ProvidersProps) {
 			 *
 			 * It does NOT cover animation outside `motion` — CSS keyframes, raw rAF
 			 * loops, video. Those are handled in styles/globals.css, and in the
-			 * components that own them (SmoothScroll, prototype-img, specular-edge,
-			 * ambient-video, LogoLoop).
+			 * components that own them (SmoothScroll, specular-edge, ambient-video,
+			 * LogoLoop, lamp).
 			 */}
 			<MotionConfig reducedMotion="user">
 				<NextThemesProvider {...themeProps}>{children}</NextThemesProvider>

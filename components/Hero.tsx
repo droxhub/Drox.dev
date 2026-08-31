@@ -3,9 +3,9 @@
 import { motion } from "motion/react";
 import Badge from "@/components/chip";
 import { subtitle, title } from "@/components/primitives";
-import PrototypeImg from "@/components/prototype-img";
 import ColourfulText from "@/components/ui/colourful-text";
 import CTAButton from "@/components/ui/cta-button";
+import { LampContainer } from "@/components/ui/lamp";
 import { homepage } from "@/config/content";
 import { DURATION } from "@/lib/motion";
 
@@ -70,18 +70,30 @@ export default function Hero() {
 				))}
 			</motion.div>
 
-			{/* The black-hole visual is pulled up under the CTAs. These two negative
-			    offsets are the dials for that overlap: raise them to tuck it closer,
-			    lower them to give the buttons more air. */}
+			{/* The lamp, shining up toward the CTAs. It replaced the black-hole video
+			    and the scrolling note mockup on 31 August — see docs/STATUS.md.
+
+			    The extra 2.5rem of width cancels this section's `px-5` so the beam
+			    reaches the screen edges. **No `-left-5` with it** — the section is a
+			    centring flex column, so an over-wide child already overhangs by half
+			    the excess on each side; adding the offset shifted it a second time
+			    and left a 20px dark strip down the right of every phone. And width
+			    rather than `w-screen`, because 100vw includes the scrollbar and would
+			    put horizontal overflow back on the homepage. **The section padding is
+			    `px-5` at every breakpoint; if it changes, this changes with it.**
+
+			    **Height is 19rem because the lamp is 19rem** — a 14rem cone standing
+			    on a bar 5rem from the bottom. Anything taller is blank space above
+			    the beam, and at the 32rem this shipped with, that was 208px pushing
+			    the whole lamp below the fold on a 900px-tall desktop. `md` gets 2rem
+			    more only so the beam is not flush against the buttons. */}
 			<motion.div
 				animate={{ opacity: 1, y: 0 }}
-				className="w-full mt-0 sm:mt-[-10px] md:mt-[-20px] lg:mt-[-30px]"
+				className="w-[calc(100%+2.5rem)] mt-4 md:mt-6"
 				initial={{ opacity: 0, y: 20 }}
-				transition={{ duration: DURATION.slow, delay: 0.5 }}
+				transition={{ duration: DURATION.slow, delay: 0.4 }}
 			>
-				<div className="mt-[-40px] sm:mt-[-60px] md:mt-[-70px]">
-					<PrototypeImg />
-				</div>
+				<LampContainer className="h-[19rem] md:h-[21rem]" />
 			</motion.div>
 		</section>
 	);
