@@ -1,53 +1,35 @@
 "use client";
 
-import type { LucideIcon } from "lucide-react";
-import { Target, TrendingUp, Users, Workflow } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
+import { Target } from "lucide-react";
+import { motion } from "motion/react";
+import type { LogoItem } from "@/components/ui/LogoLoop";
+import { LogoLoop } from "@/components/ui/LogoLoop";
 import SectionHeader from "@/components/ui/section-header";
-import SpecularEdge from "@/components/ui/specular-edge";
 import { businessChallenges } from "@/config/content";
 import { DURATION } from "@/lib/motion";
 
 /**
- * Icons are presentation, so they live here rather than in `config/content.ts`
- * — the config stays copy the client can edit without touching a component.
- * Keyed by group name so reordering the config can't silently mismatch them.
+ * Per-row speed and direction. Three different speeds rather than one, and
+ * alternating direction, because three rows moving together at the same rate
+ * read as one block sliding — the point of the stagger is that the rows are
+ * independent streams.
  */
-const GROUP_ICONS: Record<string, LucideIcon> = {
-	Operational: Workflow,
-	"Customer Experience": Users,
-	Growth: TrendingUp,
-};
+const ROWS = [
+	{ direction: "left", speed: 38 },
+	{ direction: "right", speed: 30 },
+	{ direction: "left", speed: 46 },
+] as const;
 
 /**
- * The two card glows, painted as background gradients rather than blurred boxes.
+ * The page colour, for the fade at each end of a row.
  *
- * They used to be `rounded-full` spans anchored outside the card under
- * `blur-[70px]`, pulled back inside by the parent's rounded `overflow-hidden`.
- * On iOS that clip does not hold. Anything carrying a `filter` is composited,
- * and WebKit does not reliably apply a rounded overflow clip to a composited
- * child — so the glow's *square* bounding box painted straight through the
- * corner it sits in, and the card rendered with three rounded corners and a
- * square bottom-left, exactly where the violet glow is anchored. Promoting the
- * clipping element with `transform-gpu` did not fix it on a real device.
- *
- * A radial gradient is the same shape with no filter. Nothing inside the card
- * is composited, so there is nothing left to escape the clip — the corner is
- * correct by construction rather than by compositor behaviour. It also drops
- * two 70px blurs per card, on three cards, out of every paint.
- *
- * The geometry carries over exactly. A 256px disc at `-bottom-24 -left-20` puts
- * its centre 48px in from the left and 32px up from the bottom; a 70px blur is
- * a 35px sigma, so the falloff dies ~3 sigma past the disc edge, at 233px. The
- * stops trace that Gaussian — flat through the core, half alpha at the disc
- * edge (128px, 55% of the extent), tail to nothing.
+ * `hsl(var(--background))` = `rgb(0,0,20)`, NOT `var(--color-canvas)` (`#030014`
+ * = `rgb(3,0,20)`). Three levels of red is invisible on a monitor and plain on
+ * an OLED phone in a dark room — the seam documented in docs/STATUS.md twice
+ * over. `components/TechStack.tsx` passes `--color-canvas` here and has the same
+ * latent seam; it was left alone rather than changed unasked.
  */
-const GLOW_BOTTOM_LEFT =
-	"radial-gradient(circle 233px at 48px calc(100% - 32px), rgb(124 58 237 / 0.5) 0%, rgb(124 58 237 / 0.49) 25%, rgb(124 58 237 / 0.42) 40%, rgb(124 58 237 / 0.25) 55%, rgb(124 58 237 / 0.08) 70%, rgb(124 58 237 / 0) 100%)";
-
-/** Twin of the above: a 224px purple disc at `-right-16 -top-20`, same 70px blur. */
-const GLOW_TOP_RIGHT =
-	"radial-gradient(circle 217px at calc(100% - 48px) 32px, rgb(147 51 234 / 0.4) 0%, rgb(147 51 234 / 0.39) 19%, rgb(147 51 234 / 0.34) 35%, rgb(147 51 234 / 0.2) 52%, rgb(147 51 234 / 0.06) 68%, rgb(147 51 234 / 0) 100%)";
+const FADE_COLOR = "hsl(var(--background))";
 
 /**
  * Company Profile p.12, near-verbatim.
@@ -57,134 +39,116 @@ const GLOW_TOP_RIGHT =
  * abstract headline to a wall of statistics with nothing in between to
  * establish that Drox Dev understands the reader's situation.
  *
- * The cards use the same surface as the HowWeWork panels and the /about mission
- * cards — deep violet base, two soft glows, a hairline of light along the top
- * edge — rather than the dashed outline used elsewhere. Three dashed boxes of
- * plain bullets read as a spec sheet, which is the wrong register for the one
- * section that has to feel like recognition.
+ * ## Why this is not a list
  *
- * On top of that the edge carries a specular highlight that tracks the cursor
- * (`components/ui/specular-edge.tsx`). It fades in as the pointer approaches
- * rather than switching on at the boundary, so all three cards respond to where
- * the cursor is on the section rather than one lighting up on hover.
+ * It was one three times: dashed outline boxes of bullets, then violet cards
+ * holding an inset panel holding a ruled list, then an editorial two-column
+ * layout with the pains as statements on hairlines. All three were rejected as
+ * reading like a document, and the third proved the point — **fifteen short
+ * phrases stacked vertically are list-shaped whatever chrome is put on them.**
+ * Removing the boxes did not help because the boxes were never the problem.
+ *
+ * So the form changed rather than the styling. Each group is a horizontal
+ * stream of pills moving at its own speed, and a reader scans across rather
+ * than reading down. It reads as a run of real complaints going past, which is
+ * the register this section wants, and it collapses ~1630px of vertical list
+ * into three rows.
+ *
+ * `LogoLoop` is the marquee already used by `TechStack`, driven here with
+ * `renderItem` so the items are pills rather than logos.
+ *
+ * **Do not turn this back into rows of text.** If it needs more weight the
+ * levers are the pill size, the row gap and the speeds.
+ *
+ * Motion: `LogoLoop` freezes its own track under `prefers-reduced-motion`
+ * (WCAG 2.2 SC 2.3.3), and `pauseOnHover` stops the row under the pointer.
  */
 export default function BusinessChallenges() {
-	const reduceMotion = useReducedMotion();
-
 	return (
-		// `overflow-x-clip`, because the specular overlay on each card is inset
-		// past its edges and this grid runs the full width of a phone. `clip`
-		// rather than `hidden`: it does not create a scroll container and leaves
-		// the other axis `visible`, so the glow still bleeds vertically. Covers
-		// the case the CSS `:has(canvas)` guard cannot — a hover-capable browser
-		// zoomed to 200%, where the canvas does mount and the viewport is narrow
-		// anyway (WCAG 2.2 SC 1.4.4).
+		/* Full-bleed, so this one is NOT wrapped in the homepage's gutter div —
+		   see the note in app/page.tsx. A stream that visibly starts and stops
+		   inside a 1280px box is not a stream; boxed to `max-w-7xl` on a 1440
+		   screen the rows began and ended 80px in from each side and read as
+		   three cropped strips. The rows now run to the viewport edges and
+		   LogoLoop's fade blends them into the page there. The header keeps the
+		   gutter, because it is text and text needs the margin. */
 		<section className="flex w-full flex-col items-center overflow-x-clip py-16 md:py-24">
-			<SectionHeader
-				badge="The Problem"
-				icon={Target}
-				subtitle={businessChallenges.subtitle}
-				title={businessChallenges.title}
-				size="lg"
-			/>
+			<div className="w-full px-4 sm:px-6">
+				<SectionHeader
+					badge="The Problem"
+					icon={Target}
+					subtitle={businessChallenges.subtitle}
+					title={businessChallenges.title}
+					size="lg"
+				/>
+			</div>
 
-			<div className="grid w-full max-w-7xl grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
+			<div className="w-full space-y-7 md:space-y-9">
 				{businessChallenges.groups.map((group, index) => {
-					const Icon = GROUP_ICONS[group.name];
+					const row = ROWS[index % ROWS.length];
+
+					/* `ariaLabel` per item so the pill is announced as its own text —
+					   the visible node is decorative markup around a phrase. */
+					const logos: LogoItem[] = group.items.map((item) => ({
+						node: item,
+						ariaLabel: item,
+					}));
 
 					return (
-						<motion.article
+						<motion.div
 							key={group.name}
-							/* No `overflow-hidden` here: the specular canvas is inset -20px
-							   so its glow can bleed past the edge. The surface and glows are
-							   clipped by the inner wrapper instead. */
-							className="group relative rounded-panel p-7 ring-1 ring-inset ring-white/[0.06] transition-shadow duration-slow hover:shadow-2xl hover:shadow-violet-950/50 md:p-8"
-							initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
+							initial={{ opacity: 0, y: 20 }}
 							transition={{
-								duration: reduceMotion ? 0 : DURATION.slow,
-								delay: reduceMotion ? 0 : index * 0.1,
+								duration: DURATION.slow,
+								delay: index * 0.1,
 							}}
 							viewport={{ once: true, margin: "-100px" }}
 							whileInView={{ opacity: 1, y: 0 }}
 						>
-							{/* Surface. Same three layers as the HowWeWork panels: a deep
-							    violet base, glows that bloom on hover, and a hairline along
-							    the top edge that gives the card its shape without a border.
-							    Clipped here rather than on the article so the specular canvas
-							    outside it survives. */}
-							{/* `clip-path` alongside the `overflow-hidden`, because on iOS the
-							    overflow clip alone let the old blurred glows paint their square
-							    bounding boxes through the corners (see GLOW_BOTTOM_LEFT). The
-							    glows are gradients now and nothing here is composited, but a
-							    hover opacity transition can still promote a layer mid-flight,
-							    and clip-path is applied to the layer rather than in software. */}
-							<span
-								aria-hidden="true"
-								className="absolute inset-0 overflow-hidden rounded-panel [clip-path:inset(0_round_var(--radius-panel))]"
-							>
-								<span className="absolute inset-0 bg-gradient-to-b from-card-top via-card-mid to-card-bottom" />
-								{/* Opacity only on hover, never `scale` — animating a gradient's
-								    geometry means repainting it every frame, on three cards. */}
-								<span
-									className="absolute inset-0 opacity-30 transition-opacity duration-slow group-hover:opacity-70"
-									style={{ backgroundImage: GLOW_BOTTOM_LEFT }}
-								/>
-								<span
-									className="absolute inset-0 opacity-20 transition-opacity duration-slow group-hover:opacity-50"
-									style={{ backgroundImage: GLOW_TOP_RIGHT }}
-								/>
-								<span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-400/50 to-transparent transition-opacity duration-slow group-hover:via-violet-400/80" />
-							</span>
+							{/* The label sits BESIDE the stream from `md` up, not above it.
 
-							{/* The shader draws the corner itself, so this has to be told the
-							    host's radius in px — it cannot read the class. Keep in step
-							    with --radius-panel (2rem = 32px) in styles/globals.css. */}
-							<SpecularEdge
-								baseColor="#2a1a52"
-								lineColor="#ddd6fe"
-								proximity={280}
-								radius={32}
-								shineFade={45}
-								shineSize={12}
-								thickness={1.5}
-							/>
+							    Stacked, each group was two elements and the section was six of
+							    them in a column — the eye had to work out which caption owned
+							    which row, and on a phone the labels were most of what you saw.
+							    Beside it, the row reads as one statement: "Operational → these
+							    problems". Below `md` it stays above, because pinning a 9rem
+							    label to the left of a 390px screen would leave 240px of stream.
 
-							<div className="relative z-10">
-								<div className="mb-7 flex items-center gap-4">
-									{/* Scaled-down twin of the /about mission-card icon tile. */}
-									<span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-tile bg-violet-600 shadow-[0_0_30px_-10px_rgba(124,58,237,0.6)]">
-										{Icon ? (
-											<Icon
-												aria-hidden="true"
-												className="text-white"
-												size={22}
-											/>
-										) : null}
-									</span>
-									<h3 className="text-lg font-medium leading-snug tracking-tight text-white md:text-xl">
-										{group.name}
-									</h3>
-								</div>
+							    `min-w-0` on the stream is load bearing: a flex child defaults
+							    to `min-width: auto`, which is the marquee's full content width,
+							    so without it the row refuses to shrink and pushes the page
+							    sideways. */}
+							<div className="md:flex md:items-center md:gap-6 lg:gap-8">
+								<h3 className="mb-3 px-4 text-xs font-medium uppercase tracking-[0.2em] text-violet-300/70 sm:px-6 md:mb-0 md:w-36 md:shrink-0 md:px-0 md:pl-6 md:text-right md:text-[0.8125rem] lg:w-44">
+									{group.name}
+								</h3>
 
-								{/* Hairlines instead of the previous 1px dots. At five items a
-								    row of loose bullets has no structure; a ruled list reads as
-								    a checklist of things the reader can tick off. */}
-								<ul className="space-y-0">
-									{group.items.map((item) => (
-										<li
-											key={item}
-											className="flex gap-3 border-b border-white/[0.06] py-3 text-base leading-relaxed text-default-500 last:border-0 last:pb-0"
-										>
+								<div className="min-w-0 md:flex-1">
+									<LogoLoop
+										fadeOut
+										pauseOnHover
+										ariaLabel={`${group.name} problems`}
+										direction={row.direction}
+										fadeOutColor={FADE_COLOR}
+										gap={16}
+										logos={logos}
+										speed={row.speed}
+										renderItem={(item, key) => (
 											<span
-												aria-hidden="true"
-												className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-violet-400 shadow-[0_0_8px_rgba(167,139,250,0.9)]"
-											/>
-											{item}
-										</li>
-									))}
-								</ul>
+												key={key}
+												className="flex items-center gap-2.5 whitespace-nowrap rounded-full bg-white/[0.04] px-5 py-3 text-base leading-none text-gray-300 ring-1 ring-inset ring-white/10 transition-colors duration-base hover:bg-white/[0.08] hover:text-white md:px-6 md:py-3.5 md:text-lg"
+											>
+												<span
+													aria-hidden="true"
+													className="h-1.5 w-1.5 shrink-0 rounded-full bg-violet-400 shadow-[0_0_8px_rgba(167,139,250,0.9)]"
+												/>
+												{"node" in item ? item.node : null}
+											</span>
+										)}
+									/>
+								</div>
 							</div>
-						</motion.article>
+						</motion.div>
 					);
 				})}
 			</div>

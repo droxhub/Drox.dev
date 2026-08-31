@@ -73,11 +73,19 @@ export default function Home() {
 
 			<Hero />
 
-			{/* The hero's black-hole visual bleeds well past its own section box, so
-			    this one offset stays hand-set — it's clearing artwork, not rhythm. */}
-			<div className={`${section} mt-[-20px] md:mt-[350px]`}>
-				<BusinessChallenges />
-			</div>
+			{/* **Deliberately not wrapped in `section`.** Every other block below
+			    takes the page gutter from that class, but this one's three marquee
+			    rows have to reach the viewport edges — inside a 1280px box the
+			    streams began and ended 80px in from each side on a 1440 screen and
+			    read as three cropped strips rather than as movement passing through.
+			    `BusinessChallenges` applies the same `px-4 sm:px-6` to its own
+			    header, so the text still lines up with every other section.
+
+			    It also used to carry `mt-[-20px] md:mt-[350px]` to clear the
+			    black-hole artwork, which is why a landscape phone once scrolled
+			    through three and a half blank screens to reach it. The lamp is
+			    clipped to its own box and bleeds nothing, so that is gone. */}
+			<BusinessChallenges />
 
 			<div className={section}>
 				<ServiceCards />
