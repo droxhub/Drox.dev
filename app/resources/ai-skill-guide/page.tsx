@@ -345,7 +345,6 @@ export default function AISkillGuidePage() {
 
 				<div className="flex flex-col gap-4">
 					{steps.map((step, i) => {
-						const Icon = step.icon;
 						return (
 							<motion.div
 								key={step.number}

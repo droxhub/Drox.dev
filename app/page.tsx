@@ -5,7 +5,6 @@ import Hero from "@/components/Hero";
 import HowWeWork from "@/components/HowWeWork";
 import Projects from "@/components/Projects";
 import ServiceCards from "@/components/ServiceCards";
-import Testimonials from "@/components/Testimonials";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import { faqContent } from "@/config/content";
 
