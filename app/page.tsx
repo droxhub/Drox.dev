@@ -103,9 +103,9 @@ export default function Home() {
 				<WhyChooseUs />
 			</div>
 
-			<div className={section}>
+			{/* <div className={section}>
 				<Testimonials />
-			</div>
+			</div> */}
 
 			<div className={section}>
 				<FAQ />

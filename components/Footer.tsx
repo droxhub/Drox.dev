@@ -30,7 +30,7 @@ const Footer = () => {
 
 			<div className="container mx-auto max-w-7xl px-4 sm:px-6 relative z-10">
 				{/* Top Content Grid */}
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-8 mb-16 md:mb-20">
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-10 md:gap-8 mb-16 md:mb-20">
 					{/* Brand Section */}
 					<div className="flex flex-col gap-5 md:gap-6">
 						<Link className="flex items-center gap-2" href="/">
@@ -137,6 +137,23 @@ const Footer = () => {
 									</Link>
 								</li>
 							))}
+						</ul>
+					</div>
+
+					{/* Resources Links */}
+					<div className="lg:pl-8">
+						<h4 className="text-white text-sm md:text-base font-medium mb-5 md:mb-6">
+							Resources
+						</h4>
+						<ul className="grid grid-cols-2 sm:grid-cols-1 gap-y-3.5 md:gap-y-4">
+							<li>
+								<Link
+									href="/resources/ai-skill-guide"
+									className="text-gray-400 hover:text-white transition-colors text-sm"
+								>
+									AI Skill Guide
+								</Link>
+							</li>
 						</ul>
 					</div>
 
