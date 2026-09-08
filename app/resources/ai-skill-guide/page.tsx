@@ -1,24 +1,24 @@
 "use client";
 
+import {
+	AlertCircle,
+	ArrowRight,
+	BarChart3,
+	Briefcase,
+	Check,
+	CheckCircle,
+	ChevronRight,
+	ClipboardList,
+	Copy,
+	FileCheck,
+	FileText,
+	MessageCircle,
+	Receipt,
+	Sparkles,
+} from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { useState } from "react";
-import {
-	CheckCircle,
-	Copy,
-	Check,
-	FileText,
-	Sparkles,
-	ArrowRight,
-	MessageCircle,
-	ChevronRight,
-	Briefcase,
-	FileCheck,
-	Receipt,
-	ClipboardList,
-	BarChart3,
-	AlertCircle,
-} from "lucide-react";
 import { title } from "@/components/primitives";
 import CTAButton from "@/components/ui/cta-button";
 import { DURATION } from "@/lib/motion";
@@ -92,7 +92,6 @@ const steps = [
 	},
 ];
 
-
 const whatYouNeed = [
 	{
 		title: "Your existing template",
@@ -101,7 +100,8 @@ const whatYouNeed = [
 	},
 	{
 		title: "Your brand assets",
-		detail: "Logo, fonts, colours and other brand elements used in the document.",
+		detail:
+			"Logo, fonts, colours and other brand elements used in the document.",
 	},
 	{
 		title: "Your document content",
@@ -155,7 +155,10 @@ function PromptCopyButton() {
 				</>
 			) : (
 				<>
-					<Copy size={16} className="group-hover:scale-110 transition-transform" />
+					<Copy
+						size={16}
+						className="group-hover:scale-110 transition-transform"
+					/>
 					Copy Skill Creation Prompt
 				</>
 			)}
@@ -168,7 +171,6 @@ function PromptCopyButton() {
 export default function AISkillGuidePage() {
 	return (
 		<div className="flex flex-col items-center w-full px-4 sm:px-6 xl:px-0">
-
 			{/* ── 1. HERO ─────────────────────────────────────────────────────── */}
 			<section className="relative flex flex-col items-center justify-center gap-5 py-10 md:py-24 w-full max-w-4xl mx-auto text-center">
 				{/* Ambient glow */}
@@ -208,9 +210,8 @@ export default function AISkillGuidePage() {
 					transition={{ duration: DURATION.slow, delay: 0.2 }}
 					className="text-sm sm:text-base md:text-lg text-gray-400 max-w-xl mx-auto leading-relaxed"
 				>
-					Already have a professional document template? Turn it into a
-					reusable Claude Skill — and generate new documents in seconds,
-					every time.
+					Already have a professional document template? Turn it into a reusable
+					Claude Skill — and generate new documents in seconds, every time.
 				</motion.p>
 
 				{/* Template → Skill → Document flow — stacks vertically on mobile */}
@@ -223,11 +224,17 @@ export default function AISkillGuidePage() {
 					<span className="px-4 py-2 rounded-xl border border-gray-700 text-gray-300 text-sm font-semibold w-full sm:w-auto text-center">
 						Your Template
 					</span>
-					<ArrowRight size={14} className="text-violet-400 rotate-90 sm:rotate-0 shrink-0" />
+					<ArrowRight
+						size={14}
+						className="text-violet-400 rotate-90 sm:rotate-0 shrink-0"
+					/>
 					<span className="px-4 py-2 rounded-xl border border-violet-500/40 text-violet-200 bg-violet-500/10 text-sm font-semibold w-full sm:w-auto text-center">
 						Claude Skill
 					</span>
-					<ArrowRight size={14} className="text-violet-400 rotate-90 sm:rotate-0 shrink-0" />
+					<ArrowRight
+						size={14}
+						className="text-violet-400 rotate-90 sm:rotate-0 shrink-0"
+					/>
 					<span className="px-4 py-2 rounded-xl border border-blue-500/40 text-blue-200 bg-blue-500/10 text-sm font-semibold w-full sm:w-auto text-center">
 						New Document
 					</span>
@@ -265,7 +272,10 @@ export default function AISkillGuidePage() {
 							transition={{ duration: DURATION.base, delay: i * 0.1 }}
 							className="flex flex-col gap-3 p-5 sm:p-6 rounded-xl border border-white/[0.06]"
 						>
-							<CheckCircle size={15} className="text-gray-500 shrink-0 mt-0.5" />
+							<CheckCircle
+								size={15}
+								className="text-gray-500 shrink-0 mt-0.5"
+							/>
 							<div>
 								<p className="text-white font-semibold mb-1">{item.title}</p>
 								<p className="text-gray-400 text-sm leading-relaxed">
@@ -325,7 +335,10 @@ export default function AISkillGuidePage() {
 			<div className="w-full max-w-7xl border-t border-white/5" />
 
 			{/* ── 4. HOW IT WORKS (the step-by-step process) ─────────────────── */}
-			<section id="how-it-works" className="w-full max-w-5xl mx-auto py-12 md:py-24">
+			<section
+				id="how-it-works"
+				className="w-full max-w-5xl mx-auto py-12 md:py-24"
+			>
 				<motion.div
 					initial={{ opacity: 0, y: 30 }}
 					whileInView={{ opacity: 1, y: 0 }}
@@ -336,7 +349,9 @@ export default function AISkillGuidePage() {
 					<SectionBadge>Step by Step</SectionBadge>
 					<h2 className="text-[28px] sm:text-[36px] md:text-[45px] font-semibold leading-tight tracking-tight">
 						How It{" "}
-						<span className={title({ color: "violet", size: "lg" })}>Works</span>
+						<span className={title({ color: "violet", size: "lg" })}>
+							Works
+						</span>
 					</h2>
 					<p className="text-gray-400 text-base md:text-lg max-w-2xl">
 						Four steps from your existing template to a reusable document Skill.
@@ -357,7 +372,9 @@ export default function AISkillGuidePage() {
 								{/* Step number circle + connector */}
 								<div className="flex flex-col items-center gap-2 shrink-0">
 									<div className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-white/10 bg-white/[0.04] shrink-0">
-										<span className="text-xs font-mono font-bold text-gray-400">{step.number}</span>
+										<span className="text-xs font-mono font-bold text-gray-400">
+											{step.number}
+										</span>
 									</div>
 									{i < steps.length - 1 && (
 										<div className="w-px h-full min-h-[20px] bg-white/[0.06]" />
@@ -412,8 +429,8 @@ export default function AISkillGuidePage() {
 						</span>
 					</h2>
 					<p className="text-gray-400 text-base md:text-lg max-w-2xl">
-						You can try this workflow with Claude&apos;s Free plan. However, Free
-						has usage limits.
+						You can try this workflow with Claude&apos;s Free plan. However,
+						Free has usage limits.
 					</p>
 				</motion.div>
 
@@ -447,7 +464,9 @@ export default function AISkillGuidePage() {
 					>
 						<div className="flex items-center gap-2.5 mb-3">
 							<AlertCircle size={16} className="text-gray-500 shrink-0" />
-							<h3 className="text-white font-medium text-sm">If You Hit the Limit</h3>
+							<h3 className="text-white font-medium text-sm">
+								If You Hit the Limit
+							</h3>
 						</div>
 						<ul className="space-y-2.5">
 							{[

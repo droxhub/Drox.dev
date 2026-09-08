@@ -7,6 +7,7 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 interface CTAButtonProps {
+	id?: string;
 	text: string;
 	/** Renders a link. Omit and pass `onClick` to render a <button> instead. */
 	href?: string;
@@ -41,6 +42,7 @@ const sizes = {
 };
 
 export default function CTAButton({
+	id,
 	text,
 	href,
 	onClick,
@@ -97,7 +99,7 @@ export default function CTAButton({
 
 	if (!href) {
 		return (
-			<button className={classes} onClick={handleClick} type="button">
+			<button id={id} className={classes} onClick={handleClick} type="button">
 				{content}
 			</button>
 		);
@@ -106,6 +108,7 @@ export default function CTAButton({
 	if (external) {
 		return (
 			<a
+				id={id}
 				className={classes}
 				href={href}
 				onClick={handleClick}
@@ -118,7 +121,7 @@ export default function CTAButton({
 	}
 
 	return (
-		<Link className={classes} href={href} onClick={handleClick}>
+		<Link id={id} className={classes} href={href} onClick={handleClick}>
 			{content}
 		</Link>
 	);
