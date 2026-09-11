@@ -203,7 +203,7 @@ const whatYouNeed = [
 		badge: "Single source of truth",
 		icon: FileSpreadsheet,
 		detail:
-			"An existing PDF, DOCX or Keynote proposal, invoice or SOW. Claude analyses its exact geometry, margins, typography and page furniture.",
+			"Your existing proposal as a PDF, DOCX or Keynote file. Claude analyses its exact geometry, margins, typography and page furniture.",
 		tip: "A PDF with real visual styling works best for extraction.",
 	},
 	{
@@ -695,7 +695,7 @@ export default function AISkillGuidePage() {
 					className="mb-0 md:mb-0"
 					icon={FileCog}
 					size="xl"
-					subtitle="Already have a branded proposal, invoice or SOW template? Reverse-engineer it into a repeatable Claude Skill and generate precise, on-brand documents in seconds."
+					subtitle="Already have a branded proposal template? Reverse-engineer it into a repeatable Claude Skill and generate precise, on-brand proposals in seconds."
 					title={
 						<span className="gradient-line">
 							Turn your document template into a reusable{" "}
@@ -990,7 +990,7 @@ export default function AISkillGuidePage() {
 						/>
 						<p className="mt-6 text-sm leading-relaxed text-gray-400 md:text-base">
 							Open Claude, paste the Skill creation prompt, and attach your
-							existing document template in the same message. Claude analyses
+							existing proposal template in the same message. Claude analyses
 							geometry, fonts, branding, section structure and writing
 							conventions in forensic detail.
 						</p>
@@ -1104,10 +1104,9 @@ export default function AISkillGuidePage() {
 							summary="Give it the new client variables and get a finished, validated PDF."
 						/>
 						<p className="mt-6 text-sm leading-relaxed text-gray-400 md:text-base">
-							Whenever you need a new proposal, invoice or SOW, prompt Claude
-							with the raw business parameters. The Skill formats the
-							typography, calculates totals, applies your branding and validates
-							the final PDF.
+							Whenever you need a new proposal, prompt Claude with the raw
+							business parameters. The Skill formats the typography, calculates
+							totals, applies your branding and validates the final PDF.
 						</p>
 						<div className={cn(well, "mt-6 p-4")}>
 							<p className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-widest text-gray-400">
