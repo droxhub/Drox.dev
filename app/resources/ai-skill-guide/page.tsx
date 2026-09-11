@@ -1,11 +1,12 @@
 "use client";
 
 import {
+	// BarChart3, FileCheck and Receipt belong to the commented-out document
+	// types below. Restore them with the entries that use them.
 	ArrowDown,
 	ArrowRight,
 	ArrowUp,
 	ArrowUpRight,
-	BarChart3,
 	Briefcase,
 	Check,
 	CheckCircle2,
@@ -14,7 +15,6 @@ import {
 	Code2,
 	Copy,
 	Cpu,
-	FileCheck,
 	FileCog,
 	FileOutput,
 	FileSpreadsheet,
@@ -25,7 +25,6 @@ import {
 	Layers3,
 	type LucideIcon,
 	Palette,
-	Receipt,
 	Terminal,
 	Workflow,
 	Zap,
@@ -92,13 +91,29 @@ interface DocumentType {
 	extracts: string[];
 }
 
+/**
+ * Proposal only, deliberately.
+ *
+ * `prompt.ts` is written for proposals: it opens by telling Claude a proposal
+ * PDF was uploaded, names the output a "Proposal Generation Skill", and its
+ * Phase 5 intake asks for project cost, payment structure and proposal
+ * validity. Offering an Invoice or SOW button beside that text would hand the
+ * reader a prompt for the wrong document.
+ *
+ * The other five types are kept below, commented out, for when there is a
+ * prompt per type. Restoring them means uncommenting the entries, the pill row
+ * in the Supported documents section, and the `selectedDocId` state — all three
+ * are marked. The section heading goes back to the multi-document wording then.
+ */
 const documentTypes: DocumentType[] = [
 	{
 		id: "proposal",
 		label: "Proposal",
 		short: "Proposal",
 		icon: Briefcase,
-		badge: "Most popular",
+		// Goes back to "Most popular" when the pill row returns — with one type
+		// on screen there is nothing for "most" to be measured against.
+		badge: "Available now",
 		tagline: "Reverse-engineers layout, branding, scope tables and sign-offs.",
 		extracts: [
 			"Exact cover and interior geometry",
@@ -107,78 +122,79 @@ const documentTypes: DocumentType[] = [
 			"Terms, conditions and sign-off blocks",
 		],
 	},
-	{
-		id: "invoice",
-		label: "Invoice",
-		short: "Invoice",
-		icon: Receipt,
-		badge: "Finance",
-		tagline: "Automates line items, tax rules, currency and bank tables.",
-		extracts: [
-			"Multi-tier line item grid and calculations",
-			"Tax and GST/VAT number placement",
-			"Payment terms and bank account styling",
-			"Sequential numbering and client metadata",
-		],
-	},
-	{
-		id: "quotation",
-		label: "Quotation",
-		short: "Quotation",
-		icon: FileText,
-		badge: "Sales",
-		tagline: "Standardises itemised costs, validity periods and terms.",
-		extracts: [
-			"Itemised cost tables and discounts",
-			"Validity period intake rules",
-			"Custom margin and footnote rules",
-			"Dynamic scope bullet formatting",
-		],
-	},
-	{
-		id: "sow",
-		label: "Statement of Work",
-		short: "SOW",
-		icon: FileCheck,
-		badge: "Contracts",
-		tagline:
-			"Locks in phase deliverables, acceptance criteria and legal boundaries.",
-		extracts: [
-			"Phase milestone breakdown matrices",
-			"RACI and responsibility assignment tables",
-			"Acceptance testing criteria rules",
-			"Scope inclusion vs exclusion clauses",
-		],
-	},
-	{
-		id: "report",
-		label: "Report & Audit",
-		short: "Report",
-		icon: BarChart3,
-		badge: "Analytics",
-		tagline: "Standardises KPI cards, chart styling and executive summaries.",
-		extracts: [
-			"Key metrics and performance card layouts",
-			"Callout box and insight styles",
-			"Multi-column audit checklists",
-			"Structured findings and recommendation rules",
-		],
-	},
-	{
-		id: "other",
-		label: "Custom document",
-		short: "Custom",
-		icon: ClipboardList,
-		badge: "Any format",
-		tagline:
-			"Works with pitches, employee handbooks, onboarding guides and more.",
-		extracts: [
-			"Custom page furniture and recurring headers",
-			"Embedded brand fonts and vector extraction",
-			"Custom tone and voice rule enforcement",
-			"Zero guesswork on variable client data",
-		],
-	},
+	// Each of these needs its own prompt before it can ship — see the note above.
+	// {
+	// 	id: "invoice",
+	// 	label: "Invoice",
+	// 	short: "Invoice",
+	// 	icon: Receipt,
+	// 	badge: "Finance",
+	// 	tagline: "Automates line items, tax rules, currency and bank tables.",
+	// 	extracts: [
+	// 		"Multi-tier line item grid and calculations",
+	// 		"Tax and GST/VAT number placement",
+	// 		"Payment terms and bank account styling",
+	// 		"Sequential numbering and client metadata",
+	// 	],
+	// },
+	// {
+	// 	id: "quotation",
+	// 	label: "Quotation",
+	// 	short: "Quotation",
+	// 	icon: FileText,
+	// 	badge: "Sales",
+	// 	tagline: "Standardises itemised costs, validity periods and terms.",
+	// 	extracts: [
+	// 		"Itemised cost tables and discounts",
+	// 		"Validity period intake rules",
+	// 		"Custom margin and footnote rules",
+	// 		"Dynamic scope bullet formatting",
+	// 	],
+	// },
+	// {
+	// 	id: "sow",
+	// 	label: "Statement of Work",
+	// 	short: "SOW",
+	// 	icon: FileCheck,
+	// 	badge: "Contracts",
+	// 	tagline:
+	// 		"Locks in phase deliverables, acceptance criteria and legal boundaries.",
+	// 	extracts: [
+	// 		"Phase milestone breakdown matrices",
+	// 		"RACI and responsibility assignment tables",
+	// 		"Acceptance testing criteria rules",
+	// 		"Scope inclusion vs exclusion clauses",
+	// 	],
+	// },
+	// {
+	// 	id: "report",
+	// 	label: "Report & Audit",
+	// 	short: "Report",
+	// 	icon: BarChart3,
+	// 	badge: "Analytics",
+	// 	tagline: "Standardises KPI cards, chart styling and executive summaries.",
+	// 	extracts: [
+	// 		"Key metrics and performance card layouts",
+	// 		"Callout box and insight styles",
+	// 		"Multi-column audit checklists",
+	// 		"Structured findings and recommendation rules",
+	// 	],
+	// },
+	// {
+	// 	id: "other",
+	// 	label: "Custom document",
+	// 	short: "Custom",
+	// 	icon: ClipboardList,
+	// 	badge: "Any format",
+	// 	tagline:
+	// 		"Works with pitches, employee handbooks, onboarding guides and more.",
+	// 	extracts: [
+	// 		"Custom page furniture and recurring headers",
+	// 		"Embedded brand fonts and vector extraction",
+	// 		"Custom tone and voice rule enforcement",
+	// 		"Zero guesswork on variable client data",
+	// 	],
+	// },
 ];
 
 const whatYouNeed = [
@@ -661,11 +677,13 @@ function FloatingActions() {
 // ─── Page ───────────────────────────────────────────────────────────────────
 
 export default function AISkillGuidePage() {
-	const [selectedDocId, setSelectedDocId] = useState(documentTypes[0].id);
 	const sample = useCopy(SAMPLE_REQUEST);
 
-	const activeDoc =
-		documentTypes.find((doc) => doc.id === selectedDocId) ?? documentTypes[0];
+	// Restore alongside the pill row when there is more than one document type:
+	// const [selectedDocId, setSelectedDocId] = useState(documentTypes[0].id);
+	// const activeDoc =
+	// 	documentTypes.find((doc) => doc.id === selectedDocId) ?? documentTypes[0];
+	const activeDoc = documentTypes[0];
 
 	return (
 		<div className="flex w-full flex-col items-center px-4 sm:px-6 xl:px-0">
@@ -834,12 +852,16 @@ export default function AISkillGuidePage() {
 			{/* ── Document types ───────────────────────────────────────────── */}
 			<section className="w-full max-w-5xl py-16 md:py-24">
 				<SectionHeader
-					badge="Supported documents"
+					badge="Supported document"
 					icon={FileText}
 					size="lg"
-					subtitle="Pick a document type to see what the Skill captures, standardises and validates."
-					title="Works with any business document"
+					subtitle="The prompt is written for proposals. It reads your existing proposal as the source of truth and reproduces its standard exactly."
+					title="Built for your proposal template"
 				/>
+
+				{/* The document-type pill row. Restore it, and the `selectedDocId`
+				    state above, when a second type has a prompt of its own — one pill
+				    on its own is a control that controls nothing.
 
 				<div
 					aria-label="Document type"
@@ -874,10 +896,12 @@ export default function AISkillGuidePage() {
 					})}
 				</div>
 
+				*/}
+
 				<motion.div
 					key={activeDoc.id}
 					animate={{ opacity: 1, y: 0 }}
-					className={cn(surfaceCard, "mt-6")}
+					className={surfaceCard}
 					initial={{ opacity: 0, y: 8 }}
 					transition={{ duration: DURATION.fast }}
 				>
