@@ -8,7 +8,7 @@ Companion to [`UX-AUDIT-2026-07-29.md`](./UX-AUDIT-2026-07-29.md) (Revision 2).
 **Read this first** before picking up work — it says what's already shipped, so
 the audit's roadmap isn't re-done from the top.
 
-Last updated: **5 August 2026.**
+Last updated: **11 September 2026.**
 
 ---
 
@@ -808,6 +808,85 @@ Verified on a production server at 1440/900/390 px: no hydration errors, and
 the section screenshotted at all three.
 
 ---
+
+## AI Skill Guide — rebuilt on the house design language, 11 September 2026
+
+`/resources/ai-skill-guide` (`app/resources/ai-skill-guide/`), linked from the
+footer's Resources column. A free guide: copy a prompt, attach your proposal
+template, get back a reusable Claude Skill that regenerates it. The commercial
+half is the done-for-you card, which opens WhatsApp.
+
+The page had been built outside the design language and had drifted a long way
+from it. What it was doing, all of which is now gone:
+
+| Was | Now |
+| --- | --- |
+| A solid violet gradient copy button | `CTAButton` — the one treatment. A solid violet fill was tried once before and rejected as off-standard; see HANDOFF's design-language notes |
+| Emerald / blue / cyan / amber / fuchsia accents | Violet only |
+| `rounded-2xl`, `duration-300`, three raw hex literals | `rounded-tile\|card\|panel`, `duration-fast\|base`, `@theme` tokens |
+| A bespoke section header | `components/ui/section-header.tsx` |
+| Every section carrying its own `px-*` | The page owns the gutter, as everywhere else |
+| Its own bar fixed to the bottom on phones | Desktop only — it sat on top of `StickyMobileCTA`, which is fixed to the same edge |
+| Sub-12px text in several places | Nothing below 12px |
+| The 400-line prompt inline in the page | `app/resources/ai-skill-guide/prompt.ts` |
+
+Cards are the two house treatments and nothing else: the dashed card for
+prerequisites, steps and plans, the `card-top → card-mid → card-bottom` surface
+for the proposal card and the done-for-you card.
+
+### Proposal only — the other five document types are commented out
+
+The Supported documents section used to offer six types (proposal, invoice,
+quotation, SOW, report, custom) behind a pill row, and **all six copy buttons
+handed over the same text**. That text is proposal-specific and not incidentally
+so: 25 uses of the word across 23 lines, an opening line telling Claude a
+proposal PDF was uploaded, an instruction to name the output a "Proposal
+Generation Skill", and a Phase 5 commercial intake demanding project cost,
+payment structure and proposal validity — wrong for an invoice, meaningless for
+a report. Picking Invoice and copying gave you a prompt for the wrong document,
+under a heading reading "Invoice Skill".
+
+So the section is scoped to proposals, and the page copy with it. **The other
+five types are kept in the file, commented out, not deleted.** Restoring one
+means uncommenting four things, each marked in place:
+
+1. its entry in `documentTypes`
+2. its icon in the `lucide-react` import (`BarChart3`, `FileCheck`, `Receipt`)
+3. the pill row in the Supported documents section
+4. the `selectedDocId` state in `AISkillGuidePage`
+
+Then put the multi-document wording back in the section header and the card
+eyebrow back to "Most popular". **Do not restore a type without writing it a
+prompt of its own** — that is the whole reason they came out.
+
+### Deliberately left generic
+
+- **The page title and h1** still say "document template". A proposal is one, so
+  it stays true, and narrowing it trades search reach for precision the body
+  copy already supplies.
+- **The WhatsApp enquiry message** still says "business document". That button
+  goes to the done-for-you service, which is delivered by hand and is not
+  limited to proposals.
+
+### Verification
+
+Against a production build, `reducedMotion: "reduce"`, Playwright from a scratch
+directory per the HANDOFF workflow: **0px horizontal overflow at all 14 widths
+from 320 to 1440**, one `<h1>`, no sub-12px text, and axe-core clean at 375 and
+768 once the reveal animations settle. Format, ESLint, TypeScript and build all
+pass. Deploy confirmed live by fetching the new meta description from
+droxdev.com, not just from the local build.
+
+Two axe findings remain at 1440 and **neither belongs to this page**: the
+navbar's `.effect.text` hover layer reads as black-on-black, and `<nav>` has no
+accessible name while a second nav landmark exists. Site-wide, still open.
+
+Also site-wide and deliberately untouched: the dashed card's corner dashes
+render unevenly where the 2px border meets the 32px radius. That is how the
+browser draws it, so `/pricing` and `WhyChooseUs` show the same thing. Asked
+about, told to leave it.
+
+Commits: `ef1e6ac` (rebuild), `d0b64c2` (proposal-only), `0f034fb` (copy).
 
 ## Blocked on the client — needs input before these can ship
 
