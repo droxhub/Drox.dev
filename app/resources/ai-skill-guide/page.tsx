@@ -1,1006 +1,1339 @@
 "use client";
 
 import {
-	AlertCircle,
+	ArrowDown,
 	ArrowRight,
+	ArrowUp,
+	ArrowUpRight,
 	BarChart3,
 	Briefcase,
 	Check,
-	CheckCircle,
+	CheckCircle2,
 	ChevronRight,
 	ClipboardList,
+	Code2,
 	Copy,
+	Cpu,
 	FileCheck,
+	FileCog,
+	FileOutput,
+	FileSpreadsheet,
 	FileText,
-	MessageCircle,
+	FolderArchive,
+	Handshake,
+	Info,
+	Layers3,
+	type LucideIcon,
+	Palette,
 	Receipt,
-	Sparkles,
+	Terminal,
+	Workflow,
+	Zap,
 } from "lucide-react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { SiWhatsapp } from "react-icons/si";
 import { title } from "@/components/primitives";
 import CTAButton from "@/components/ui/cta-button";
-import { DURATION } from "@/lib/motion";
+import SectionHeader from "@/components/ui/section-header";
+import { DURATION, EASE, STAGGER } from "@/lib/motion";
+import { cn } from "@/lib/utils";
+import { SKILL_CREATION_PROMPT } from "./prompt";
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 const WHATSAPP_NUMBER = "919946642643";
 const WHATSAPP_ENQUIRY_MSG = encodeURIComponent(
-	"Hi Drox.dev, I want your help to create an AI Skill for my business document. I don't have a Claude subscription and would like to know about your Skill creation service.",
+	"Hi Drox.dev, I want your help to create an AI Skill for my business document. I would like to know about your Skill creation service.",
 );
 const WHATSAPP_HREF = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_ENQUIRY_MSG}`;
 
+const SAMPLE_REQUEST = `Generate a new proposal for client "Vertex Cloud Systems".
+Project scope: Enterprise multi-tenant SaaS architecture & SOC 2 compliance.
+Total investment: $24,500
+Timeline: 8 weeks across 3 milestones (30% deposit, 40% beta delivery, 30% sign-off).
+Proposal validity: 30 days.`;
+
 /**
- * The Skill Creation Prompt that users copy to give Claude.
- * Update this text to reflect the actual prompt you distribute.
+ * The two card treatments the rest of the site uses, so this page does not
+ * introduce a third. `houseCard` is the dashed card from /pricing and
+ * WhyChooseUs; `surfaceCard` is the deep violet gradient surface from
+ * HowWeWork and the /about mission cards.
  */
-const SKILL_CREATION_PROMPT = `I have uploaded our original proposal PDF. Treat this PDF as the single source of truth for creating a reusable Claude Skill that can generate future proposals in the same visual and structural standard.
+const houseCard =
+	"rounded-panel border-2 border-dashed border-default-200 bg-transparent p-6 transition-colors duration-base hover:border-violet-500/50 dark:border-default-100 sm:p-7 md:p-8";
 
-Do NOT simply describe the design or create an approximate proposal.
+const surfaceCard =
+	"relative overflow-hidden rounded-panel bg-gradient-to-b from-card-top via-card-mid to-card-bottom p-6 sm:p-7 md:p-8";
 
-Your objective is to reverse-engineer the uploaded PDF and create a complete, reusable Proposal Generation Skill.
+/** Inset well for code, file trees and sample text. */
+const well = "rounded-tile border border-hairline bg-surface-inset";
 
-IMPORTANT:
-- Extract real assets wherever technically possible.
-- Measure the actual document.
-- Preserve the original PDF's visual identity.
-- Do not approximate measurements when they can be extracted.
-- Do not invent missing information.
-- The final Skill must be reusable with completely different proposal content.
+/** Tertiary control: the CTA pill's border language, without the gradient. */
+const ghostButton =
+	"inline-flex items-center justify-center gap-2 rounded-full border border-hairline-strong px-4 py-2 text-xs font-medium text-gray-300 transition-colors duration-base hover:border-violet-500/60 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas";
 
-==================================================
-PHASE 1 — FORENSICALLY ANALYSE THE SOURCE PDF
-==================================================
+const iconTile =
+	"flex h-11 w-11 shrink-0 items-center justify-center rounded-tile border border-violet-500/30 bg-violet-500/10 text-violet-300";
 
-Analyse the uploaded proposal PDF in forensic detail.
+const eyebrow = "text-xs font-medium uppercase tracking-widest text-violet-400";
 
-Extract and identify:
+// ─── Data ───────────────────────────────────────────────────────────────────
 
-1. DOCUMENT GEOMETRY
-- Page size
-- Page dimensions in points
-- Page margins
-- Text column width
-- Header position
-- Footer position
-- Logo position and dimensions
-- Footer rule position and length
-- Page-number position
-- Section heading positions
-- Table dimensions
-- Column widths
-- Cell padding
-- Spacing before/after headings
-- Paragraph spacing
-- Line height
-- Indentation
-- Any recurring absolute-positioned elements
+interface DocumentType {
+	id: string;
+	label: string;
+	/** Fits a two-column pill row on a 320px phone; `label` is used everywhere else. */
+	short: string;
+	icon: LucideIcon;
+	badge: string;
+	tagline: string;
+	extracts: string[];
+}
 
-Record actual measurements in points wherever possible.
-
-Do not use vague descriptions such as:
-"approximately 1 inch"
-"around 20px"
-"roughly centered"
-
-Use actual measured values.
-
---------------------------------------------------
-
-2. FONTS
---------------------------------------------------
-
-Identify the actual fonts used in the PDF.
-
-For every identifiable font, determine:
-
-- Font family
-- Font variant
-- Weight
-- Italic/regular state
-- Where it is used
-- Approximate/exact font size where extractable
-
-Check whether the fonts are embedded.
-
-If an original font cannot legally or technically be bundled, identify the closest suitable open-source substitute based on actual letterform characteristics.
-
-Do NOT automatically fall back to generic fonts such as Arial, Calibri, Times New Roman, or Georgia.
-
-If substitute fonts are required:
-- Obtain/bundle appropriate licensable font files where possible.
-- Document the substitution and reason.
-
---------------------------------------------------
-
-3. GRAPHICS AND DESIGN ASSETS
---------------------------------------------------
-
-Extract actual reusable visual assets from the PDF wherever technically possible.
-
-Look specifically for:
-
-- Logo
-- Gradient artwork
-- Background graphics
-- Decorative shapes
-- Corner artwork
-- Footer artwork
-- Icons
-- Repeating visual elements
-- Vector artwork
-- Masks
-- Clipping paths
-- Page furniture
-
-Do NOT recreate these assets using CSS if the original artwork can be extracted from the PDF.
-
-If different page types use different artwork, preserve those variants separately.
-
-For example:
-
-- Cover furniture
-- Odd-page furniture
-- Even-page furniture
-
-Preserve transparency and original proportions wherever possible.
-
---------------------------------------------------
-
-4. PAGE STRUCTURE
---------------------------------------------------
-
-Identify the complete page structure.
-
-Determine:
-
-- Cover layout
-- Interior-page layout
-- Section-page behaviour
-- Header behaviour
-- Footer behaviour
-- Page-number behaviour
-- Page-break rules
-- Sign-off placement
-- Table behaviour
-- Repeating elements
-
-Identify which elements are fixed and which are variable.
-
-==================================================
-PHASE 2 — REVERSE-ENGINEER THE CONTENT STRUCTURE
-==================================================
-
-Analyse the proposal's complete content architecture.
-
-Identify:
-
-- All top-level sections
-- Subsections
-- Repeating content patterns
-- Feature-list structures
-- Tables
-- Boilerplate sections
-- Project-specific sections
-- Closing/sign-off structure
-
-Create a reusable section skeleton.
-
-For the existing proposal structure, identify which sections should normally be rewritten for every new project and which sections can be reused as standard boilerplate.
-
-Do not assume every future proposal will have identical content.
-
-The Skill must allow project-specific content to replace the appropriate sections while preserving the overall proposal standard.
-
-==================================================
-PHASE 3 — REVERSE-ENGINEER WRITING RULES
-==================================================
-
-Analyse the writing style of the source proposal.
-
-Identify:
-
-- Point of view
-- Tone
-- Sentence style
-- Heading style
-- Bullet style
-- Bullet length
-- Capitalization
-- Terminology
-- Feature-description pattern
-- Commitment/boundary pattern
-- Caveat style
-- Section depth
-- Level of detail
-
-Create explicit writing rules for future proposals.
-
-The Skill should reproduce the writing conventions rather than merely copying sentences.
-
-==================================================
-PHASE 4 — CREATE THE REUSABLE SKILL
-==================================================
-
-Now create a complete Claude Skill for generating future proposals.
-
-The Skill must contain:
-
-- SKILL.md
-- Reference documentation
-- Format/layout specification
-- Writing conventions
-- Section structure
-- Extracted assets
-- Fonts where required
-- Background/furniture assets
-- Generation scripts where required
-- Validation scripts
-- Example content/input structure
-
-The Skill should be self-contained and should NOT require the original PDF at runtime if all required assets and specifications can be packaged into the Skill.
-
-==================================================
-PHASE 5 — COMMERCIAL INFORMATION INTAKE
-==================================================
-
-Before generating a final proposal, the Skill must identify missing commercial information.
-
-At minimum check for:
-
-1. Client legal/company name
-2. Project cost
-3. Payment structure
-4. Proposal validity period
-
-If any required commercial information is missing, ask for all missing information together in ONE message.
-
-Do not ask one question at a time.
-
-Never:
-
-- Invent pricing
-- Infer pricing from another project
-- Reuse another client's pricing
-- Guess payment percentages
-- Guess the client's legal name
-- Guess validity dates
-
-If the proposal contains line-item pricing, require the actual values before generating the final document.
-
-For Indian currency, use Indian digit grouping.
-
-Example:
-
-₹1,25,000
-
-not:
-
-₹125,000
-
-==================================================
-PHASE 6 — OUTPUT GENERATION
-==================================================
-
-Because the source document is a PDF, the generation pipeline must prioritize precise PDF layout.
-
-Do NOT use DOCX as the primary generation format if it causes the source layout to change.
-
-Use a PDF generation approach capable of:
-
-- Precise positioning
-- Exact typography
-- Controlled page breaks
-- Background/furniture compositing
-- Reusable extracted assets
-- Consistent page dimensions
-
-If HTML/CSS + headless Chromium is the most reliable approach, use it.
-
-If another PDF-generation pipeline provides better fidelity, use that.
-
-The final output must be a PDF.
-
-==================================================
-PHASE 7 — VALIDATION
-==================================================
-
-The Skill must validate the generated proposal before treating it as final.
-
-Check for:
-
-- Placeholder text
-- Missing sections
-- Missing commercial information
-- Incorrect page numbers
-- Overflow
-- Clipped content
-- Empty pages
-- Broken tables
-- Incorrect fonts
-- Incorrect spacing
-- Incorrect logo placement
-- Incorrect background artwork
-- Poor page breaks
-- Sign-off position
-- Currency formatting
-
-If placeholder text remains, DO NOT silently produce a final proposal.
-
-Report exactly where the placeholder occurs.
-
-==================================================
-PHASE 8 — VISUAL TEST
-==================================================
-
-After creating the Skill, test it.
-
-Use the original proposal's content as one test case.
-
-Regenerate the proposal using the new Skill.
-
-Render both:
-
-1. Original PDF
-2. Generated PDF
-
-as page images.
-
-Compare them page-by-page.
-
-Check visual differences in:
-
-- Geometry
-- Typography
-- Spacing
-- Logo
-- Background artwork
-- Section positioning
-- Tables
-- Footer
-- Page numbers
-- Sign-off position
-
-Fix significant differences and test again.
-
-Do not declare the Skill complete based only on textual comparison.
-
-==================================================
-PHASE 9 — GENERALIZATION TEST
-==================================================
-
-After the original-content test passes, run a second test using completely different proposal content.
-
-The second test should verify that the Skill:
-
-- Preserves the same visual system
-- Preserves the same writing conventions
-- Handles different section lengths
-- Handles different project details
-- Handles different pricing
-- Handles different client names
-- Handles different page counts
-- Does not remain overfitted to the original proposal
-
-==================================================
-PHASE 10 — FINAL PACKAGE
-==================================================
-
-Package the complete reusable Skill.
-
-The package should contain, where applicable:
-
-SKILL.md
-
-references/
-- format specification
-- section structure
-- writing conventions
-- generation rules
-- validation rules
-
-assets/
-- fonts
-- logo
-- furniture/background artwork
-- other required graphics
-
-scripts/
-- proposal generation
-- validation
-- rendering/comparison
-- supporting utilities
-
-examples/
-- example proposal input
-- example output
-
-The final Skill must be usable for future proposals without needing to rebuild the entire system from the original PDF.
-
-==================================================
-FINAL REQUIREMENT
-==================================================
-
-Do not stop after analysing the PDF.
-
-Do not merely give me instructions for how I could create the Skill.
-
-Actually create the complete reusable Skill package.
-
-If the current environment cannot complete a specific step, clearly identify the exact blocker and complete every other possible step rather than replacing the missing step with an approximation.`;
-
-// ─── Data ────────────────────────────────────────────────────────────────────
-
-const documentTypes = [
-	{ label: "Proposal", icon: Briefcase },
-	{ label: "Invoice", icon: Receipt },
-	{ label: "Quotation", icon: FileText },
-	{ label: "SOW", icon: FileCheck },
-	{ label: "Report", icon: BarChart3 },
-	{ label: "Other Business Docs", icon: ClipboardList },
-];
-
-const steps = [
+const documentTypes: DocumentType[] = [
 	{
-		number: "01",
-		title: "Paste the Prompt + Attach Your Template",
-		description:
-			"Open Claude. Copy our Skill Creation Prompt below and paste it into Claude — then attach your existing document template in the same message. Claude reads both together, analysing your design, fonts, layout, branding, sections, tables and content patterns.",
-		subNote:
-			"One message. Prompt + your document attached. That's all Claude needs.",
-		showCopyButton: true,
+		id: "proposal",
+		label: "Proposal",
+		short: "Proposal",
+		icon: Briefcase,
+		badge: "Most popular",
+		tagline: "Reverse-engineers layout, branding, scope tables and sign-offs.",
+		extracts: [
+			"Exact cover and interior geometry",
+			"Payment milestones and commercial intake",
+			"Executive summary and deliverables layout",
+			"Terms, conditions and sign-off blocks",
+		],
 	},
 	{
-		number: "02",
-		title: "Download the Skill File",
-		description:
-			"Claude generates a reusable .skill file that captures every design and structural rule from your template. Download it and keep it stored safely — this is your document-generation Skill.",
+		id: "invoice",
+		label: "Invoice",
+		short: "Invoice",
+		icon: Receipt,
+		badge: "Finance",
+		tagline: "Automates line items, tax rules, currency and bank tables.",
+		extracts: [
+			"Multi-tier line item grid and calculations",
+			"Tax and GST/VAT number placement",
+			"Payment terms and bank account styling",
+			"Sequential numbering and client metadata",
+		],
 	},
 	{
-		number: "03",
-		title: "Upload the Skill to Claude",
-		description:
-			"Go to the Skills section in Claude and upload your .skill file. Your document Skill is now ready to use — no setup needed again.",
+		id: "quotation",
+		label: "Quotation",
+		short: "Quotation",
+		icon: FileText,
+		badge: "Sales",
+		tagline: "Standardises itemised costs, validity periods and terms.",
+		extracts: [
+			"Itemised cost tables and discounts",
+			"Validity period intake rules",
+			"Custom margin and footnote rules",
+			"Dynamic scope bullet formatting",
+		],
 	},
 	{
-		number: "04",
-		title: "Generate Your New Document",
-		description:
-			"Give Claude your new document details — client name, project, investment, timeline, payment terms — and ask it to create the document using your Skill. New content in, finished document out.",
+		id: "sow",
+		label: "Statement of Work",
+		short: "SOW",
+		icon: FileCheck,
+		badge: "Contracts",
+		tagline:
+			"Locks in phase deliverables, acceptance criteria and legal boundaries.",
+		extracts: [
+			"Phase milestone breakdown matrices",
+			"RACI and responsibility assignment tables",
+			"Acceptance testing criteria rules",
+			"Scope inclusion vs exclusion clauses",
+		],
+	},
+	{
+		id: "report",
+		label: "Report & Audit",
+		short: "Report",
+		icon: BarChart3,
+		badge: "Analytics",
+		tagline: "Standardises KPI cards, chart styling and executive summaries.",
+		extracts: [
+			"Key metrics and performance card layouts",
+			"Callout box and insight styles",
+			"Multi-column audit checklists",
+			"Structured findings and recommendation rules",
+		],
+	},
+	{
+		id: "other",
+		label: "Custom document",
+		short: "Custom",
+		icon: ClipboardList,
+		badge: "Any format",
+		tagline:
+			"Works with pitches, employee handbooks, onboarding guides and more.",
+		extracts: [
+			"Custom page furniture and recurring headers",
+			"Embedded brand fonts and vector extraction",
+			"Custom tone and voice rule enforcement",
+			"Zero guesswork on variable client data",
+		],
 	},
 ];
 
 const whatYouNeed = [
 	{
 		title: "Your existing template",
+		badge: "Single source of truth",
+		icon: FileSpreadsheet,
 		detail:
-			"The proposal, invoice, SOW or other document you want to automate.",
+			"An existing PDF, DOCX or Keynote proposal, invoice or SOW. Claude analyses its exact geometry, margins, typography and page furniture.",
+		tip: "A PDF with real visual styling works best for extraction.",
 	},
 	{
 		title: "Your brand assets",
+		badge: "Visual consistency",
+		icon: Palette,
 		detail:
-			"Logo, fonts, colours and other brand elements used in the document.",
+			"Your logos, colour codes, font families and decorative design motifs. Claude extracts vector artwork directly from the document.",
+		tip: "Vector logos inside the PDF are preserved automatically.",
 	},
 	{
-		title: "Your document content",
-		detail: "The information that changes from one document to another.",
+		title: "Your project content",
+		badge: "Dynamic variables",
+		icon: Layers3,
+		detail:
+			"The unique client variables: project scope, timeline, commercial pricing and deliverables that change for each new client.",
+		tip: "The Skill prompts you for any missing business data.",
 	},
 ];
 
-// ─── Sub-components ──────────────────────────────────────────────────────────
+const promptPhases = [
+	{
+		phase: "01",
+		name: "Forensic geometry",
+		description:
+			"Measures page points, margins, columns, rules and furniture with exact precision.",
+	},
+	{
+		phase: "02",
+		name: "Font identification",
+		description:
+			"Detects exact font weights, line heights, letter spacing and open-source equivalents.",
+	},
+	{
+		phase: "03",
+		name: "Asset extraction",
+		description:
+			"Isolates vector logos, corner artwork, masks and backgrounds directly from the PDF.",
+	},
+	{
+		phase: "04",
+		name: "Content architecture",
+		description:
+			"Separates reusable boilerplate sections from project-specific sections.",
+	},
+	{
+		phase: "05",
+		name: "Writing style rules",
+		description:
+			"Encodes point of view, bullet structure, commercial boundary voice and tone.",
+	},
+	{
+		phase: "06",
+		name: "Skill structure",
+		description:
+			"Packages SKILL.md, reference specs, generation scripts and validation routines.",
+	},
+	{
+		phase: "07",
+		name: "Commercial guardrails",
+		description:
+			"Enforces missing pricing intake before generation. No invented pricing.",
+	},
+	{
+		phase: "08",
+		name: "PDF engine pipeline",
+		description:
+			"Configures HTML/CSS with headless Chromium, or another high-fidelity pipeline.",
+	},
+	{
+		phase: "09",
+		name: "Automated validation",
+		description:
+			"Scans for overflow, placeholder text, broken tables and missing sign-offs.",
+	},
+	{
+		phase: "10",
+		name: "Visual regression test",
+		description:
+			"Renders side-by-side comparisons against the original PDF before completion.",
+	},
+];
 
-function SectionBadge({ children }: { children: React.ReactNode }) {
+const pipelineStages = [
+	{
+		step: "Step 1 · Input",
+		name: "Your existing file",
+		detail:
+			"PDF, DOCX or Figma template with your fonts, layout and furniture.",
+		icon: FileSpreadsheet,
+		highlighted: false,
+	},
+	{
+		step: "Step 2 · Automation",
+		name: "Reusable .skill bundle",
+		detail: "Extracts geometry, vector assets, voice rules and a PDF pipeline.",
+		icon: Cpu,
+		highlighted: true,
+	},
+	{
+		step: "Step 3 · Output",
+		name: "Production-ready PDF",
+		detail: "Pass new client data and get a brand-aligned document in seconds.",
+		icon: FileOutput,
+		highlighted: false,
+	},
+];
+
+const skillFiles = [
+	{
+		name: "SKILL.md",
+		note: "master instructions and commercial guardrails",
+		file: true,
+	},
+	{
+		name: "references/",
+		note: "geometry.md, typography.md, content-skeleton.md",
+		file: false,
+	},
+	{
+		name: "assets/",
+		note: "extracted vector logos, backgrounds, corner furniture",
+		file: false,
+	},
+	{
+		name: "scripts/",
+		note: "generate-pdf.js, validate-geometry.js",
+		file: false,
+	},
+];
+
+const reveal = {
+	initial: { opacity: 0, y: 20 },
+	whileInView: { opacity: 1, y: 0 },
+	viewport: { once: true, margin: "-80px" },
+} as const;
+
+// ─── Hooks ──────────────────────────────────────────────────────────────────
+
+/** Copies `text` and reports success for a short while. */
+function useCopy(text: string) {
+	const [copied, setCopied] = useState(false);
+
+	useEffect(() => {
+		if (!copied) return;
+		const timer = setTimeout(() => setCopied(false), 2500);
+		return () => clearTimeout(timer);
+	}, [copied]);
+
+	const copy = async () => {
+		try {
+			await navigator.clipboard.writeText(text);
+			setCopied(true);
+		} catch {
+			// Clipboard API is unavailable over plain http and in some webviews.
+			const textarea = document.createElement("textarea");
+			textarea.value = text;
+			textarea.setAttribute("readonly", "");
+			textarea.style.position = "fixed";
+			textarea.style.opacity = "0";
+			document.body.appendChild(textarea);
+			textarea.select();
+			const ok = document.execCommand("copy");
+			document.body.removeChild(textarea);
+			setCopied(ok);
+		}
+	};
+
+	return { copied, copy };
+}
+
+// ─── Sub-components ─────────────────────────────────────────────────────────
+
+/**
+ * The page's primary action, in the site's one button treatment. The label
+ * flips to a confirmation for a moment; a status region announces it to
+ * screen readers, since the visual change alone is not announced.
+ */
+function PromptCopyButton({
+	label = "Copy the Skill prompt",
+	location,
+	size = "md",
+	className,
+}: {
+	label?: string;
+	location: string;
+	size?: "sm" | "md";
+	className?: string;
+}) {
+	const { copied, copy } = useCopy(SKILL_CREATION_PROMPT);
+
 	return (
-		<span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-white/10 bg-white/[0.04] text-gray-400 text-xs font-medium tracking-wide uppercase">
+		<>
+			<CTAButton
+				className={className}
+				icon={copied ? <Check size={18} /> : <Copy size={18} />}
+				iconMotion="down"
+				location={location}
+				onClick={copy}
+				size={size}
+				text={copied ? "Copied" : label}
+			/>
+			<span className="sr-only" role="status">
+				{copied ? "Skill prompt copied to clipboard" : ""}
+			</span>
+		</>
+	);
+}
+
+function Divider() {
+	return (
+		<hr aria-hidden className="w-full max-w-5xl border-t border-hairline" />
+	);
+}
+
+/** The hairline of light along the top edge of the surface card. */
+function SurfaceGlow() {
+	return (
+		<>
+			<span
+				aria-hidden="true"
+				className="pointer-events-none absolute -bottom-24 -left-20 hidden h-72 w-72 rounded-full bg-violet-600/40 blur-[70px] md:block"
+			/>
+			<span
+				aria-hidden="true"
+				className="pointer-events-none absolute -right-16 -top-20 hidden h-64 w-64 rounded-full bg-fuchsia-500/30 blur-[80px] md:block"
+			/>
+			<span
+				aria-hidden="true"
+				className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-300/60 to-transparent"
+			/>
+		</>
+	);
+}
+
+function StepNumber({
+	children,
+	active = false,
+}: {
+	children: string;
+	active?: boolean;
+}) {
+	return (
+		<span
+			className={cn(
+				"flex h-11 w-11 shrink-0 items-center justify-center rounded-tile border font-mono text-sm font-medium",
+				active
+					? "border-violet-400/50 bg-violet-600/30 text-violet-100"
+					: "border-hairline-strong bg-surface text-gray-300",
+			)}
+		>
 			{children}
 		</span>
 	);
 }
 
-function PromptCopyButton() {
-	const [copied, setCopied] = useState(false);
-
-	const handleCopy = async () => {
-		try {
-			await navigator.clipboard.writeText(SKILL_CREATION_PROMPT);
-			setCopied(true);
-			setTimeout(() => setCopied(false), 2500);
-		} catch {
-			// Fallback for browsers without clipboard API
-			const textarea = document.createElement("textarea");
-			textarea.value = SKILL_CREATION_PROMPT;
-			document.body.appendChild(textarea);
-			textarea.select();
-			document.execCommand("copy");
-			document.body.removeChild(textarea);
-			setCopied(true);
-			setTimeout(() => setCopied(false), 2500);
-		}
-	};
-
+function StepHeader({
+	number,
+	heading,
+	summary,
+	active = false,
+	action,
+}: {
+	number: string;
+	heading: string;
+	summary: string;
+	active?: boolean;
+	action?: React.ReactNode;
+}) {
 	return (
-		<button
-			id="copy-skill-prompt-btn"
-			type="button"
-			onClick={handleCopy}
-			aria-label="Copy Skill Creation Prompt to clipboard"
-			className="group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-full font-semibold text-white text-sm bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 border border-violet-500/50 hover:border-violet-400/70 shadow-lg shadow-violet-900/30 hover:shadow-violet-900/50 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
-		>
-			{copied ? (
-				<>
-					<Check size={16} className="text-green-300" />
-					Copied!
-				</>
-			) : (
-				<>
-					<Copy
-						size={16}
-						className="group-hover:scale-110 transition-transform"
-					/>
-					Copy Skill Creation Prompt
-				</>
-			)}
-		</button>
+		<div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+			<div className="flex items-start gap-4">
+				<StepNumber active={active}>{number}</StepNumber>
+				<div>
+					<h3 className="text-lg font-medium text-white md:text-xl">
+						{heading}
+					</h3>
+					<p className="mt-1 text-sm text-gray-400">{summary}</p>
+				</div>
+			</div>
+			{action && <div className="shrink-0 sm:pl-4">{action}</div>}
+		</div>
 	);
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+/**
+ * Overview of the ten phases, or the prompt itself. The full prompt is ~400
+ * lines, so it opens into a read-only textarea: natively focusable and
+ * keyboard-scrollable, and the reader can select from it, without the page
+ * growing by several screens.
+ */
+function PromptInspector() {
+	const [view, setView] = useState<"overview" | "prompt">("overview");
+	const [expanded, setExpanded] = useState(false);
+
+	return (
+		<div className={cn(well, "overflow-hidden")}>
+			<div className="flex flex-wrap items-center justify-between gap-3 border-b border-hairline bg-surface px-4 py-3">
+				<div className="flex gap-1" role="group" aria-label="Prompt view">
+					{(
+						[
+							{ id: "overview", label: "Overview", icon: Workflow },
+							{ id: "prompt", label: "Full prompt", icon: Terminal },
+						] as const
+					).map(({ id, label, icon: Icon }) => (
+						<button
+							key={id}
+							aria-pressed={view === id}
+							className={cn(
+								"inline-flex items-center gap-1.5 rounded-control px-3 py-1.5 text-xs font-medium transition-colors duration-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400",
+								view === id
+									? "bg-violet-600/30 text-white"
+									: "text-gray-400 hover:bg-white/5 hover:text-white",
+							)}
+							onClick={() => setView(id)}
+							type="button"
+						>
+							<Icon aria-hidden size={14} />
+							{label}
+						</button>
+					))}
+				</div>
+				<span className="font-mono text-xs text-gray-400">
+					10 phases · {SKILL_CREATION_PROMPT.length.toLocaleString()} characters
+				</span>
+			</div>
+
+			{view === "overview" ? (
+				<ol className="grid grid-cols-1 gap-2.5 p-4 sm:grid-cols-2 sm:p-5">
+					{promptPhases.map((phase) => (
+						<li
+							key={phase.phase}
+							className="flex items-start gap-3 rounded-control border border-hairline/60 bg-surface/60 p-3"
+						>
+							<span className="shrink-0 font-mono text-xs font-medium text-violet-400">
+								{phase.phase}
+							</span>
+							<div>
+								<p className="text-sm font-medium text-white">{phase.name}</p>
+								<p className="mt-0.5 text-xs leading-relaxed text-gray-400">
+									{phase.description}
+								</p>
+							</div>
+						</li>
+					))}
+				</ol>
+			) : (
+				<div className="relative">
+					{expanded ? (
+						<textarea
+							aria-label="Skill creation prompt"
+							className="block h-[70vh] max-h-[36rem] w-full resize-none bg-transparent p-4 font-mono text-xs leading-relaxed text-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-violet-400 sm:p-5"
+							readOnly
+							spellCheck={false}
+							value={SKILL_CREATION_PROMPT}
+						/>
+					) : (
+						<pre
+							aria-hidden
+							className="max-h-64 overflow-hidden whitespace-pre-wrap p-4 font-mono text-xs leading-relaxed text-gray-300 sm:p-5"
+						>
+							{SKILL_CREATION_PROMPT}
+						</pre>
+					)}
+					<div
+						className={cn(
+							"flex justify-center",
+							expanded
+								? "border-t border-hairline bg-surface py-3"
+								: "absolute inset-x-0 bottom-0 items-end bg-gradient-to-t from-surface-inset via-surface-inset/90 to-transparent pb-4 pt-16",
+						)}
+					>
+						<button
+							aria-expanded={expanded}
+							className={ghostButton}
+							onClick={() => setExpanded((value) => !value)}
+							type="button"
+						>
+							{expanded ? "Collapse prompt" : "Show the full prompt"}
+							<ArrowDown
+								aria-hidden
+								className={cn(
+									"transition-transform duration-base",
+									expanded && "rotate-180",
+								)}
+								size={14}
+							/>
+						</button>
+					</div>
+				</div>
+			)}
+		</div>
+	);
+}
+
+/**
+ * Desktop-only. On phones the site already fixes a contact bar to the bottom
+ * edge (StickyMobileCTA, from 50% scroll), and two bars in the same place is
+ * the one thing worse than none. Mobile readers reach the copy button in the
+ * hero, in step 1 and in the closing section.
+ */
+function FloatingActions() {
+	const [visible, setVisible] = useState(false);
+	const reduceMotion = useReducedMotion();
+
+	useEffect(() => {
+		let frame = 0;
+
+		const measure = () => {
+			frame = 0;
+			setVisible(window.scrollY > 640);
+		};
+
+		const onScroll = () => {
+			if (frame) return;
+			frame = requestAnimationFrame(measure);
+		};
+
+		measure();
+		window.addEventListener("scroll", onScroll, { passive: true });
+
+		return () => {
+			if (frame) cancelAnimationFrame(frame);
+			window.removeEventListener("scroll", onScroll);
+		};
+	}, []);
+
+	return (
+		<AnimatePresence>
+			{visible && (
+				<motion.div
+					animate={{ opacity: 1, y: 0 }}
+					className="fixed inset-x-0 bottom-6 z-40 mx-auto hidden w-fit items-center gap-2 rounded-full border border-hairline-strong bg-surface-deep/95 p-1.5 shadow-2xl shadow-black/60 backdrop-blur-md md:flex"
+					exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 16 }}
+					initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 16 }}
+					transition={{ duration: DURATION.base, ease: EASE.entrance }}
+				>
+					<PromptCopyButton
+						label="Copy the prompt"
+						location="ai-skill-guide-floating"
+						size="sm"
+					/>
+					<a
+						aria-label="Ask Drox Dev on WhatsApp"
+						className="flex h-10 w-10 items-center justify-center rounded-full text-violet-300 transition-colors duration-base hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+						href={WHATSAPP_HREF}
+						rel="noopener noreferrer"
+						target="_blank"
+					>
+						<SiWhatsapp aria-hidden="true" size={18} />
+					</a>
+					<button
+						aria-label="Back to top"
+						className="flex h-10 w-10 items-center justify-center rounded-full text-gray-400 transition-colors duration-base hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+						onClick={() =>
+							window.scrollTo({
+								top: 0,
+								behavior: reduceMotion ? "auto" : "smooth",
+							})
+						}
+						type="button"
+					>
+						<ArrowUp aria-hidden size={16} />
+					</button>
+				</motion.div>
+			)}
+		</AnimatePresence>
+	);
+}
+
+// ─── Page ───────────────────────────────────────────────────────────────────
 
 export default function AISkillGuidePage() {
+	const [selectedDocId, setSelectedDocId] = useState(documentTypes[0].id);
+	const sample = useCopy(SAMPLE_REQUEST);
+
+	const activeDoc =
+		documentTypes.find((doc) => doc.id === selectedDocId) ?? documentTypes[0];
+
 	return (
-		<div className="flex flex-col items-center w-full px-4 sm:px-6 xl:px-0">
-			{/* ── 1. HERO ─────────────────────────────────────────────────────── */}
-			<section className="relative flex flex-col items-center justify-center gap-5 py-10 md:py-24 w-full max-w-4xl mx-auto text-center">
-				{/* Ambient glow */}
-				<div
-					aria-hidden
-					className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] md:w-[600px] h-[200px] md:h-[300px] bg-violet-600/10 blur-[100px] rounded-full pointer-events-none -z-10"
+		<div className="flex w-full flex-col items-center px-4 sm:px-6 xl:px-0">
+			{/* ── Hero ─────────────────────────────────────────────────────── */}
+			<section className="flex w-full max-w-5xl flex-col items-center py-12 md:py-20">
+				<SectionHeader
+					as="h1"
+					badge="AI document automation guide"
+					className="mb-0 md:mb-0"
+					icon={FileCog}
+					size="xl"
+					subtitle="Already have a branded proposal, invoice or SOW template? Reverse-engineer it into a repeatable Claude Skill and generate precise, on-brand documents in seconds."
+					title={
+						<span className="gradient-line">
+							Turn your document template into a reusable{" "}
+							<span className={title({ color: "violet", size: "xl" })}>
+								AI Skill
+							</span>
+						</span>
+					}
 				/>
 
 				<motion.div
 					animate={{ opacity: 1, y: 0 }}
+					className="mt-9 flex w-full max-w-[19rem] flex-col items-stretch gap-3 sm:max-w-none sm:flex-row sm:items-center sm:justify-center sm:gap-4 md:mt-10"
 					initial={{ opacity: 0, y: 20 }}
-					transition={{ duration: DURATION.slow }}
+					transition={{ duration: DURATION.slow, delay: 0.3 }}
 				>
-					<SectionBadge>
-						<Sparkles size={12} /> AI Document Automation
-					</SectionBadge>
+					<PromptCopyButton location="ai-skill-guide-hero" />
+					<CTAButton
+						href="#how-it-works"
+						icon={<ArrowDown size={18} />}
+						iconMotion="down"
+						location="ai-skill-guide-hero"
+						text="See how it works"
+					/>
 				</motion.div>
 
+				{/* The transformation, in one picture: file in, Skill, PDF out. */}
 				<motion.div
 					animate={{ opacity: 1, y: 0 }}
+					className="relative mt-14 w-full overflow-hidden rounded-panel border border-hairline bg-gradient-to-b from-surface-muted to-surface p-5 sm:p-7 md:mt-16"
 					initial={{ opacity: 0, y: 24 }}
-					transition={{ duration: DURATION.slow, delay: 0.1 }}
-					className="relative z-10 w-full"
+					transition={{ duration: DURATION.slow, delay: 0.4 }}
 				>
-					<h1 className="text-[32px] sm:text-[42px] md:text-[56px] font-semibold leading-tight tracking-tight">
-						Turn Your{" "}
-						<span className={title({ color: "violet", size: "xl" })}>
-							Document Template
-						</span>{" "}
-						Into an AI Skill
-					</h1>
-				</motion.div>
-
-				<motion.p
-					animate={{ opacity: 1 }}
-					initial={{ opacity: 0 }}
-					transition={{ duration: DURATION.slow, delay: 0.2 }}
-					className="text-sm sm:text-base md:text-lg text-gray-400 max-w-xl mx-auto leading-relaxed"
-				>
-					Already have a professional document template? Turn it into a reusable
-					Claude Skill — and generate new documents in seconds, every time.
-				</motion.p>
-
-				{/* Template → Skill → Document flow — stacks vertically on mobile */}
-				<motion.div
-					animate={{ opacity: 1, scale: 1 }}
-					initial={{ opacity: 0, scale: 0.95 }}
-					transition={{ duration: DURATION.slow, delay: 0.3 }}
-					className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 mt-1 w-full"
-				>
-					<span className="px-4 py-2 rounded-xl border border-gray-700 text-gray-300 text-sm font-semibold w-full sm:w-auto text-center">
-						Your Template
-					</span>
-					<ArrowRight
-						size={14}
-						className="text-violet-400 rotate-90 sm:rotate-0 shrink-0"
+					<div
+						aria-hidden
+						className="pointer-events-none absolute inset-0 bg-[radial-gradient(#fff_1px,transparent_1px)] opacity-[0.035] [background-size:16px_16px]"
 					/>
-					<span className="px-4 py-2 rounded-xl border border-violet-500/40 text-violet-200 bg-violet-500/10 text-sm font-semibold w-full sm:w-auto text-center">
-						Claude Skill
-					</span>
-					<ArrowRight
-						size={14}
-						className="text-violet-400 rotate-90 sm:rotate-0 shrink-0"
-					/>
-					<span className="px-4 py-2 rounded-xl border border-blue-500/40 text-blue-200 bg-blue-500/10 text-sm font-semibold w-full sm:w-auto text-center">
-						New Document
-					</span>
-				</motion.div>
-			</section>
 
-			<div className="w-full max-w-7xl border-t border-white/5" />
-
-			{/* ── 2. WHAT YOU NEED (prerequisites — before anything else) ────── */}
-			<section className="w-full max-w-5xl mx-auto py-12 md:py-20">
-				<motion.div
-					initial={{ opacity: 0, y: 30 }}
-					whileInView={{ opacity: 1, y: 0 }}
-					viewport={{ once: true, margin: "-80px" }}
-					transition={{ duration: DURATION.slow }}
-					className="flex flex-col items-center text-center mb-8 md:mb-12 gap-4"
-				>
-					<SectionBadge>Before You Start</SectionBadge>
-					<h2 className="text-[28px] sm:text-[36px] md:text-[45px] font-semibold leading-tight tracking-tight">
-						What You{" "}
-						<span className={title({ color: "violet", size: "lg" })}>Need</span>
-					</h2>
-					<p className="text-gray-400 text-base md:text-lg max-w-2xl">
-						Three things. That&apos;s all it takes to get started.
-					</p>
-				</motion.div>
-
-				<div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
-					{whatYouNeed.map((item, i) => (
-						<motion.div
-							key={item.title}
-							initial={{ opacity: 0, y: 20 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true }}
-							transition={{ duration: DURATION.base, delay: i * 0.1 }}
-							className="flex flex-col gap-3 p-5 sm:p-6 rounded-xl border border-white/[0.06]"
-						>
-							<CheckCircle
-								size={15}
-								className="text-gray-500 shrink-0 mt-0.5"
-							/>
-							<div>
-								<p className="text-white font-semibold mb-1">{item.title}</p>
-								<p className="text-gray-400 text-sm leading-relaxed">
-									{item.detail}
-								</p>
-							</div>
-						</motion.div>
-					))}
-				</div>
-			</section>
-
-			<div className="w-full max-w-7xl border-t border-white/5" />
-
-			{/* ── 3. WHAT CAN YOU AUTOMATE (scope — what documents) ──────────── */}
-			<section className="w-full max-w-5xl mx-auto py-12 md:py-20">
-				<motion.div
-					initial={{ opacity: 0, y: 30 }}
-					whileInView={{ opacity: 1, y: 0 }}
-					viewport={{ once: true, margin: "-80px" }}
-					transition={{ duration: DURATION.slow }}
-					className="flex flex-col items-center text-center mb-10 md:mb-12 gap-4"
-				>
-					<SectionBadge>Document Types</SectionBadge>
-					<h2 className="text-[28px] sm:text-[36px] md:text-[45px] font-semibold leading-tight tracking-tight">
-						Works With{" "}
-						<span className={title({ color: "violet", size: "lg" })}>
-							Any Business Document
-						</span>
-					</h2>
-					<p className="text-gray-400 text-base md:text-lg max-w-2xl">
-						Create a separate Skill for each document type you want to automate.
-					</p>
-				</motion.div>
-
-				<div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
-					{documentTypes.map((doc, i) => {
-						const Icon = doc.icon;
-						return (
-							<motion.div
-								key={doc.label}
-								initial={{ opacity: 0, y: 16 }}
-								whileInView={{ opacity: 1, y: 0 }}
-								viewport={{ once: true }}
-								transition={{ duration: DURATION.base, delay: i * 0.06 }}
-								className="flex items-center gap-2.5 p-3.5 sm:p-4 rounded-xl border border-white/[0.06] bg-white/[0.02]"
-							>
-								<Icon size={15} className="text-gray-500 shrink-0" />
-								<span className="text-gray-300 font-medium text-sm">
-									{doc.label}
-								</span>
-							</motion.div>
-						);
-					})}
-				</div>
-			</section>
-
-			<div className="w-full max-w-7xl border-t border-white/5" />
-
-			{/* ── 4. HOW IT WORKS (the step-by-step process) ─────────────────── */}
-			<section
-				id="how-it-works"
-				className="w-full max-w-5xl mx-auto py-12 md:py-24"
-			>
-				<motion.div
-					initial={{ opacity: 0, y: 30 }}
-					whileInView={{ opacity: 1, y: 0 }}
-					viewport={{ once: true, margin: "-80px" }}
-					transition={{ duration: DURATION.slow }}
-					className="flex flex-col items-center text-center mb-10 md:mb-16 gap-4"
-				>
-					<SectionBadge>Step by Step</SectionBadge>
-					<h2 className="text-[28px] sm:text-[36px] md:text-[45px] font-semibold leading-tight tracking-tight">
-						How It{" "}
-						<span className={title({ color: "violet", size: "lg" })}>
-							Works
-						</span>
-					</h2>
-					<p className="text-gray-400 text-base md:text-lg max-w-2xl">
-						Four steps from your existing template to a reusable document Skill.
-					</p>
-				</motion.div>
-
-				<div className="flex flex-col gap-4">
-					{steps.map((step, i) => {
-						return (
-							<motion.div
-								key={step.number}
-								initial={{ opacity: 0, x: -30 }}
-								whileInView={{ opacity: 1, x: 0 }}
-								viewport={{ once: true, margin: "-60px" }}
-								transition={{ duration: DURATION.slow, delay: i * 0.08 }}
-								className="group relative flex gap-4 sm:gap-5 p-4 sm:p-6 rounded-xl border border-white/[0.06] transition-colors duration-200 hover:border-white/10"
-							>
-								{/* Step number circle + connector */}
-								<div className="flex flex-col items-center gap-2 shrink-0">
-									<div className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-white/10 bg-white/[0.04] shrink-0">
-										<span className="text-xs font-mono font-bold text-gray-400">
-											{step.number}
+					<ol className="relative grid grid-cols-1 items-stretch gap-3 sm:grid-cols-[1fr_auto_1fr_auto_1fr] sm:gap-2">
+						{pipelineStages.map((stage, index) => {
+							const Icon = stage.icon;
+							return (
+								<li key={stage.name} className="contents">
+									<div
+										className={cn(
+											"relative flex flex-col items-center rounded-tile border p-5 text-center",
+											stage.highlighted
+												? "border-violet-500/40 bg-gradient-to-b from-violet-600/20 to-violet-950/20"
+												: "border-hairline bg-surface/60",
+										)}
+									>
+										{stage.highlighted && (
+											<span className="absolute -top-2.5 whitespace-nowrap rounded-full border border-violet-300/60 bg-violet-600 px-2.5 py-0.5 text-xs font-medium text-white">
+												Automated by Claude
+											</span>
+										)}
+										<span
+											className={cn(
+												iconTile,
+												"mb-3",
+												stage.highlighted && "mt-1",
+											)}
+										>
+											<Icon aria-hidden size={20} />
+										</span>
+										<span className={eyebrow}>{stage.step}</span>
+										<span className="mt-1.5 text-sm font-medium text-white">
+											{stage.name}
+										</span>
+										<span className="mt-1 text-xs leading-relaxed text-gray-400">
+											{stage.detail}
 										</span>
 									</div>
-									{i < steps.length - 1 && (
-										<div className="w-px h-full min-h-[20px] bg-white/[0.06]" />
-									)}
-								</div>
-
-								<div className="flex-1 min-w-0 pt-1">
-									<h3 className="text-white font-semibold text-base sm:text-lg leading-snug mb-2">
-										{step.title}
-									</h3>
-									<p className="text-gray-400 text-sm sm:text-base leading-relaxed">
-										{step.description}
-									</p>
-
-									{/* Sub-note for combined step */}
-									{step.subNote && (
-										<p className="mt-3 text-sm text-gray-500 italic">
-											{step.subNote}
-										</p>
-									)}
-
-									{/* Copy prompt button inline in step 01 */}
-									{step.showCopyButton && (
-										<div className="mt-5">
-											<PromptCopyButton />
+									{index < pipelineStages.length - 1 && (
+										<div
+											aria-hidden
+											className="flex items-center justify-center text-violet-400"
+										>
+											<ArrowRight className="rotate-90 sm:rotate-0" size={18} />
 										</div>
 									)}
-								</div>
-							</motion.div>
+								</li>
+							);
+						})}
+					</ol>
+
+					<ul className="relative mt-5 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 border-t border-hairline pt-4 text-xs text-gray-300">
+						{[
+							"No visual approximation",
+							"Extracts real vectors and fonts",
+							"Built-in commercial guardrails",
+						].map((point) => (
+							<li key={point} className="inline-flex items-center gap-1.5">
+								<CheckCircle2
+									aria-hidden
+									className="text-violet-400"
+									size={14}
+								/>
+								{point}
+							</li>
+						))}
+					</ul>
+				</motion.div>
+			</section>
+
+			<Divider />
+
+			{/* ── What you need ────────────────────────────────────────────── */}
+			<section className="w-full max-w-5xl py-16 md:py-24">
+				<SectionHeader
+					badge="Prerequisites"
+					icon={ClipboardList}
+					size="lg"
+					subtitle="Three inputs. Claude handles the forensic disassembly, asset bundling and pipeline construction."
+					title="What you need to start"
+				/>
+
+				<div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+					{whatYouNeed.map((item, index) => {
+						const Icon = item.icon;
+						return (
+							<motion.article
+								key={item.title}
+								{...reveal}
+								className={cn(houseCard, "flex flex-col")}
+								transition={{ duration: DURATION.slow, delay: index * STAGGER }}
+							>
+								<span className={iconTile}>
+									<Icon aria-hidden size={20} />
+								</span>
+								<p className={cn(eyebrow, "mt-5")}>{item.badge}</p>
+								<h3 className="mt-2 text-lg font-medium text-white">
+									{item.title}
+								</h3>
+								<p className="mb-5 mt-3 text-sm leading-relaxed text-gray-400 md:text-base">
+									{item.detail}
+								</p>
+								<p className="mt-auto flex items-start gap-2 border-t border-hairline pt-4 text-xs leading-relaxed text-gray-400">
+									<Info
+										aria-hidden
+										className="mt-0.5 shrink-0 text-violet-400"
+										size={13}
+									/>
+									{item.tip}
+								</p>
+							</motion.article>
 						);
 					})}
 				</div>
 			</section>
 
-			{/* ── Divider ──────────────────────────────────────────────────── */}
-			<div className="w-full max-w-7xl border-t border-white/5 my-4" />
+			<Divider />
 
-			{/* ── Claude Subscription Info ─────────────────────────────────── */}
-			<section className="w-full max-w-5xl mx-auto py-12 md:py-20">
-				<motion.div
-					initial={{ opacity: 0, y: 30 }}
-					whileInView={{ opacity: 1, y: 0 }}
-					viewport={{ once: true, margin: "-80px" }}
-					transition={{ duration: DURATION.slow }}
-					className="flex flex-col items-center text-center mb-8 md:mb-10 gap-4"
+			{/* ── Document types ───────────────────────────────────────────── */}
+			<section className="w-full max-w-5xl py-16 md:py-24">
+				<SectionHeader
+					badge="Supported documents"
+					icon={FileText}
+					size="lg"
+					subtitle="Pick a document type to see what the Skill captures, standardises and validates."
+					title="Works with any business document"
+				/>
+
+				<div
+					aria-label="Document type"
+					className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:justify-center sm:gap-3"
+					role="group"
 				>
-					<SectionBadge>Claude Access</SectionBadge>
-					<h2 className="text-[28px] sm:text-[36px] md:text-[45px] font-semibold leading-tight tracking-tight">
-						Do I Need a{" "}
-						<span className={title({ color: "violet", size: "lg" })}>
-							Claude Subscription?
-						</span>
-					</h2>
-					<p className="text-gray-400 text-base md:text-lg max-w-2xl">
-						You can try this workflow with Claude&apos;s Free plan. However,
-						Free has usage limits.
-					</p>
-				</motion.div>
+					{documentTypes.map((doc) => {
+						const Icon = doc.icon;
+						const selected = doc.id === selectedDocId;
+						return (
+							<button
+								key={doc.id}
+								aria-pressed={selected}
+								className={cn(
+									"inline-flex min-h-11 items-center justify-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium transition-colors duration-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
+									selected
+										? "border-violet-400/70 bg-violet-600/25 text-white"
+										: "border-hairline-strong text-gray-400 hover:border-violet-500/50 hover:text-white",
+								)}
+								onClick={() => setSelectedDocId(doc.id)}
+								type="button"
+							>
+								<Icon
+									aria-hidden
+									className={selected ? "text-violet-300" : "text-gray-500"}
+									size={15}
+								/>
+								<span className="sm:hidden">{doc.short}</span>
+								<span className="hidden sm:inline">{doc.label}</span>
+							</button>
+						);
+					})}
+				</div>
 
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-					{/* Free plan card */}
-					<motion.div
-						initial={{ opacity: 0, y: 20 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						viewport={{ once: true }}
-						transition={{ duration: DURATION.base }}
-						className="p-5 sm:p-6 rounded-xl border border-white/[0.06]"
-					>
-						<div className="flex items-center gap-2.5 mb-3">
-							<CheckCircle size={16} className="text-gray-500 shrink-0" />
-							<h3 className="text-white font-medium text-sm">Free Plan</h3>
+				<motion.div
+					key={activeDoc.id}
+					animate={{ opacity: 1, y: 0 }}
+					className={cn(surfaceCard, "mt-6")}
+					initial={{ opacity: 0, y: 8 }}
+					transition={{ duration: DURATION.fast }}
+				>
+					<SurfaceGlow />
+					<div className="relative flex flex-col gap-5 border-b border-white/10 pb-6 sm:flex-row sm:items-start sm:justify-between">
+						<div className="flex items-start gap-4">
+							<span className={iconTile}>
+								<activeDoc.icon aria-hidden size={22} />
+							</span>
+							<div>
+								<p className={eyebrow}>{activeDoc.badge}</p>
+								<h3 className="mt-1 text-lg font-medium text-white md:text-xl">
+									{activeDoc.label} Skill
+								</h3>
+								<p className="mt-1 text-sm text-gray-400">
+									{activeDoc.tagline}
+								</p>
+							</div>
 						</div>
-						<p className="text-gray-400 text-sm leading-relaxed">
-							You can try this workflow with Claude&apos;s Free plan. Skill
-							creation and document generation may consume your available usage,
-							especially with large templates or complex documents.
+						<div className="shrink-0">
+							<PromptCopyButton
+								label="Copy the prompt"
+								location={`ai-skill-guide-doc-${activeDoc.id}`}
+								size="sm"
+							/>
+						</div>
+					</div>
+
+					<div className="relative mt-6">
+						<p className={eyebrow}>
+							What the Skill reverse-engineers and validates
 						</p>
-					</motion.div>
-
-					{/* If you hit the limit card */}
-					<motion.div
-						initial={{ opacity: 0, y: 20 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						viewport={{ once: true }}
-						transition={{ duration: DURATION.base, delay: 0.1 }}
-						className="p-5 sm:p-6 rounded-xl border border-white/[0.06]"
-					>
-						<div className="flex items-center gap-2.5 mb-3">
-							<AlertCircle size={16} className="text-gray-500 shrink-0" />
-							<h3 className="text-white font-medium text-sm">
-								If You Hit the Limit
-							</h3>
-						</div>
-						<ul className="space-y-2.5">
-							{[
-								"Wait until your usage resets",
-								"Switch to another Claude account with available usage",
-							].map((item) => (
-								<li key={item} className="flex items-start gap-2.5">
-									<ChevronRight
-										size={15}
-										className="text-amber-400 shrink-0 mt-0.5"
+						<ul className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+							{activeDoc.extracts.map((item) => (
+								<li
+									key={item}
+									className="flex items-start gap-2.5 rounded-tile border border-white/10 bg-black/20 p-3 text-sm text-gray-200"
+								>
+									<CheckCircle2
+										aria-hidden
+										className="mt-0.5 shrink-0 text-violet-400"
+										size={16}
 									/>
-									<span className="text-gray-400 text-sm">{item}</span>
+									{item}
 								</li>
 							))}
 						</ul>
-						<p className="mt-4 text-gray-500 text-xs leading-relaxed">
-							Your .skill file is reusable — you don&apos;t need to recreate the
-							Skill every time.
-						</p>
-					</motion.div>
-				</div>
-
-				{/* Note */}
-				<motion.p
-					initial={{ opacity: 0 }}
-					whileInView={{ opacity: 1 }}
-					viewport={{ once: true }}
-					transition={{ duration: DURATION.slow, delay: 0.2 }}
-					className="mt-6 text-center text-gray-500 text-sm"
-				>
-					Note: Claude&apos;s available features and usage limits can vary by
-					plan and may change over time. Check your Claude account for current
-					limits.
-				</motion.p>
+					</div>
+				</motion.div>
 			</section>
 
-			<div className="w-full max-w-7xl border-t border-white/5" />
+			<Divider />
 
-			{/* ── 6. FINAL CTA — two paths: self-serve OR get help ───────────── */}
-			<section className="w-full max-w-5xl mx-auto py-12 md:py-24">
-				<motion.div
-					initial={{ opacity: 0, y: 30 }}
-					whileInView={{ opacity: 1, y: 0 }}
-					viewport={{ once: true, margin: "-80px" }}
-					transition={{ duration: DURATION.slow }}
-					className="flex flex-col items-center text-center mb-8 md:mb-12 gap-4"
-				>
-					<h2 className="text-[28px] sm:text-[36px] md:text-[45px] font-semibold leading-tight tracking-tight">
-						Ready? Choose{" "}
-						<span className={title({ color: "violet", size: "lg" })}>
-							How to Start
-						</span>
-					</h2>
-					<p className="text-gray-400 text-base md:text-lg max-w-xl">
-						Follow the guide yourself, or let us create the Skill for you.
-					</p>
-				</motion.div>
+			{/* ── How it works ─────────────────────────────────────────────── */}
+			<section
+				className="w-full max-w-5xl scroll-mt-28 py-16 md:py-24"
+				id="how-it-works"
+			>
+				<SectionHeader
+					badge="Step by step"
+					icon={Workflow}
+					size="lg"
+					subtitle="Four steps. Claude reverse-engineers your document in a single run and hands you a production-ready Skill."
+					title="How to build your document Skill"
+				/>
 
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-					{/* Follow the guide yourself */}
-					<motion.div
-						initial={{ opacity: 0, y: 20 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						viewport={{ once: true }}
-						transition={{ duration: DURATION.base }}
-						className="flex flex-col gap-4 p-5 sm:p-6 rounded-xl border border-white/[0.06]"
+				<ol className="flex flex-col gap-6 md:gap-8">
+					{/* Step 1 */}
+					<motion.li
+						{...reveal}
+						className={cn(houseCard, "border-violet-500/40")}
+						transition={{ duration: DURATION.slow }}
 					>
-						<div className="flex items-center gap-2.5">
-							<Sparkles size={15} className="text-gray-500 shrink-0" />
-							<h3 className="text-white font-semibold text-base">
-								I&apos;ll Do It Myself
-							</h3>
-						</div>
-						<p className="text-gray-400 text-sm leading-relaxed flex-1">
-							Have Claude access? Start with Step 1 of the guide above — copy
-							the prompt, attach your template, and Claude does the rest.
+						<StepHeader
+							action={
+								<PromptCopyButton
+									label="Copy the prompt"
+									location="ai-skill-guide-step-1"
+									size="sm"
+								/>
+							}
+							active
+							heading="Paste the prompt and attach your template"
+							number="01"
+							summary="Send the prompt and your template PDF in a single Claude message."
+						/>
+						<p className="mt-6 text-sm leading-relaxed text-gray-400 md:text-base">
+							Open Claude, paste the Skill creation prompt, and attach your
+							existing document template in the same message. Claude analyses
+							geometry, fonts, branding, section structure and writing
+							conventions in forensic detail.
 						</p>
-						<div className="flex flex-col gap-2">
-							{/* Scroll to guide */}
-							<button
-								type="button"
-								onClick={() =>
-									document
-										.getElementById("how-it-works")
-										?.scrollIntoView({ behavior: "smooth", block: "start" })
-								}
-								className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full border border-white/10 bg-white/[0.04] text-white text-sm font-medium hover:bg-white/[0.07] transition-colors duration-200"
+						<div className="mt-6">
+							<PromptInspector />
+						</div>
+					</motion.li>
+
+					{/* Step 2 */}
+					<motion.li
+						{...reveal}
+						className={houseCard}
+						transition={{ duration: DURATION.slow }}
+					>
+						<StepHeader
+							heading="Download the generated .skill package"
+							number="02"
+							summary="Claude compiles the forensic rules into an independent, reusable package."
+						/>
+						<p className="mt-6 text-sm leading-relaxed text-gray-400 md:text-base">
+							Once the analysis finishes, Claude provides a downloadable bundle.
+							It contains everything required to reproduce your document design
+							without the original template.
+						</p>
+						<div className={cn(well, "mt-6 p-4 font-mono text-xs")}>
+							<p className="flex items-center gap-2 border-b border-hairline pb-2.5 font-medium text-violet-300">
+								<FolderArchive aria-hidden size={16} />
+								proposal-generation.skill
+							</p>
+							<ul className="mt-2.5 space-y-2">
+								{skillFiles.map((entry) => (
+									<li
+										key={entry.name}
+										className="flex flex-wrap items-center gap-x-2 gap-y-0.5"
+									>
+										{entry.file ? (
+											<FileText
+												aria-hidden
+												className="text-violet-400"
+												size={14}
+											/>
+										) : (
+											<ChevronRight
+												aria-hidden
+												className="text-gray-500"
+												size={14}
+											/>
+										)}
+										<span
+											className={entry.file ? "text-white" : "text-gray-300"}
+										>
+											{entry.name}
+										</span>
+										<span className="text-gray-400">{entry.note}</span>
+									</li>
+								))}
+							</ul>
+						</div>
+					</motion.li>
+
+					{/* Step 3 */}
+					<motion.li
+						{...reveal}
+						className={houseCard}
+						transition={{ duration: DURATION.slow }}
+					>
+						<StepHeader
+							heading="Add the Skill to Claude"
+							number="03"
+							summary="Store it once in Claude Skills or a Claude Project for permanent access."
+						/>
+						<p className="mt-6 text-sm leading-relaxed text-gray-400 md:text-base">
+							Go to the Skills or Projects section of your Claude workspace and
+							upload the bundle. The Skill is now attached and available to you
+							and your team on demand.
+						</p>
+					</motion.li>
+
+					{/* Step 4 */}
+					<motion.li
+						{...reveal}
+						className={houseCard}
+						transition={{ duration: DURATION.slow }}
+					>
+						<StepHeader
+							action={
+								<>
+									<button
+										className={ghostButton}
+										onClick={sample.copy}
+										type="button"
+									>
+										{sample.copied ? (
+											<Check
+												aria-hidden
+												className="text-violet-300"
+												size={14}
+											/>
+										) : (
+											<Copy aria-hidden size={14} />
+										)}
+										{sample.copied ? "Copied" : "Copy sample request"}
+									</button>
+									<span className="sr-only" role="status">
+										{sample.copied ? "Sample request copied to clipboard" : ""}
+									</span>
+								</>
+							}
+							heading="Generate new documents on demand"
+							number="04"
+							summary="Give it the new client variables and get a finished, validated PDF."
+						/>
+						<p className="mt-6 text-sm leading-relaxed text-gray-400 md:text-base">
+							Whenever you need a new proposal, invoice or SOW, prompt Claude
+							with the raw business parameters. The Skill formats the
+							typography, calculates totals, applies your branding and validates
+							the final PDF.
+						</p>
+						<div className={cn(well, "mt-6 p-4")}>
+							<p className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-widest text-gray-400">
+								<Terminal aria-hidden size={13} />
+								Example request to Claude
+							</p>
+							<pre className="mt-3 whitespace-pre-wrap font-mono text-xs leading-relaxed text-violet-200 sm:text-sm">
+								{SAMPLE_REQUEST}
+							</pre>
+						</div>
+					</motion.li>
+				</ol>
+			</section>
+
+			<Divider />
+
+			{/* ── Plans ────────────────────────────────────────────────────── */}
+			<section className="w-full max-w-5xl py-16 md:py-24">
+				<SectionHeader
+					badge="Usage and plans"
+					icon={Zap}
+					size="lg"
+					subtitle="You can build and test this workflow on Claude Free. Here is what to expect on each plan."
+					title="Do I need a Claude subscription?"
+				/>
+
+				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+					<motion.article
+						{...reveal}
+						className={cn(houseCard, "flex flex-col")}
+						transition={{ duration: DURATION.slow }}
+					>
+						<div className="flex items-start justify-between gap-4">
+							<div className="flex items-center gap-3">
+								<span className={iconTile}>
+									<CheckCircle2 aria-hidden size={18} />
+								</span>
+								<h3 className="text-lg font-medium text-white">Claude Free</h3>
+							</div>
+							<span className="rounded-full border border-hairline-strong px-3 py-1 text-xs font-medium text-gray-300">
+								$0 / month
+							</span>
+						</div>
+						<p className="mt-5 text-sm leading-relaxed text-gray-400 md:text-base">
+							Works for testing and small document templates. Because the prompt
+							performs a forensic disassembly, it consumes significant usage in
+							one go.
+						</p>
+						<ul className="mb-5 mt-4 space-y-2 text-sm text-gray-300">
+							{[
+								"Generates the complete .skill bundle without payment",
+								"The generated Skill never expires",
+							].map((point) => (
+								<li key={point} className="flex items-start gap-2">
+									<Check
+										aria-hidden
+										className="mt-0.5 shrink-0 text-violet-400"
+										size={14}
+									/>
+									{point}
+								</li>
+							))}
+						</ul>
+						<p className="mt-auto border-t border-hairline pt-4 text-xs leading-relaxed text-gray-400">
+							If you hit the hourly limit, wait for the window to reset and send
+							the same message again.
+						</p>
+					</motion.article>
+
+					<motion.article
+						{...reveal}
+						className={cn(houseCard, "flex flex-col border-violet-500/50")}
+						transition={{ duration: DURATION.slow, delay: STAGGER }}
+					>
+						<div className="flex items-start justify-between gap-4">
+							<div className="flex items-center gap-3">
+								<span className={iconTile}>
+									<Zap aria-hidden size={18} />
+								</span>
+								<h3 className="text-lg font-medium text-white">
+									Claude Pro or Team
+								</h3>
+							</div>
+							<span className="rounded-full border border-violet-500/40 bg-violet-500/15 px-3 py-1 text-xs font-medium text-violet-200">
+								Recommended
+							</span>
+						</div>
+						<p className="mt-5 text-sm leading-relaxed text-gray-400 md:text-base">
+							Higher usage limits and Claude Projects. The right fit for
+							agencies and businesses producing proposals and contracts every
+							week.
+						</p>
+						<ul className="mb-5 mt-4 space-y-2 text-sm text-gray-300">
+							{[
+								"Handles large, complex templates of 20+ pages",
+								"Generates documents without waiting on limits",
+							].map((point) => (
+								<li key={point} className="flex items-start gap-2">
+									<Check
+										aria-hidden
+										className="mt-0.5 shrink-0 text-violet-400"
+										size={14}
+									/>
+									{point}
+								</li>
+							))}
+						</ul>
+						<p className="mt-auto border-t border-hairline pt-4 text-xs leading-relaxed text-gray-400">
+							No Claude Pro? Drox Dev can build and test the Skill for you.
+						</p>
+					</motion.article>
+				</div>
+			</section>
+
+			<Divider />
+
+			{/* ── Closing: two paths ───────────────────────────────────────── */}
+			<section className="w-full max-w-5xl py-16 md:py-24">
+				<SectionHeader
+					badge="Choose your path"
+					icon={Code2}
+					size="lg"
+					subtitle="Do it yourself with the free guide, or have Drox Dev engineer and validate a Skill for your business."
+					title="Ready to automate?"
+				/>
+
+				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+					<motion.article
+						{...reveal}
+						className={cn(houseCard, "flex flex-col")}
+						transition={{ duration: DURATION.slow }}
+					>
+						<div className="flex items-center gap-3">
+							<span className={iconTile}>
+								<Code2 aria-hidden size={20} />
+							</span>
+							<div>
+								<h3 className="text-lg font-medium text-white">
+									Build it yourself
+								</h3>
+								<p className="text-xs text-gray-400">Free and self-guided</p>
+							</div>
+						</div>
+						<p className="mt-5 text-sm leading-relaxed text-gray-400 md:text-base">
+							If you have Claude access and 15 minutes, copy the prompt, attach
+							your existing template, and Claude generates your custom Skill.
+						</p>
+						<ul className="mt-4 space-y-2 text-sm text-gray-300">
+							{[
+								"The complete 10-phase prompt",
+								"Works on Claude Free",
+								"Full ownership of the generated Skill",
+							].map((point) => (
+								<li key={point} className="flex items-start gap-2">
+									<Check
+										aria-hidden
+										className="mt-0.5 shrink-0 text-violet-400"
+										size={14}
+									/>
+									{point}
+								</li>
+							))}
+						</ul>
+						<div className="mt-auto flex flex-col items-center gap-3 pt-8">
+							<PromptCopyButton
+								className="w-full"
+								location="ai-skill-guide-closing"
+							/>
+							<Link
+								className="inline-flex items-center gap-1 rounded-inline text-xs text-gray-400 transition-colors duration-base hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+								href="#how-it-works"
 							>
-								<ArrowRight size={14} className="rotate-180" />
-								Scroll to the Guide
-							</button>
-							{/* Or copy prompt directly */}
-							<PromptCopyButton />
+								Back to the walkthrough
+								<ArrowUp aria-hidden size={12} />
+							</Link>
 						</div>
-					</motion.div>
+					</motion.article>
 
-					{/* Get support */}
-					<motion.div
-						initial={{ opacity: 0, y: 20 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						viewport={{ once: true }}
-						transition={{ duration: DURATION.base, delay: 0.1 }}
-						className="flex flex-col gap-4 p-5 sm:p-6 rounded-xl border border-white/[0.06]"
+					<motion.article
+						{...reveal}
+						className={cn(surfaceCard, "flex flex-col")}
+						transition={{ duration: DURATION.slow, delay: STAGGER }}
 					>
-						<div className="flex items-center gap-2.5">
-							<MessageCircle size={15} className="text-gray-500 shrink-0" />
-							<h3 className="text-white font-semibold text-base">
-								Create It for Me
-							</h3>
+						<SurfaceGlow />
+						<div className="relative flex items-center gap-3">
+							<span className={iconTile}>
+								<Handshake aria-hidden size={20} />
+							</span>
+							<div>
+								<h3 className="text-lg font-medium text-white">Done for you</h3>
+								<p className="text-xs text-violet-300">
+									Engineered and tested by Drox Dev
+								</p>
+							</div>
 						</div>
-						<p className="text-gray-400 text-sm leading-relaxed flex-1">
-							No Claude subscription, or prefer to hand it off? Send us your
-							template on WhatsApp and we&apos;ll create the Skill for you.
+						<p className="relative mt-5 text-sm leading-relaxed text-gray-300 md:text-base">
+							No Claude subscription, or you want the geometry checked by hand?
+							Send us your document. We extract the vector assets, write the
+							validation scripts and deliver a tested Skill.
 						</p>
-						<CTAButton
-							id="whatsapp-dual-cta-btn"
-							text="Enquire on WhatsApp"
-							href={WHATSAPP_HREF}
-							external
-							location="ai-skill-guide-dual-cta"
-							icon={<MessageCircle size={18} />}
-						/>
-					</motion.div>
+						<ul className="relative mt-4 space-y-2 text-sm text-gray-200">
+							{[
+								"Pixel-accurate geometry and font matching",
+								"Vector logo and graphic asset extraction",
+								"Tested across varied client scopes",
+								"Delivered in 24 to 48 hours",
+							].map((point) => (
+								<li key={point} className="flex items-start gap-2">
+									<CheckCircle2
+										aria-hidden
+										className="mt-0.5 shrink-0 text-violet-400"
+										size={14}
+									/>
+									{point}
+								</li>
+							))}
+						</ul>
+						<div className="relative mt-auto flex flex-col items-center gap-3 pt-8">
+							<CTAButton
+								className="w-full"
+								external
+								href={WHATSAPP_HREF}
+								icon={<SiWhatsapp aria-hidden="true" size={18} />}
+								id="whatsapp-dual-cta-btn"
+								location="ai-skill-guide-closing"
+								text="Enquire on WhatsApp"
+							/>
+							<p className="text-xs text-gray-400">
+								Quick response · direct engineer consultation
+							</p>
+						</div>
+					</motion.article>
 				</div>
 
-				{/* Tagline */}
-				<motion.p
-					initial={{ opacity: 0 }}
-					whileInView={{ opacity: 1 }}
-					viewport={{ once: true }}
-					transition={{ duration: DURATION.slow, delay: 0.3 }}
-					className="mt-12 text-center text-gray-600 text-sm italic"
-				>
-					Your Template. Your Standard. Automated.
-				</motion.p>
+				<p className="mt-12 text-center md:mt-16">
+					<Link
+						className="group inline-flex items-center gap-1.5 rounded-inline text-sm text-gray-400 transition-colors duration-base hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+						href="/services"
+					>
+						Explore all Drox Dev services
+						<ArrowUpRight
+							aria-hidden
+							className="text-violet-400 transition-transform duration-base group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+							size={14}
+						/>
+					</Link>
+				</p>
 			</section>
 
-			{/* ── Footer link back to Services ─────────────────────────────── */}
-			<section className="pb-16">
-				<motion.div
-					initial={{ opacity: 0 }}
-					whileInView={{ opacity: 1 }}
-					viewport={{ once: true }}
-					transition={{ duration: DURATION.slow }}
-					className="flex items-center gap-2 text-gray-500 text-sm hover:text-gray-300 transition-colors"
-				>
-					<Link href="/services" className="flex items-center gap-1.5 group">
-						<ArrowRight
-							size={14}
-							className="rotate-180 group-hover:-translate-x-1 transition-transform"
-						/>
-						Explore all Drox Dev services
-					</Link>
-				</motion.div>
-			</section>
+			<FloatingActions />
 		</div>
 	);
 }
