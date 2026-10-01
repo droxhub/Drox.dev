@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { title } from "@/components/primitives";
 import CTAButton from "@/components/ui/cta-button";
-import { caseStudies } from "@/config/content";
+import { caseStudies, caseStudyDescription } from "@/config/content";
 import { siteConfig } from "@/config/site";
 
 export function generateStaticParams() {
@@ -23,7 +23,7 @@ export async function generateMetadata({
 
 	return {
 		title: `${study.name} — Case Study`,
-		description: `${study.summary} ${study.outcomes.map((o) => `${o.value} ${o.label.toLowerCase()}`).join(", ")}.`,
+		description: caseStudyDescription(study),
 		alternates: { canonical: `/work/${study.slug}` },
 	};
 }
@@ -37,6 +37,8 @@ export default async function CaseStudyPage({
 	const study = caseStudies.find((s) => s.slug === slug);
 
 	if (!study) notFound();
+
+	const images = [study.image, ...(study.gallery ?? [])];
 
 	// Breadcrumbs render in Google's results in place of a bare URL, and give
 	// nested pages a visible path back to the section.
@@ -85,42 +87,85 @@ export default async function CaseStudyPage({
 				</p>
 
 				<div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-default-500">
-					<span>{study.client}</span>
+					<span>
+						{study.kind === "product" ? "A Drox Dev product" : study.client}
+					</span>
 					<a
 						className="text-violet-400 underline underline-offset-4 hover:text-violet-300 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
 						href={study.liveUrl}
 						rel="noopener noreferrer"
 						target="_blank"
 					>
-						View the live system ↗
+						{study.kind === "product"
+							? "Visit the product ↗"
+							: "View the live system ↗"}
 					</a>
 				</div>
 
-				<div className="relative mt-12 aspect-[16/11] w-full overflow-hidden rounded-card border border-white/5 bg-surface-inset shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)]">
-					<Image
-						alt={study.imageAlt}
-						className="object-cover"
-						fill
-						priority
-						sizes="(max-width: 896px) 100vw, 896px"
-						src={study.image}
-					/>
+				{/* One image runs full width; two sit side by side; three or more
+				    become a collage with the first image leading. */}
+				<div
+					className={`mt-12 grid gap-4 ${
+						images.length === 2
+							? "sm:grid-cols-2"
+							: images.length > 2
+								? "grid-cols-2 sm:grid-cols-3"
+								: ""
+					}`}
+				>
+					{images.map((src, index) => {
+						const lead = index === 0 && images.length > 2;
+
+						return (
+							<div
+								key={src}
+								className={`group relative w-full overflow-hidden rounded-card border border-white/5 bg-surface-inset shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] ${
+									images.length === 1
+										? "aspect-16/11"
+										: lead
+											? "col-span-2 aspect-4/3 sm:row-span-2 sm:aspect-auto"
+											: "aspect-4/3"
+								}`}
+							>
+								<Image
+									alt={
+										index === 0
+											? study.imageAlt
+											: `${study.name} — screen ${index + 1}`
+									}
+									className="object-cover transition-transform duration-slow group-hover:scale-105"
+									fill
+									priority={index === 0}
+									sizes={
+										images.length === 1
+											? "(max-width: 896px) 100vw, 896px"
+											: lead
+												? "(max-width: 640px) 100vw, 600px"
+												: "(max-width: 640px) 50vw, 450px"
+									}
+									src={src}
+								/>
+							</div>
+						);
+					})}
 				</div>
 
 				{/* Outcomes first — it's what a buyer scrolls for. */}
-				<div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-3">
-					{study.outcomes.map((outcome) => (
-						<div
-							key={outcome.label}
-							className="rounded-card border-2 border-dashed border-default-100 p-7 text-center"
-						>
-							<p className="text-4xl font-bold tabular-nums tracking-tighter text-white md:text-5xl">
-								{outcome.value}
-							</p>
-							<p className="mt-2 text-sm text-default-500">{outcome.label}</p>
-						</div>
-					))}
-				</div>
+				{study.outcomes.length > 0 && (
+					<div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-3">
+						{study.outcomes.map((outcome) => (
+							<div
+								key={outcome.label}
+								className="rounded-card border-2 border-dashed border-default-100 p-7 text-center"
+							>
+								<p className="text-4xl font-bold tabular-nums tracking-tighter text-white md:text-5xl">
+									{outcome.value}
+								</p>
+								<p className="mt-2 text-sm text-default-500">{outcome.label}</p>
+							</div>
+						))}
+					</div>
+				)}
 
 				<section className="mt-16">
 					<h2 className="text-2xl font-medium text-white md:text-3xl">
@@ -174,36 +219,40 @@ export default async function CaseStudyPage({
 					</div>
 				</section>
 
-				<section className="mt-16 space-y-6">
-					<h2 className="text-2xl font-medium text-white md:text-3xl">
-						In their words
-					</h2>
-					{study.testimonials.map((testimonial) => (
-						<figure
-							key={testimonial.name}
-							className="rounded-card border border-hairline/80 bg-gradient-to-b from-surface-muted to-surface p-7 md:p-8"
-						>
-							<blockquote className="text-base leading-relaxed text-gray-300 md:text-lg">
-								“{testimonial.quote}”
-							</blockquote>
-							<figcaption className="mt-6 flex items-center gap-3">
-								<Image
-									alt=""
-									className="h-11 w-11 rounded-full object-cover ring-2 ring-purple-500/20"
-									height={44}
-									src={testimonial.avatar}
-									width={44}
-								/>
-								<div>
-									<p className="text-sm font-semibold text-white">
-										{testimonial.name}
-									</p>
-									<p className="text-xs text-default-500">{testimonial.role}</p>
-								</div>
-							</figcaption>
-						</figure>
-					))}
-				</section>
+				{study.testimonials.length > 0 && (
+					<section className="mt-16 space-y-6">
+						<h2 className="text-2xl font-medium text-white md:text-3xl">
+							In their words
+						</h2>
+						{study.testimonials.map((testimonial) => (
+							<figure
+								key={testimonial.name}
+								className="rounded-card border border-hairline/80 bg-gradient-to-b from-surface-muted to-surface p-7 md:p-8"
+							>
+								<blockquote className="text-base leading-relaxed text-gray-300 md:text-lg">
+									“{testimonial.quote}”
+								</blockquote>
+								<figcaption className="mt-6 flex items-center gap-3">
+									<Image
+										alt=""
+										className="h-11 w-11 rounded-full object-cover ring-2 ring-purple-500/20"
+										height={44}
+										src={testimonial.avatar}
+										width={44}
+									/>
+									<div>
+										<p className="text-sm font-semibold text-white">
+											{testimonial.name}
+										</p>
+										<p className="text-xs text-default-500">
+											{testimonial.role}
+										</p>
+									</div>
+								</figcaption>
+							</figure>
+						))}
+					</section>
+				)}
 
 				<div className="mt-16 flex justify-center">
 					<CTAButton

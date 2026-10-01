@@ -213,10 +213,44 @@ export const aboutPage = {
 // ============================================
 // SELECTED WORK — Company Profile pp.19-20
 // ============================================
-export const caseStudies = [
+/**
+ * `client` work was built for someone else and names them; a `product` is
+ * Drox Dev's own and has no client line. `outcomes` and `testimonials` may be
+ * empty — the pages hide those blocks rather than show invented numbers.
+ */
+export type CaseStudy = {
+	slug: string;
+	name: string;
+	kind: "client" | "product";
+	category: string;
+	client?: string;
+	liveUrl: string;
+	image: string;
+	/** Extra screenshots; the card and case-study image rotate through them. */
+	gallery?: string[];
+	imageAlt: string;
+	summary: string;
+	challenge: string;
+	solution: string;
+	modules: string[];
+	stack: string[];
+	outcomes: { value: string; label: string }[];
+	testimonials: { quote: string; name: string; role: string; avatar: string }[];
+};
+
+/** Summary plus outcomes as one sentence, for cards and meta descriptions. */
+export function caseStudyDescription(study: CaseStudy) {
+	if (study.outcomes.length === 0) return study.summary;
+	return `${study.summary} ${study.outcomes
+		.map((o) => `${o.value} ${o.label.toLowerCase()}`)
+		.join(", ")}.`;
+}
+
+export const caseStudies: CaseStudy[] = [
 	{
 		slug: "alfa-events",
 		name: "Alfa Event Management System",
+		kind: "client",
 		category: "Event Operations Platform",
 		client: "Alfa Events, Malappuram",
 		liveUrl: "https://alfaeventsitebooking.cloud",
@@ -260,6 +294,91 @@ export const caseStudies = [
 		],
 		// TODO: add the delivery timeline — "X weeks from first conversation to
 		// first live event" is the number enterprise buyers ask for next.
+	},
+	{
+		slug: "droxlink",
+		name: "Droxlink",
+		kind: "product",
+		category: "Review Collection Product",
+		liveUrl: "https://grb-soft-web.vercel.app",
+		image: "/projects/Droxlink mockup1.png",
+		imageAlt:
+			"Droxlink — QR-code review page that routes happy customers to Google and unhappy ones to private feedback",
+		summary:
+			"A QR-code review system for service businesses: happy customers go straight to Google, unhappy ones reach the owner privately first.",
+		challenge:
+			"Cafés, salons, clinics and gyms live on their Google rating, yet satisfied customers rarely think to leave a review — while unhappy ones often go straight to a public one-star. By the time the owner hears about a problem, it's already on their profile.",
+		solution:
+			"A QR code on the table or counter opens a branded rating page — no app, no sign-up. Four- and five-star ratings are sent to the business's Google review form; one to three stars open a private feedback form so the owner can put things right first. A dashboard tracks scans, ratings and how many become Google reviews.",
+		modules: [
+			"QR Review Pages",
+			"Smart Rating Routing",
+			"Private Feedback",
+			"Analytics Dashboard",
+			"Branded Page Themes",
+		],
+		stack: ["Next.js"],
+		// TODO: add real numbers (businesses onboarded, reviews routed) once
+		// there are enough to quote.
+		outcomes: [],
+		testimonials: [],
+	},
+	{
+		slug: "droxmenu",
+		name: "DroxMenu",
+		kind: "product",
+		category: "Digital Menu Product",
+		liveUrl: "https://droxmenu.vercel.app",
+		image: "/projects/droxmenu mockup 1.png",
+		gallery: ["/projects/droxmenu mockup 2.png"],
+		imageAlt:
+			"DroxMenu — mobile digital menu opened from a restaurant table QR code",
+		summary:
+			"Digital QR menus for restaurants, cafés and cloud kitchens — prices, items and availability update instantly, with no reprinting.",
+		challenge:
+			"Printed menus go out of date the moment a price changes or a dish sells out. Reprinting costs time and money, and for multi-outlet businesses every location drifts towards a slightly different menu.",
+		solution:
+			"A mobile-first menu builder with ready-made templates. Each menu sits behind a permanent QR code, so changes to items, prices, images or availability go live immediately without replacing the code. Owners give managers and menu editors their own access, and run every outlet from one account.",
+		modules: [
+			"Menu Builder & Templates",
+			"Permanent QR Codes",
+			"Team Roles & Permissions",
+			"Multi-Outlet Management",
+			"Branding & Customisation",
+		],
+		stack: ["Next.js"],
+		// TODO: add real numbers (restaurants live, menus served) once there
+		// are enough to quote.
+		outcomes: [],
+		testimonials: [],
+	},
+	{
+		slug: "haiwa-snacks",
+		name: "Haiwa Snacks Website",
+		kind: "client",
+		category: "Brand & Ordering Website",
+		client: "Haiwa Snacks, Malappuram",
+		liveUrl: "https://haiwa.vercel.app",
+		image: "/projects/Haiwa mockup.jpeg",
+		gallery: ["/projects/Haiwa mockup2.png"],
+		imageAlt:
+			"Haiwa Snacks website — vacuum-dried jackfruit chips product page with WhatsApp ordering",
+		summary:
+			"A brand and ordering website for a Kerala jackfruit-snack maker, built to turn interest into WhatsApp orders across India.",
+		challenge:
+			"Haiwa make vacuum-dried jackfruit chips with no oil and no preservatives — a product people need to understand before they buy. They needed a site that told that story, made ingredients and FSSAI licensing clear, and got a customer to an order with as little friction as possible.",
+		solution:
+			"A fast, static website covering the product, the brand story and contact details. Instead of a cart and checkout, each pack size orders straight through WhatsApp — the channel Haiwa's customers already use — backed by clear shipping, privacy and terms pages.",
+		modules: [
+			"Product Showcase",
+			"Brand Story",
+			"WhatsApp Ordering",
+			"Shipping & Policy Pages",
+			"Contact",
+		],
+		stack: ["Next.js"],
+		outcomes: [],
+		testimonials: [],
 	},
 ];
 
