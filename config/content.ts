@@ -300,7 +300,7 @@ export const caseStudies: CaseStudy[] = [
 		name: "Droxlink",
 		kind: "product",
 		category: "Review Collection Product",
-		liveUrl: "https://grb-soft-web.vercel.app",
+		liveUrl: "https://link.droxdev.com/",
 		image: "/projects/Droxlink mockup1.png",
 		imageAlt:
 			"Droxlink — QR-code review page that routes happy customers to Google and unhappy ones to private feedback",
@@ -328,7 +328,7 @@ export const caseStudies: CaseStudy[] = [
 		name: "DroxMenu",
 		kind: "product",
 		category: "Digital Menu Product",
-		liveUrl: "https://droxmenu.vercel.app",
+		liveUrl: "https://menu.droxdev.com/",
 		image: "/projects/droxmenu mockup 1.png",
 		gallery: ["/projects/droxmenu mockup 2.png"],
 		imageAlt:
